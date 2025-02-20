@@ -1,0 +1,58 @@
+service: palmera-backend
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  environment:
+    NODE_ENV: ${self:provider.stage}
+    MONGODB_URI: ${ssm:/palmera/${self:provider.stage}/mongodb-uri}
+    JWT_SECRET: ${ssm:/palmera/${self:provider.stage}/jwt-secret}
+    AWS_S3_BUCKET: ${ssm:/palmera/${self:provider.stage}/s3-bucket}
+
+custom:
+  serverless-offline:
+    httpPort: 4000
+    lambdaPort: 4002
+  prune:
+    automatic: true
+    number: 3
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-prune-plugin
+
+package:
+  individually: true
+  patterns:
+    - '!node_modules/**'
+    - '!.git/**'
+    - '!.gitignore'
+    - '!.env*'
+    - '!README.md'
+    - '!tests/**'
+    - '!coverage/**'
+
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+    
+    GatewayResponseDefault5XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_5XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi' 

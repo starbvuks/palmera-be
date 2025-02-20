@@ -1,0 +1,86 @@
+service: palmera-auth
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  environment:
+    NODE_ENV: ${.env:NODE_ENV}
+    MONGODB_URI: ${.env:MONGODB_URI}
+    JWT_SECRET: ${.env:JWT_SECRET}
+    GOOGLE_CLIENT_ID: ${.env:GOOGLE_CLIENT_ID}
+    GOOGLE_CLIENT_SECRET: ${.env:GOOGLE_CLIENT_SECRET}
+
+functions:
+  signup:
+    handler: src/handlers/signupHandler.handler
+    events:
+      - http:
+          path: /auth/signup
+          method: post
+          cors: true
+
+  login:
+    handler: src/handlers/loginHandler.handler
+    events:
+      - http:
+          path: /auth/login
+          method: post
+          cors: true
+
+  googleAuth:
+    handler: src/handlers/googleOAuthHandler.handler
+    events:
+      - http:
+          path: /auth/google
+          method: post
+          cors: true
+
+  refreshToken:
+    handler: src/handlers/refreshTokenHandler.handler
+    events:
+      - http:
+          path: /auth/refresh
+          method: post
+          cors: true
+
+  logout:
+    handler: src/handlers/logoutHandler.handler
+    events:
+      - http:
+          path: /auth/logout
+          method: post
+          cors: true
+          authorizer:
+            name: verifyToken
+            type: token
+
+  deleteAccount:
+    handler: src/handlers/deleteAccountHandler.handler
+    events:
+      - http:
+          path: /auth/delete-account
+          method: delete
+          cors: true
+          authorizer:
+            name: verifyToken
+            type: token
+
+  verifyToken:
+    handler: src/middlewares/authMiddleware.verifyToken
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-prune-plugin
+
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!.git/**'
+    - '!.gitignore'
+    - '!.env*'
+    - '!README.md'
+    - '!tests/**'
+    - '!coverage/**' 
