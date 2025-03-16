@@ -20,9 +20,9 @@ functions:
           path: /users/{id}
           method: get
           cors: true
-          # authorizer:
-          #   name: verifyToken
-          #   type: token
+          authorizer:
+            name: verifyToken
+            type: token
 
   updateUserProfile:
     handler: src/handlers/updateUserHandler.handler
