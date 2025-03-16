@@ -108,7 +108,7 @@ const savedItemsSchema = Joi.object({
         Joi.object({
             searchQuery: Joi.string(),
             filters: Joi.object(),
-            savedAt: Joi.date().default(Date.now)
+            savedAt: Joi.date().default(new Date())
         })
     )
 });
@@ -119,7 +119,7 @@ const reviewsSchema = Joi.object({
             reviewerId: Joi.string(),
             rating: Joi.number(),
             comment: Joi.string(),
-            createdAt: Joi.date().default(Date.now)
+            createdAt: Joi.date().default(new Date())
         })
     ),
     given: Joi.array().items(
@@ -127,7 +127,7 @@ const reviewsSchema = Joi.object({
             revieweeId: Joi.string(),
             rating: Joi.number(),
             comment: Joi.string(),
-            createdAt: Joi.date().default(Date.now)
+            createdAt: Joi.date().default(new Date())
         })
     )
 });
@@ -144,7 +144,7 @@ const activityLogSchema = Joi.array().items(
     Joi.object({
         action: Joi.string().required(),
         description: Joi.string(),
-        timestamp: Joi.date().default(Date.now)
+        timestamp: Joi.date().default(new Date())
     })
 );
 

@@ -1,0 +1,120 @@
+service: palmera-user
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  environment:
+    NODE_ENV: ${.env:NODE_ENV}
+    MONGODB_URI: ${.env:MONGODB_URI}
+    JWT_SECRET: ${.env:JWT_SECRET}
+    GOOGLE_CLIENT_ID: ${.env:GOOGLE_CLIENT_ID}
+    GOOGLE_CLIENT_SECRET: ${.env:GOOGLE_CLIENT_SECRET}
+
+functions:
+  getUserProfile:
+    handler: src/handlers/getUserHandler.handler
+    events:
+      - http:
+          path: /users/{id}
+          method: get
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+  updateUserProfile:
+    handler: src/handlers/updateUserHandler.handler
+    events:
+      - http:
+          path: /users/{id}
+          method: put
+          cors: true
+          authorizer:
+            name: verifyToken
+            type: token
+
+  updateUserPreferences:
+    handler: src/handlers/updatePreferencesHandler.handler
+    events:
+      - http:
+          path: /users/{id}/preferences
+          method: post
+          cors: true
+          authorizer:
+            name: verifyToken
+            type: token
+
+  getUserPreferences:
+    handler: src/handlers/getPreferencesHandler.handler
+    events:
+      - http:
+          path: /users/{id}/preferences
+          method: get
+          cors: true
+          authorizer:
+            name: verifyToken
+            type: token
+
+  saveUserLocation:
+    handler: src/handlers/saveLocationHandler.handler
+    events:
+      - http:
+          path: /users/{id}/saved-locations
+          method: post
+          cors: true
+          authorizer:
+            name: verifyToken
+            type: token
+
+  getUserSavedLocations:
+    handler: src/handlers/getSavedLocationsHandler.handler
+    events:
+      - http:
+          path: /users/{id}/saved-locations
+          method: get
+          cors: true
+          authorizer:
+            name: verifyToken
+            type: token
+
+  deleteUserSavedLocation:
+    handler: src/handlers/deleteSavedLocationHandler.handler
+    events:
+      - http:
+          path: /users/{id}/saved-locations/{locationId}
+          method: delete
+          cors: true
+          authorizer:
+            name: verifyToken
+            type: token
+
+  switchUserRole:
+    handler: src/handlers/changeRoleHandler.handler
+    events:
+      - http:
+          path: /users/{id}/role
+          method: post
+          cors: true
+          authorizer:
+            name: verifyToken
+            type: token
+
+  verifyToken:
+    handler: ../auth/src/middlewares/authMiddleware.verifyToken
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-prune-plugin
+
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!.git/**'
+    - '!.gitignore'
+    - '!.env*'
+    - '!README.md'
+    - '!tests/**'
+    - '!coverage/**'
