@@ -67,8 +67,8 @@ const preferencesSchema = Joi.object({
 
 const accountStatusSchema = Joi.object({
     status: Joi.string().valid('active', 'suspended', 'deleted').default('active'),
-    createdAt: Joi.date().default(Date.now),
-    updatedAt: Joi.date().default(Date.now),
+    createdAt: Joi.date().default(new Date()),
+    updatedAt: Joi.date().default(new Date()),
     lastLogin: Joi.date()
 });
 
@@ -179,4 +179,4 @@ const userSchema = Joi.object({
     activityLog: activityLogSchema
 });
 
-module.exports = { userSchema, preferencesSchema, personalInfoSchema, savedItemsSchema };
+module.exports = { userSchema, preferencesSchema, personalInfoSchema, savedItemsSchema, accountStatusSchema, authenticationSchema };
