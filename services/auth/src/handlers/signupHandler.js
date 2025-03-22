@@ -59,7 +59,7 @@ const handler = async(event) => {
         const user = {
             _id: uuidv4(),
             personalInfo,
-            role: {
+            roles: {
                 isHost: false,
                 isSuperhost: false,
                 isAdmin: false

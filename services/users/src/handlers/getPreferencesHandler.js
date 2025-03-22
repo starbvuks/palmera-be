@@ -3,7 +3,7 @@ const response = require('../../../auth/src/lib/response');
 
 const handler = async(event) => {
     try {
-        const userId = event.params['id'];
+        const userId = event.pathParameters['id'];
 
         // Connect to MongoDB
         const db = await connectToDatabase();

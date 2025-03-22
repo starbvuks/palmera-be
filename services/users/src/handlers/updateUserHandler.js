@@ -6,8 +6,7 @@ const {
 
 const handler = async(event) => {
     try {
-        const userId = event.params['id'];
-        console.log(event.body);
+        const userId = event.pathParameters['id'];
         const updateData = JSON.parse(event.body);
 
         // Validate input
@@ -28,7 +27,8 @@ const handler = async(event) => {
         // Update user
         await db.collection('users').updateOne({ _id: userId }, {
             $set: {
-                personalInfo: updateData
+                personalInfo: updateData,
+                "accountStatus.updatedAt": new Date()
             }
         });
 

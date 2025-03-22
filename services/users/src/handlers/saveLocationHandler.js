@@ -6,7 +6,7 @@ const {
 
 const handler = async(event) => {
     try {
-        const userId = event.params['id'];
+        const userId = event.pathParameters['id'];
 
         const { favoriteProperties } = JSON.parse(event.body);
 
