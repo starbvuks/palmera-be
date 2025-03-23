@@ -14,7 +14,7 @@ const {
     authenticationSchema
 } = require('../../../users/src/lib/userDAL');
 
-const handler = async(event) => {
+const handler = async (event) => {
     try {
         const { email, password, firstName, lastName, phone } = JSON.parse(event.body);
 
@@ -71,7 +71,7 @@ const handler = async(event) => {
         await db.collection('users').insertOne(user);
 
         // Remove password from response
-        delete user.password;
+        delete user.authentication;
 
         return response.success(user, 201);
     } catch (error) {

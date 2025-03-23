@@ -4,7 +4,7 @@ const {
     personalInfoSchema
 } = require('../lib/userDAL.js');
 
-const handler = async(event) => {
+const handler = async (event) => {
     try {
         const userId = event.pathParameters['id'];
         const updateData = JSON.parse(event.body);
@@ -12,7 +12,7 @@ const handler = async(event) => {
         // Validate input
         const { error } = personalInfoSchema.validate(updateData);
         if (error) {
-            console.log(error);
+            console.error(error);
             return response.error(error.details[0].message, 400);
         }
 
