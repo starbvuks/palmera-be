@@ -16,7 +16,7 @@ provider:
 
 functions:
   createProperty:
-    handler: ../properties/src/handlers/createPropertyHandler.handler
+    handler: src/handlers/createPropertyHandler.handler
     events:
       - http:
           path: /properties
@@ -27,7 +27,7 @@ functions:
             type: token
 
   getProperty:
-    handler: ../properties/src/handlers/getPropertyHandler.handler
+    handler: src/handlers/getPropertyHandler.handler
     events:
       - http:
           path: /properties/{id}
@@ -35,7 +35,7 @@ functions:
           cors: true
 
   updateProperty:
-    handler: ../properties/src/handlers/updatePropertyHandler.handler
+    handler: src/handlers/updatePropertyHandler.handler
     events:
       - http:
           path: /properties/{id}
@@ -45,7 +45,7 @@ functions:
             name: verifyToken
             type: token
   getUserProperty:
-    handler: ../properties/src/handlers/getUserPropertiesHandler.handler
+    handler: src/handlers/getUserPropertiesHandler.handler
     events:
       - http:
           path: /properties/user/{id}
@@ -53,7 +53,7 @@ functions:
           cors: true
 
   deleteProperty:
-    handler: ../properties/src/handlers/deletePropertyHandler.handler
+    handler: src/handlers/deletePropertyHandler.handler
     events:
       - http:
           path: /properties/{id}
@@ -64,7 +64,7 @@ functions:
             type: token
 
   searchProperties:
-    handler: ../properties/src/handlers/searchPropertiesHandler.handler
+    handler: src/handlers/searchPropertiesHandler.handler
     events:
       - http:
           path: /properties/search
