@@ -6,13 +6,13 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
   environment:
-    NODE_ENV: ${env:NODE_ENV}
-    MONGODB_URI: ${env:MONGODB_URI}
-    JWT_SECRET: ${env:JWT_SECRET}
-    AWS_S3_BUCKET_NAME: ${env:AWS_S3_BUCKET_NAME}
-    AWS_ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
-    AWS_SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
-    AWS_REGION: ${env:AWS_REGION}
+    NODE_ENV: ${.env:NODE_ENV}
+    MONGODB_URI: ${.env:MONGODB_URI}
+    JWT_SECRET: ${.env:JWT_SECRET}
+    AWS_S3_BUCKET_NAME: ${.env:AWS_S3_BUCKET_NAME}
+    AWS_ACCESS_KEY_ID: ${.env:AWS_ACCESS_KEY_ID}
+    AWS_SECRET_ACCESS_KEY: ${.env:AWS_SECRET_ACCESS_KEY}
+    AWS_REGION: ${.env:AWS_REGION}
 
 functions:
   createProperty:
@@ -70,7 +70,48 @@ functions:
           path: /properties/search
           method: get
           cors: true
-
+  uploadPropertyDocument:
+    handler: src/handlers/uploadPropertyDocumentsHandler.handler
+    timeout: 90
+    events:
+      - http:
+          path: /properties/{id}/documents
+          method: post
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+  uploadPropertyImages:
+    handler: src/handlers/uploadPropertyImagesHandler.handler
+    timeout: 90
+    events:
+      - http:
+          path: /properties/{id}/images
+          method: post
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+  deletePropertyDocument:
+    handler: src/handlers/deletePropertyDocumentHandler.handler
+    events:
+      - http:
+          path: /properties/{id}/documents/{docId}
+          method: delete
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+  deletePropertyImages:
+    handler: src/handlers/deletePropertyImagesHandler.handler
+    events:
+      - http:
+          path: /properties/{id}/images
+          method: delete
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
   verifyToken:
     handler: ../auth/src/middlewares/authMiddleware.verifyToken
 

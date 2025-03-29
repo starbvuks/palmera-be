@@ -91,8 +91,16 @@ const rulesSchema = Joi.object({
     events_allowed: Joi.boolean(),
 });
 
+// Document Schema
+const documentSchema = Joi.object({
+    document_name: Joi.string(),
+    id: Joi.string(),
+    document_url: Joi.string().uri(),
+});
+
 // Verification Schema
 const verificationSchema = Joi.object({
+    documents: Joi.array().items(documentSchema),
     government_id_verified: Joi.boolean().default(false),
     ownership_proof_verified: Joi.boolean().default(false),
     admin_approved: Joi.boolean().default(false),
