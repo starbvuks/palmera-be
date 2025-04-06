@@ -1,0 +1,121 @@
+service: palmera-bookings
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  environment:
+    NODE_ENV: ${.env:NODE_ENV}
+    MONGODB_URI: ${.env:MONGODB_URI}
+    JWT_SECRET: ${.env:JWT_SECRET}
+    AWS_S3_BUCKET_NAME: ${.env:AWS_S3_BUCKET_NAME}
+    AWS_ACCESS_KEY_ID: ${.env:AWS_ACCESS_KEY_ID}
+    AWS_SECRET_ACCESS_KEY: ${.env:AWS_SECRET_ACCESS_KEY}
+    AWS_REGION: ${.env:AWS_REGION}
+
+functions:
+  createBookings:
+    handler: src/handlers/createBookingHandler.handler
+    events:
+      - http:
+          path: /bookings
+          method: post
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+  getBookings:
+    handler: src/handlers/getBookingHandler.handler
+    events:
+      - http:
+          path: /bookings/{id}
+          method: get
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+  updateBookings:
+    handler: src/handlers/updateBookingHandler.handler
+    events:
+      - http:
+          path: /bookings/{id}
+          method: put
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+  getUserBookings:
+    handler: src/handlers/getUserBookingsHandler.handler
+    events:
+      - http:
+          path: /bookings/user/{id}
+          method: get
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+  getHostBookings:
+    handler: src/handlers/getHostBookingsHandler.handler
+    events:
+      - http:
+          path: /bookings/host/{id}
+          method: get
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+  cancelBooking:
+    handler: src/handlers/cancelBookingHandler.handler
+    events:
+      - http:
+          path: /bookings/{id}
+          method: delete
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+  getUserPastBookings:
+    handler: src/handlers/getUserBookingHistoryHandler.handler
+    events:
+      - http:
+          path: /bookings/history/user/{id}
+          method: get
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+  getHostPastBookings:
+    handler: src/handlers/getHostBookingHistoryHandler.handler
+    events:
+      - http:
+          path: /bookings/history/host/{id}
+          method: get
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+    
+  verifyToken:
+    handler: ../auth/src/middlewares/authMiddleware.verifyToken
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-prune-plugin
+
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!.git/**'
+    - '!.gitignore'
+    - '!.env*'
+    - '!README.md'
+    - '!tests/**'
+    - '!coverage/**'
