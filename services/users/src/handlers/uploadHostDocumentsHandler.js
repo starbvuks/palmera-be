@@ -1,0 +1,95 @@
+const AWS = require('aws-sdk');
+const { connectToDatabase } = require('../../../auth/src/lib/mongodb');
+const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+const response = require('../../../auth/src/lib/response');
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage() });
+const parseMultipart = require('parse-multipart');
+const { v4: uuidv4 } = require('uuid');
+
+const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION
+});
+
+function extractFiles(event) {
+    if (!event.body || !event.headers) {
+        throw new Error('Invalid event structure');
+    }
+
+    const bodyBuffer = event.isBase64Encoded ?
+        Buffer.from(event.body, 'base64') :
+        Buffer.from(event.body, 'binary');
+
+    const contentType = event.headers['Content-Type'] || event.headers['content-type'];
+    if (!contentType) {
+        throw new Error('Missing content-type header');
+    }
+
+    const boundary = parseMultipart.getBoundary(contentType);
+    const parts = parseMultipart.Parse(bodyBuffer, boundary);
+    return parts
+}
+
+const handler = async (event) => {
+    try {
+        const userId = event.pathParameters.id;
+
+
+        if (!userId) {
+            return response.error('user ID is required', 400);
+        }
+
+        const db = await connectToDatabase();
+        const user = await db.collection('users').findOne({ _id: userId });
+        if (!user) {
+            return response.error('user not found', 404);
+        }
+
+        const parts = extractFiles(event);
+        if (!parts.length) {
+            return response.error('No files uploaded', 400);
+        }
+
+        const allowedTypes = ['application/pdf'];
+        const uploadedFiles = [];
+        for (const file of parts) {
+            const { filename, type, data } = file;
+            if (!data || !filename || !type) {
+                return response.error('Invalid file upload', 400);
+            }
+            if (!allowedTypes.includes(type)) {
+                return response.error('Invalid file type. Only PDF is allowed.', 400);
+            }
+
+            const fileExtension = type.split('/')[1];
+            const id = uuidv4()
+            const fileKey = `host-Documents/${userId}/${id}.${fileExtension}`;
+
+            const uploadParams = {
+                Bucket: process.env.AWS_S3_BUCKET_NAME,
+                Key: fileKey,
+                Body: data,
+                ContentType: type
+            };
+
+            await s3.putObject(uploadParams).promise();
+            const fileUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}`;
+            const fileDoc = {
+                document_name: filename,
+                id: id,
+                document_url: fileUrl,
+            }
+            uploadedFiles.push(fileDoc);
+        }
+        await db.collection('users').updateOne({ _id: userId }, { $push: { "hostDetails.verification.documents": { $each: uploadedFiles } } });
+
+        return response.success({ message: 'File uploaded successfully', documents: uploadedFiles }, 200);
+    } catch (error) {
+        console.error('Upload document error:', error);
+        return response.error('Internal server error', 500);
+    }
+};
+
+module.exports = { handler };

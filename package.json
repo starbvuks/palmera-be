@@ -1,12 +1,20 @@
 {
   "name": "palmera-be",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is the **serverless-first backend** for **Palemra**, an Airbnb-style mobile application. Built using **AWS Lambda, API Gateway, MongoDB Atlas, and AWS services**, it provides a scalable and modular backend for the **React Native frontend**.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/starbvuks/palmera-be.git"
+  },
+  "bugs": {
+    "url": "https://github.com/starbvuks/palmera-be/issues"
+  },
+  "homepage": "https://github.com/starbvuks/palmera-be#readme"
 }

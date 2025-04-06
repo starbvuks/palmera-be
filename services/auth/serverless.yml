@@ -52,9 +52,9 @@ functions:
           path: /auth/logout
           method: post
           cors: true
-          authorizer:
-            name: verifyToken
-            type: token
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
 
   deleteAccount:
     handler: src/handlers/deleteAccountHandler.handler
@@ -63,9 +63,175 @@ functions:
           path: /auth/delete-account
           method: delete
           cors: true
-          authorizer:
-            name: verifyToken
-            type: token
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+  getUserProfile:
+    handler: ../users/src/handlers/getUserHandler.handler
+    events:
+      - http:
+          path: /users/{id}
+          method: get
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+  updateUserProfile:
+    handler: ../users/src/handlers/updateUserHandler.handler
+    events:
+      - http:
+          path: /users/{id}
+          method: put
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+  updateUserPreferences:
+    handler: ../users/src/handlers/updatePreferencesHandler.handler
+    events:
+      - http:
+          path: /users/{id}/preferences
+          method: post
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+  getUserPreferences:
+    handler: ../users/src/handlers/getPreferencesHandler.handler
+    events:
+      - http:
+          path: /users/{id}/preferences
+          method: get
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+  saveUserLocation:
+    handler: ../users/src/handlers/saveLocationHandler.handler
+    events:
+      - http:
+          path: /users/{id}/saved-locations
+          method: post
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+  getUserSavedLocations:
+    handler: ../users/src/handlers/getSavedLocationsHandler.handler
+    events:
+      - http:
+          path: /users/{id}/saved-locations
+          method: get
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+  deleteUserSavedLocation:
+    handler: ../users/src/handlers/deleteSavedLocationHandler.handler
+    events:
+      - http:
+          path: /users/{id}/saved-locations/{locationId}
+          method: delete
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+  switchUserRole:
+    handler: ../users/src/handlers/changeRoleHandler.handler
+    events:
+      - http:
+          path: /users/{id}/role
+          method: post
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+
+  createProperty:
+    handler: ../properties/src/handlers/createPropertyHandler.handler
+    events:
+      - http:
+          path: /properties
+          method: post
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+  getProperty:
+    handler: ../properties/src/handlers/getPropertyHandler.handler
+    events:
+      - http:
+          path: /properties/{id}
+          method: get
+          cors: true
+
+  updateProperty:
+    handler: ../properties/src/handlers/updatePropertyHandler.handler
+    events:
+      - http:
+          path: /properties/{id}
+          method: put
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+  getUserProperty:
+    handler: ../properties/src/handlers/getUserPropertiesHandler.handler
+    events:
+      - http:
+          path: /properties/user/{id}
+          method: get
+          cors: true
+
+  deleteProperty:
+    handler: ../properties/src/handlers/deletePropertyHandler.handler
+    events:
+      - http:
+          path: /properties/{id}
+          method: delete
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+  searchProperties:
+    handler: ../properties/src/handlers/searchPropertiesHandler.handler
+    events:
+      - http:
+          path: /properties/search
+          method: get
+          cors: true
+
+  uploadPropertyDocument:
+    handler: ../properties/src/handlers/uploadPropertyDocumentHandler.handler
+    events:
+      - http:
+          path: /properties/{id}/documents
+          method: post
+          cors: true
+  #         authorizer:
+  #           name: verifyToken
+  #           type: token
+
+  # getPropertyDocuments:
+  #   handler: ../properties/src/handlers/getPropertyDocumentsHandler.handler
+  #   events:
+  #     - http:
+  #         path: /properties/{id}/documents
+  #         method: get
+  #         cors: true
+  #         authorizer:
+  #           name: verifyToken
+  #           type: token
 
   verifyToken:
     handler: src/middlewares/authMiddleware.verifyToken
