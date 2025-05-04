@@ -22,9 +22,9 @@ functions:
           path: /messages
           method: post
           cors: true
-          # authorizer:
-          #   name: verifyToken
-          #   type: token
+          authorizer:
+            name: verifyToken
+            type: token
 
   getMessages:
     handler: src/handlers/getConversationMessagesHandler.handler
@@ -33,9 +33,9 @@ functions:
           path: /messages/{id}
           method: get
           cors: true
-          # authorizer:
-          #   name: verifyToken
-          #   type: token
+          authorizer:
+            name: verifyToken
+            type: token
   getUserConversations:
     handler: src/handlers/getUserConversationsHandler.handler
     events:
@@ -43,9 +43,9 @@ functions:
           path: /conversations/user/{id}
           method: get
           cors: true
-          # authorizer:
-          #   name: verifyToken
-          #   type: token
+          authorizer:
+            name: verifyToken
+            type: token
   deleteMessage:
     handler: src/handlers/deleteMessageHandler.handler
     events:
@@ -53,9 +53,9 @@ functions:
           path: /messages/{conversationId}/{id}
           method: delete
           cors: true
-          # authorizer:
-          #   name: verifyToken
-          #   type: token
+          authorizer:
+            name: verifyToken
+            type: token
   
   verifyToken:
     handler: ../auth/src/middlewares/authMiddleware.verifyToken

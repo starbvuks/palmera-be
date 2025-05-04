@@ -78,9 +78,9 @@ functions:
           path: /properties/{id}/documents
           method: post
           cors: true
-          # authorizer:
-          #   name: verifyToken
-          #   type: token
+          authorizer:
+            name: verifyToken
+            type: token
   uploadPropertyImages:
     handler: src/handlers/uploadPropertyImagesHandler.handler
     timeout: 90
@@ -89,9 +89,9 @@ functions:
           path: /properties/{id}/images
           method: post
           cors: true
-          # authorizer:
-          #   name: verifyToken
-          #   type: token
+          authorizer:
+            name: verifyToken
+            type: token
   deletePropertyDocument:
     handler: src/handlers/deletePropertyDocumentHandler.handler
     events:
@@ -99,9 +99,9 @@ functions:
           path: /properties/{id}/documents/{docId}
           method: delete
           cors: true
-          # authorizer:
-          #   name: verifyToken
-          #   type: token
+          authorizer:
+            name: verifyToken
+            type: token
   deletePropertyImages:
     handler: src/handlers/deletePropertyImagesHandler.handler
     events:
@@ -109,9 +109,9 @@ functions:
           path: /properties/{id}/images
           method: delete
           cors: true
-          # authorizer:
-          #   name: verifyToken
-          #   type: token
+          authorizer:
+            name: verifyToken
+            type: token
   verifyToken:
     handler: ../auth/src/middlewares/authMiddleware.verifyToken
 
