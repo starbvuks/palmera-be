@@ -55,6 +55,20 @@ functions:
           authorizer:
             name: verifyToken
             type: token
+  sendOtp:
+    handler: src/handlers/sendOtpHandler.handler
+    events:
+      - http:
+          path: /auth/otp/send
+          method: post
+          cors: true
+  verifyOtp:
+    handler: src/handlers/verifyOtpHandler.handler
+    events:
+      - http:
+          path: /auth/otp/verify
+          method: post
+          cors: true
 
   deleteAccount:
     handler: src/handlers/deleteAccountHandler.handler

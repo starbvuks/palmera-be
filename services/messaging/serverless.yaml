@@ -1,0 +1,76 @@
+service: palmera-messaging
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  environment:
+    NODE_ENV: ${.env:NODE_ENV}
+    MONGODB_URI: ${.env:MONGODB_URI}
+    JWT_SECRET: ${.env:JWT_SECRET}
+    AWS_S3_BUCKET_NAME: ${.env:AWS_S3_BUCKET_NAME}
+    AWS_ACCESS_KEY_ID: ${.env:AWS_ACCESS_KEY_ID}
+    AWS_SECRET_ACCESS_KEY: ${.env:AWS_SECRET_ACCESS_KEY}
+    AWS_REGION: ${.env:AWS_REGION}
+
+functions:
+  sendMessage:
+    handler: src/handlers/sendMessageHandler.handler
+    events:
+      - http:
+          path: /messages
+          method: post
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+
+  getMessages:
+    handler: src/handlers/getConversationMessagesHandler.handler
+    events:
+      - http:
+          path: /messages/{id}
+          method: get
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+  getUserConversations:
+    handler: src/handlers/getUserConversationsHandler.handler
+    events:
+      - http:
+          path: /conversations/user/{id}
+          method: get
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+  deleteMessage:
+    handler: src/handlers/deleteMessageHandler.handler
+    events:
+      - http:
+          path: /messages/{conversationId}/{id}
+          method: delete
+          cors: true
+          # authorizer:
+          #   name: verifyToken
+          #   type: token
+  
+  verifyToken:
+    handler: ../auth/src/middlewares/authMiddleware.verifyToken
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-prune-plugin
+
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!.git/**'
+    - '!.gitignore'
+    - '!.env*'
+    - '!README.md'
+    - '!tests/**'
+    - '!coverage/**'
