@@ -1,0 +1,37 @@
+{
+  "name": "palmera-messaging",
+  "version": "1.0.0",
+  "description": "Messaging service for Palmera",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "deploy": "serverless deploy",
+    "deploy:prod": "serverless deploy --stage prod",
+    "offline": "serverless offline start"
+  },
+  "dependencies": {
+    "@aws-sdk/client-ssm": "^3.750.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^5.9.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.31.0",
+    "jest": "^29.7.0",
+    "serverless": "^3.40.0",
+    "serverless-dotenv-plugin": "^4.0.2",
+    "serverless-offline": "^12.0.4",
+    "serverless-prune-plugin": "^2.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 

@@ -1,0 +1,101 @@
+service: palmera-properties
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  environment:
+    NODE_ENV: ${env:NODE_ENV}
+    MONGODB_URI: ${env:MONGODB_URI}
+    JWT_SECRET: ${env:JWT_SECRET}
+    AWS_S3_BUCKET_NAME: ${env:AWS_S3_BUCKET_NAME}
+    AWS_ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
+    AWS_SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
+    AWS_REGION: ${env:AWS_REGION}
+
+functions:
+  createProperty:
+    handler: src/handlers/createPropertyHandler.handler
+    events:
+      - http:
+          path: /properties
+          method: post
+          cors: true
+          authorizer:
+            name: verifyToken
+            type: token
+
+  getProperty:
+    handler: src/handlers/getPropertyHandler.handler
+    events:
+      - http:
+          path: /properties/{id}
+          method: get
+          cors: true
+
+  updateProperty:
+    handler: src/handlers/updatePropertyHandler.handler
+    events:
+      - http:
+          path: /properties/{id}
+          method: put
+          cors: true
+          authorizer:
+            name: verifyToken
+            type: token
+
+  getUserProperty:
+    handler: src/handlers/getUserPropertiesHandler.handler
+    events:
+      - http:
+          path: /properties/user/{id}
+          method: get
+          cors: true
+
+  deleteProperty:
+    handler: src/handlers/deletePropertyHandler.handler
+    events:
+      - http:
+          path: /properties/{id}
+          method: delete
+          cors: true
+          authorizer:
+            name: verifyToken
+            type: token
+
+  searchProperties:
+    handler: src/handlers/searchPropertiesHandler.handler
+    events:
+      - http:
+          path: /properties/search
+          method: get
+          cors: true
+
+  verifyToken:
+    handler: ../auth/src/middlewares/authMiddleware.verifyToken
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-prune-plugin
+
+custom:
+  serverless-offline:
+    httpPort: 4002
+    lambdaPort: 4003
+  prune:
+    automatic: true
+    number: 3
+
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!.git/**'
+    - '!.gitignore'
+    - '!.env*'
+    - '!README.md'
+    - '!tests/**'
+    - '!coverage/**' 
