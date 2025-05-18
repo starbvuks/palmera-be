@@ -1,4 +1,4 @@
-service: palmera-messaging
+service: palmera-files
 
 provider:
   name: aws
@@ -10,40 +10,44 @@ provider:
     MONGODB_URI: ${.env:MONGODB_URI}
     JWT_SECRET: ${.env:JWT_SECRET}
     AWS_S3_BUCKET_NAME: ${.env:AWS_S3_BUCKET_NAME}
+    AWS_ACCESS_KEY_ID: ${.env:AWS_ACCESS_KEY_ID}
+    AWS_SECRET_ACCESS_KEY: ${.env:AWS_SECRET_ACCESS_KEY}
+    AWS_REGION: ${.env:AWS_REGION}
 
 functions:
-  createNotification:
-    handler: src/handlers/createNotificationHandler.handler
+  uploadFile:
+    handler: src/handlers/uploadFileHandler.handler
     events:
       - http:
-          path: /notifications
+          path: /files/upload
           method: post
           cors: true
           authorizer:
             name: verifyToken
             type: token
 
-  getUserNotifications:
-    handler: src/handlers/getUserNotificationsHandler.handler
+  getFile:
+    handler: src/handlers/getFileHandler.handler
     events:
       - http:
-          path: /notifications/{id}
+          path: /files/{id}
           method: get
           cors: true
           authorizer:
             name: verifyToken
             type: token
-  deleteNotification:
-    handler: src/handlers/deleteNotificationHandler.handler
+
+  deleteFile:
+    handler: src/handlers/deleteFileHandler.handler
     events:
       - http:
-          path: /notifications/{id}
+          path: /files/{id}
           method: delete
           cors: true
           authorizer:
             name: verifyToken
             type: token
-  
+
   verifyToken:
     handler: ../auth/src/middlewares/authMiddleware.verifyToken
 
