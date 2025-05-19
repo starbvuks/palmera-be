@@ -6,6 +6,7 @@ const handler = async (event) => {
 
     try {
         const userId = event.pathParameters['id'];
+        console.log(userId); 
 
         // Connect to MongoDB
         const db = await connectToDatabase();
@@ -20,6 +21,7 @@ const handler = async (event) => {
         if (!user) {
             return response.error('User not found', 404);
         }
+        console.log(user);
         return response.success({ user }, 200);
     } catch (error) {
         console.error('Get user error:', error);
