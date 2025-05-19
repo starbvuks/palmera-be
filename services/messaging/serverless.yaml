@@ -10,9 +10,6 @@ provider:
     MONGODB_URI: ${.env:MONGODB_URI}
     JWT_SECRET: ${.env:JWT_SECRET}
     AWS_S3_BUCKET_NAME: ${.env:AWS_S3_BUCKET_NAME}
-    AWS_ACCESS_KEY_ID: ${.env:AWS_ACCESS_KEY_ID}
-    AWS_SECRET_ACCESS_KEY: ${.env:AWS_SECRET_ACCESS_KEY}
-    AWS_REGION: ${.env:AWS_REGION}
 
 functions:
   sendMessage:
@@ -30,27 +27,29 @@ functions:
     handler: src/handlers/getConversationMessagesHandler.handler
     events:
       - http:
-          path: /messages/{id}
+          path: /messages/conversation/{conversationId}
           method: get
           cors: true
           authorizer:
             name: verifyToken
             type: token
+
   getUserConversations:
     handler: src/handlers/getUserConversationsHandler.handler
     events:
       - http:
-          path: /conversations/user/{id}
+          path: /conversations/user/{userId}
           method: get
           cors: true
           authorizer:
             name: verifyToken
             type: token
+
   deleteMessage:
     handler: src/handlers/deleteMessageHandler.handler
     events:
       - http:
-          path: /messages/{conversationId}/{id}
+          path: /messages/{messageId}
           method: delete
           cors: true
           authorizer:
