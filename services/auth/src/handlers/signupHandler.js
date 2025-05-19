@@ -1,4 +1,4 @@
-const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const { v4: uuidv4 } = require('uuid');
 const { connectToDatabase } = require('../lib/mongodb');
 const response = require('../lib/response');
@@ -13,6 +13,16 @@ const {
 const {
     authenticationSchema
 } = require('../../../users/src/lib/userDAL');
+
+// Function to hash password using crypto instead of bcrypt
+const hashPassword = (password) => {
+    // Generate a random salt
+    const salt = crypto.randomBytes(16).toString('hex');
+    // Hash the password with the salt using PBKDF2
+    const hash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
+    // Return both salt and hash together
+    return `${salt}:${hash}`;
+};
 
 const handler = async (event) => {
     try {
@@ -48,9 +58,8 @@ const handler = async (event) => {
             return response.error('Phone number already registered', 409);
         }
 
-        // Hash password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        // Hash password using crypto instead of bcrypt
+        const hashedPassword = hashPassword(password);
 
         const accountStatus = accountStatusSchema.validate({}).value
         authentication = authenticationSchema.validate({ passwordHash: hashedPassword }).value

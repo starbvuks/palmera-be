@@ -40,19 +40,57 @@ const handler = async (event) => {
             return response.error('Host ID does not match with property host ID', 400);
         }
 
-        // check if availability exists
+        // Fix: properly check if all dates in the range are available
         const startDate = new Date(bookingData.bookingDetails.check_in);
         const endDate = new Date(bookingData.bookingDetails.check_out);
+        
+        // Convert availability dates to format that can be compared directly (YYYY-MM-DD)
+        const availableDatesSet = new Set(property.availability.availability_calendar.map(date => {
+            // Handle if dates are stored as strings or Date objects
+            if (typeof date === 'string') {
+                // If already in ISO format, get just the date part
+                if (date.includes('T')) {
+                    return date.split('T')[0];
+                }
+                return date;
+            } else if (date instanceof Date) {
+                return date.toISOString().split('T')[0];
+            }
+            return date;
+        }));
+
+        console.log('Available dates:', availableDatesSet);
+        
+        // Check each date in the requested booking period
+        let unavailableDate = null;
         for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-            console.log(d);
-            if (!property.availability.availability_calendar.includes(d.toISOString().split("T")[0])) {
-                return response.error('Property is not available for the selected dates', 400);
+            const dateString = d.toISOString().split('T')[0];
+            console.log('Checking date:', dateString);
+            
+            if (!availableDatesSet.has(dateString)) {
+                unavailableDate = dateString;
+                console.log('Unavailable date found:', dateString);
+                break;
             }
         }
-
+        
+        if (unavailableDate) {
+            return response.error(`Property is not available for the selected date: ${unavailableDate}`, 400);
+        }
 
         // Create booking
         await db.collection('bookings').insertOne(bookingData);
+
+        // Update property availability - remove booked dates
+        const datesToRemove = [];
+        for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+            datesToRemove.push(d.toISOString().split('T')[0]);
+        }
+        
+        await db.collection('properties').updateOne(
+            { _id: bookingData.property_id },
+            { $pull: { "availability.availability_calendar": { $in: datesToRemove } } }
+        );
 
         return response.success({
             bookingData

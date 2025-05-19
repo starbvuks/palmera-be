@@ -1,13 +1,10 @@
 const { connectToDatabase } = require('../../../auth/src/lib/mongodb');
 const response = require('../../../auth/src/lib/response');
-const {
-    preferencesSchema
-} = require('../lib/userDAL.js');
+const { preferencesSchema } = require('../lib/userDAL.js');
 
 const handler = async(event) => {
     try {
         const userId = event.pathParameters['id'];
-
         const updateData = JSON.parse(event.body);
 
         // Validate input
@@ -25,20 +22,19 @@ const handler = async(event) => {
             return response.error('User not found', 404);
         }
 
-        // Update user
+        // Update user preferences
         await db.collection('users').updateOne({ _id: userId }, {
-            $set: {
-                preferences: updateData
-            }
+            $set: { preferences: updateData }
         });
 
-        return response.success({ message: 'user preferences updated successfully' });
+        // Fetch updated preferences
+        const updatedUser = await db.collection('users').findOne({ _id: userId }, { projection: { preferences: 1 } });
+
+        return response.success(updatedUser);
     } catch (error) {
         console.error('Update user preferences error:', error);
         return response.error('Internal server error', 500);
     }
 };
 
-module.exports = {
-    handler,
-};
+module.exports = { handler };

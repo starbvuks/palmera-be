@@ -1,8 +1,20 @@
-const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const { connectToDatabase } = require('../lib/mongodb');
 const { loginSchema } = require('../lib/validationSchemas');
 const response = require('../lib/response');
+
+// Function to verify password using crypto instead of bcrypt
+const verifyPassword = (inputPassword, storedHash) => {
+  // Split the stored hash into salt and hash portions
+  const [salt, hash] = storedHash.split(':');
+  
+  // Hash the input password with the same salt
+  const inputHash = crypto.pbkdf2Sync(inputPassword, salt, 10000, 64, 'sha512').toString('hex');
+  
+  // Compare the computed hash with the stored hash
+  return inputHash === hash;
+};
 
 const generateTokens = (userId) => {
   const accessToken = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -29,8 +41,8 @@ const handler = async (event) => {
       return response.error('Invalid credentials', 401);
     }
 
-    // Verify password
-    const validPassword = await bcrypt.compare(password, user.authentication.passwordHash);
+    // Verify password using crypto instead of bcrypt
+    const validPassword = verifyPassword(password, user.authentication.passwordHash);
     if (!validPassword) {
       return response.error('Invalid credentials', 401);
     }

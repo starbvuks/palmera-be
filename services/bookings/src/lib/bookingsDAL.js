@@ -1,5 +1,23 @@
 const Joi = require('joi');
 
+// Payment schema
+const paymentSchema = Joi.object({
+    paymentIntentId: Joi.string(),
+    amount: Joi.number().positive(),
+    currency: Joi.string().length(3),
+    status: Joi.string().valid('pending', 'completed', 'failed', 'refunded'),
+    createdAt: Joi.date(),
+    completedAt: Joi.date(),
+    refunded: Joi.boolean(),
+    refundedAmount: Joi.number().positive(),
+    refundedAt: Joi.date(),
+    refundReason: Joi.string(),
+    lastError: Joi.string(),
+    disputed: Joi.boolean(),
+    disputeDetails: Joi.object(),
+    details: Joi.object()
+  });
+
 // Booking Details Schema
 const bookingDetailsSchema = Joi.object({
     booking_reference: Joi.string().required(),
@@ -14,7 +32,8 @@ const bookingDetailsSchema = Joi.object({
     special_requests: Joi.string().allow('').optional(),
     status: Joi.string().valid("pending", "confirmed", "cancelled", "completed", "no-show").default("pending"),
     booking_date: Joi.date().default(new Date()),
-    last_updated: Joi.date().default(new Date())
+    last_updated: Joi.date().default(new Date()),
+    payment: paymentSchema
 });
 
 // Pricing Schema
@@ -78,6 +97,7 @@ const bookingSchema = Joi.object({
 
 // Exporting Modules
 module.exports = {
+    paymentSchema,
     bookingSchema,
     bookingDetailsSchema,
     pricingSchema,
