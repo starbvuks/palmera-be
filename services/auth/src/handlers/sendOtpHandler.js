@@ -1,6 +1,6 @@
-const { connectToDatabase } = require('../../../auth/src/lib/mongodb');
-const response = require('../../../auth/src/lib/response');
-const {sendOTP} = require('../../../auth/src/lib/twilioClient');
+const { connectToDatabase } = require('../lib/mongodb');
+const response = require('../lib/response');
+const {sendOTP} = require('../lib/twilioClient');
 const Joi = require('joi');
 
 const { v4: uuidv4 } = require('uuid');

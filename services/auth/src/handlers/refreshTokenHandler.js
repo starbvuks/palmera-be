@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { connectToDatabase } = require('../lib/mongodb');
-const { refreshTokenSchema } = require('../lib/validationSchemas');
+const { refreshTokenSchema } = require('../lib/userDAL');
 const response = require('../lib/response');
 
 const generateAccessToken = (userId) => {

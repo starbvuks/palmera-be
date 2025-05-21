@@ -1,11 +1,11 @@
 const AWS = require('aws-sdk');
-const { connectToDatabase } = require('../../../auth/src/lib/mongodb');
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
-const response = require('../../../auth/src/lib/response');
 const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
 const parseMultipart = require('parse-multipart');
 const { v4: uuidv4 } = require('uuid');
+const { connectToDatabase } = require('../lib/mongodb');
+const response = require('../lib/response');
 
 const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,

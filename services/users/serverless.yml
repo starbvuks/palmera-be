@@ -111,8 +111,6 @@ plugins:
 
 package:
   patterns:
-    - '!node_modules/**'
-    - 'node_modules/bcryptjs/**'
     - '!.git/**'
     - '!.gitignore'
     - '!.env*'

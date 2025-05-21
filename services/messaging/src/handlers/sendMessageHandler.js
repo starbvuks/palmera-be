@@ -1,5 +1,5 @@
-const { connectToDatabase } = require('../../../auth/src/lib/mongodb.js');
-const response = require('../../../auth/src/lib/response.js');
+const { connectToDatabase } = require('../lib/mongodb.js');
+const response = require('../lib/response.js');
 const {
     messageSchemaWithConversationDetails,
 } = require('../lib/messageDAL.js');

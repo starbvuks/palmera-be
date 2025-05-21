@@ -1,22 +1,40 @@
 const Joi = require('joi');
 
-// Payment schema
 const paymentSchema = Joi.object({
-    paymentIntentId: Joi.string(),
-    amount: Joi.number().positive(),
-    currency: Joi.string().length(3),
-    status: Joi.string().valid('pending', 'completed', 'failed', 'refunded'),
-    createdAt: Joi.date(),
+    stripePaymentIntentId: Joi.string(), 
+    paymentIntentId: Joi.string(), 
+    amount: Joi.number().positive().required(),
+    currency: Joi.string().length(3).required(),
+    status: Joi.string().valid('pending', 'completed', 'failed', 'refunded').required(),
+    breakdown: Joi.object({
+        basePrice: Joi.number().positive().required(),
+        cleaningFee: Joi.number().min(0).required(),
+        serviceFee: Joi.number().min(0).required(),
+        taxes: Joi.number().min(0).required(),
+        total: Joi.number().positive().required()
+    }),
+    refund: Joi.object({
+        amount: Joi.number().min(0),
+        reason: Joi.string(),
+        stripeRefundId: Joi.string(),
+        processedAt: Joi.date()
+    }),
+    createdAt: Joi.date().default(Date.now),
+    updatedAt: Joi.date().default(Date.now),
     completedAt: Joi.date(),
-    refunded: Joi.boolean(),
-    refundedAmount: Joi.number().positive(),
-    refundedAt: Joi.date(),
-    refundReason: Joi.string(),
-    lastError: Joi.string(),
-    disputed: Joi.boolean(),
-    disputeDetails: Joi.object(),
-    details: Joi.object()
-  });
+    details: Joi.object().optional(),
+    payment_method: Joi.string().valid('credit_card', 'paypal', 'stripe', 'bank_transfer').optional(),
+    payment_status: Joi.string().valid('pending', 'paid', 'failed', 'refunded').optional(),
+    transaction_id: Joi.string().allow(null, '').optional(),
+    payment_date: Joi.date().optional(),
+    refunded: Joi.boolean().optional(),
+    refundedAmount: Joi.number().min(0).optional(),
+    refundedAt: Joi.date().optional(),
+    refundReason: Joi.string().optional(),
+    lastError: Joi.string().optional(),
+    disputed: Joi.boolean().optional(),
+    disputeDetails: Joi.object().optional()
+});
 
 // Booking Details Schema
 const bookingDetailsSchema = Joi.object({
@@ -55,17 +73,6 @@ const pricingSchema = Joi.object({
     platform_commission: Joi.number().min(0).default(0)
 });
 
-// Payment Schema
-const paymentSchema = Joi.object({
-    payment_status: Joi.string().valid("pending", "paid", "failed", "refunded").default("pending"),
-    payment_method: Joi.string().valid("credit_card", "paypal", "stripe", "bank_transfer").optional(),
-    transaction_id: Joi.string().allow(null, '').optional(),
-    payment_date: Joi.date().optional(),
-    refund_status: Joi.string().valid("not_requested", "requested", "processed", "declined").default("not_requested"),
-    refund_amount: Joi.number().min(0).optional(),
-    refund_date: Joi.date().optional()
-});
-
 // Cancellation Schema
 const cancellationSchema = Joi.object({
     cancellation_policy: Joi.string().optional(),
@@ -101,7 +108,6 @@ module.exports = {
     bookingSchema,
     bookingDetailsSchema,
     pricingSchema,
-    paymentSchema,
     cancellationSchema,
     metadataSchema
 };

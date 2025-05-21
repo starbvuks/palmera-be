@@ -119,7 +119,6 @@ plugins:
 
 package:
   patterns:
-    - '!node_modules/**'
     - '!.git/**'
     - '!.gitignore'
     - '!.env*'

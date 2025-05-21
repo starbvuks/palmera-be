@@ -2,7 +2,7 @@ const { OAuth2Client } = require('google-auth-library');
 const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
 const { connectToDatabase } = require('../lib/mongodb');
-const { googleAuthSchema } = require('../lib/validationSchemas');
+const { googleAuthSchema } = require('../lib/userDAL');
 const response = require('../lib/response');
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);

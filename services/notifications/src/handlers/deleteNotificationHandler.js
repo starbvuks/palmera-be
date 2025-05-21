@@ -1,19 +1,19 @@
-const { connectToDatabase } = require('../../../auth/src/lib/mongodb');
-const response = require('../../../auth/src/lib/response');
+const { connectToDatabase } = require('../lib/mongodb');
+const response = require('../lib/response');
 
 const handler = async (event) => {
-
-
     try {
-        const notificationId = event.pathParameters['id'];        
+        const notificationId = event.pathParameters['id'];
 
         // Connect to MongoDB
         const db = await connectToDatabase();
-        
-        await db.collection('notifications').deleteOne({ _id: notificationId } );
-        return response.success({ "response":"Notification Deleted Succsessfully" }, 200);
+
+        // Delete notification
+        await db.collection('notifications').deleteOne({ _id: notificationId });
+
+        return response.success({ message: 'Notification deleted successfully' });
     } catch (error) {
-        console.error('Get notification error:', error);
+        console.error('Delete notification error:', error);
         return response.error('Internal server error', 500);
     }
 };

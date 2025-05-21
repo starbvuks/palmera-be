@@ -1,5 +1,5 @@
-const { connectToDatabase } = require('../../../auth/src/lib/mongodb');
-const response = require('../../../auth/src/lib/response');
+const { connectToDatabase } = require('../lib/mongodb');
+const response = require('../lib/response');
 const { preferencesSchema } = require('../lib/userDAL.js');
 
 const handler = async(event) => {

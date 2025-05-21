@@ -3,14 +3,8 @@ const { v4: uuidv4 } = require('uuid');
 const { connectToDatabase } = require('../lib/mongodb');
 const response = require('../lib/response');
 const {
-    personalInfoSchema
-} = require('../lib/userDAL');
-
-const {
-    accountStatusSchema
-} = require('../lib/userDAL');
-
-const {
+    personalInfoSchema,
+    accountStatusSchema,
     authenticationSchema
 } = require('../lib/userDAL');
 

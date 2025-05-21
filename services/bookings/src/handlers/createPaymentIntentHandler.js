@@ -1,6 +1,6 @@
-const { connectToDatabase } = require('../../../../auth/src/lib/mongodb');
-const response = require('../../../../auth/src/lib/response');
-const { createPaymentIntent } = require('../../lib/stripeService');
+const { connectToDatabase } = require('../lib/mongodb');
+const response = require('../lib/response');
+const { createPaymentIntent } = require('../lib/stripeService');
 const Joi = require('joi');
 
 // Validation schema
