@@ -2,7 +2,7 @@ const { MongoClient } = require('mongodb');
 
 let cachedDb = null;
 
-const connectToDatabase = async() => {
+const connectToDatabase = async () => {
     if (cachedDb) {
         return cachedDb;
     }
@@ -20,4 +20,4 @@ const connectToDatabase = async() => {
 
 module.exports = {
     connectToDatabase,
-};
+}; 
