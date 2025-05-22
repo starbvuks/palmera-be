@@ -19,9 +19,9 @@ functions:
           path: /bookings
           method: post
           cors: true
-          # authorizer:
-          #   name: verifyToken
-          #   type: token
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
 
   getBookings:
     handler: src/handlers/getBookingHandler.handler
@@ -30,9 +30,9 @@ functions:
           path: /bookings/{id}
           method: get
           cors: true
-          # authorizer:
-          #   name: verifyToken
-          #   type: token
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
 
   updateBookings:
     handler: src/handlers/updateBookingHandler.handler
@@ -41,9 +41,10 @@ functions:
           path: /bookings/{id}
           method: put
           cors: true
-          # authorizer:
-          #   name: verifyToken
-          #   type: token
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
   getUserBookings:
     handler: src/handlers/getUserBookingsHandler.handler
     events:
@@ -51,9 +52,9 @@ functions:
           path: /bookings/user/{id}
           method: get
           cors: true
-          # authorizer:
-          #   name: verifyToken
-          #   type: token
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
 
   getHostBookings:
     handler: src/handlers/getHostBookingsHandler.handler
@@ -62,9 +63,9 @@ functions:
           path: /bookings/host/{id}
           method: get
           cors: true
-          # authorizer:
-          #   name: verifyToken
-          #   type: token
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
 
   cancelBooking:
     handler: src/handlers/cancelBookingHandler.handler
@@ -73,9 +74,9 @@ functions:
           path: /bookings/{id}
           method: delete
           cors: true
-          # authorizer:
-          #   name: verifyToken
-          #   type: token
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
 
   getUserPastBookings:
     handler: src/handlers/getUserBookingHistoryHandler.handler
@@ -84,9 +85,9 @@ functions:
           path: /bookings/history/user/{id}
           method: get
           cors: true
-          # authorizer:
-          #   name: verifyToken
-          #   type: token
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
 
   getHostPastBookings:
     handler: src/handlers/getHostBookingHistoryHandler.handler
@@ -95,12 +96,9 @@ functions:
           path: /bookings/history/host/{id}
           method: get
           cors: true
-          # authorizer:
-          #   name: verifyToken
-          #   type: token
-    
-  verifyToken:
-    handler: ../auth/src/middlewares/authMiddleware.verifyToken
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
 
 plugins:
   - serverless-offline

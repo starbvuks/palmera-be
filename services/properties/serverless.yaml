@@ -20,7 +20,7 @@ functions:
           method: post
           cors: true
           authorizer:
-            name: verifyToken
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
             type: token
 
   getProperty:
@@ -30,6 +30,9 @@ functions:
           path: /properties/{id}
           method: get
           cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
 
   updateProperty:
     handler: src/handlers/updatePropertyHandler.handler
@@ -39,8 +42,9 @@ functions:
           method: put
           cors: true
           authorizer:
-            name: verifyToken
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
             type: token
+
   getUserProperty:
     handler: src/handlers/getUserPropertiesHandler.handler
     events:
@@ -48,6 +52,9 @@ functions:
           path: /properties/user/{id}
           method: get
           cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
 
   deleteProperty:
     handler: src/handlers/deletePropertyHandler.handler
@@ -57,7 +64,7 @@ functions:
           method: delete
           cors: true
           authorizer:
-            name: verifyToken
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
             type: token
 
   searchProperties:
@@ -67,6 +74,10 @@ functions:
           path: /properties/search
           method: get
           cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
   uploadPropertyDocument:
     handler: src/handlers/uploadPropertyDocumentsHandler.handler
     timeout: 90
@@ -76,8 +87,9 @@ functions:
           method: post
           cors: true
           authorizer:
-            name: verifyToken
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
             type: token
+
   uploadPropertyImages:
     handler: src/handlers/uploadPropertyImagesHandler.handler
     timeout: 90
@@ -87,8 +99,9 @@ functions:
           method: post
           cors: true
           authorizer:
-            name: verifyToken
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
             type: token
+
   deletePropertyDocument:
     handler: src/handlers/deletePropertyDocumentHandler.handler
     events:
@@ -97,8 +110,9 @@ functions:
           method: delete
           cors: true
           authorizer:
-            name: verifyToken
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
             type: token
+
   deletePropertyImages:
     handler: src/handlers/deletePropertyImagesHandler.handler
     events:
@@ -107,10 +121,8 @@ functions:
           method: delete
           cors: true
           authorizer:
-            name: verifyToken
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
             type: token
-  verifyToken:
-    handler: ../auth/src/middlewares/authMiddleware.verifyToken
 
 plugins:
   - serverless-offline

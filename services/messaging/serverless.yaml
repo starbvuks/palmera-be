@@ -20,7 +20,7 @@ functions:
           method: post
           cors: true
           authorizer:
-            name: verifyToken
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
             type: token
 
   getMessages:
@@ -31,7 +31,7 @@ functions:
           method: get
           cors: true
           authorizer:
-            name: verifyToken
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
             type: token
 
   getUserConversations:
@@ -42,7 +42,7 @@ functions:
           method: get
           cors: true
           authorizer:
-            name: verifyToken
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
             type: token
 
   deleteMessage:
@@ -53,11 +53,8 @@ functions:
           method: delete
           cors: true
           authorizer:
-            name: verifyToken
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
             type: token
-  
-  verifyToken:
-    handler: ../auth/src/middlewares/authMiddleware.verifyToken
 
 plugins:
   - serverless-offline

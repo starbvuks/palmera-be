@@ -6,7 +6,6 @@ const Joi = require('joi');
 const { v4: uuidv4 } = require('uuid');
 const schema = Joi.object({ phone: Joi.string().pattern(/^\+\d{10,15}$/).required() });
 
-
 const handler = async (event) => {
     try {
         const requestData = JSON.parse(event.body);

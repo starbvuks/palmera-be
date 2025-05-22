@@ -3,6 +3,7 @@ const response = require('../lib/response');
 
 const handler = async (event) => {
     try {
+      console.log("Lambda started")
       const userId = event.pathParameters['id'];
       const db = await connectToDatabase();
       const user = await db.collection('users').findOne({ _id: userId });

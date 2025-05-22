@@ -20,6 +20,7 @@
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^5.9.2",
+    "twilio": "^5.6.1",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
