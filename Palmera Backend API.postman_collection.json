@@ -1,0 +1,4356 @@
+{
+	"info": {
+		"_postman_id": "d5fc4235-300a-441f-91b8-2a43f949f4f4",
+		"name": "Palmera Backend API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15607682",
+		"_collection_link": "https://www.postman.com/martian-resonance-6021/workspace/palmera-backend/collection/15607682-d5fc4235-300a-441f-91b8-2a43f949f4f4?action=share&source=collection_link&creator=15607682"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Sign Up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"password123\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"phone\": \"+1234567890\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://m71ar6e3f9.execute-api.us-east-1.amazonaws.com/dev/auth/signup",
+							"protocol": "https",
+							"host": [
+								"m71ar6e3f9",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Sign Up Success (201)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"newTestEmail2@example.com\",\n    \"password\": \"newpassword841\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"phone\": \"+1234567890\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://m71ar6e3f9.execute-api.us-east-1.amazonaws.com/dev/auth/signup",
+									"protocol": "https",
+									"host": [
+										"m71ar6e3f9",
+										"execute-api",
+										"us-east-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"auth",
+										"signup"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "256"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 15 May 2025 07:47:24 GMT"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "04542b08-5af4-4cb4-99f4-f3605b5d00f5"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KmVSAHzSIAMEu-Q="
+								},
+								{
+									"key": "X-Amzn-Trace-Id",
+									"value": "Root=1-68259c0c-0f8d28e17bef55c75f11f6b9;Parent=47283c97fb4e808a;Sampled=0;Lineage=1:972c2fc3:0"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Miss from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 f2ed20ce8c15acb95905bec6b556d148.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "tYQ7IXJWOzLQho-PA1A6ZIihNCG2RNe0uEdhqx-2AEfzTUSpMUGxTg=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"_id\": \"d725db10-ccab-4242-8267-aff3c6e478f9\",\n        \"email\": \"newTestEmail2@example.com\",\n        \"firstName\": \"John\",\n        \"lastName\": \"Doe\",\n        \"phone\": \"+1234567890\",\n        \"role\": \"user\",\n        \"createdAt\": \"2025-05-15T07:47:24.629Z\",\n        \"updatedAt\": \"2025-05-15T07:47:24.629Z\"\n    }\n}"
+						},
+						{
+							"name": "Sign Up Fail (409)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"newTestEmail2@example.com\",\n    \"password\": \"newpassword841\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"phone\": \"+1234567890\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://m71ar6e3f9.execute-api.us-east-1.amazonaws.com/dev/auth/signup",
+									"protocol": "https",
+									"host": [
+										"m71ar6e3f9",
+										"execute-api",
+										"us-east-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"auth",
+										"signup"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "52"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 15 May 2025 07:47:33 GMT"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "584e0315-f848-4b71-9031-5a1d9432c3c3"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KmVTcGc0IAMEjGA="
+								},
+								{
+									"key": "X-Amzn-Trace-Id",
+									"value": "Root=1-68259c15-7e7e6adc6a30385f744b89d3;Parent=2951aaed9dfbe5d1;Sampled=0;Lineage=1:972c2fc3:0"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 f2ed20ce8c15acb95905bec6b556d148.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "KXqszaGncQ8n0mXcnl23_kKF5s9gEI9zmusVGr2lZVQuzYQ7LT1uYg=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": false,\n    \"error\": \"Email already registered\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://m71ar6e3f9.execute-api.us-east-1.amazonaws.com/dev/auth/login",
+							"protocol": "https",
+							"host": [
+								"m71ar6e3f9",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Login Success (201)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://m71ar6e3f9.execute-api.us-east-1.amazonaws.com/dev/auth/login",
+									"protocol": "https",
+									"host": [
+										"m71ar6e3f9",
+										"execute-api",
+										"us-east-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"dev",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "675"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 19 May 2025 09:20:01 GMT"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "b0d73a0c-22ac-4fb3-aa25-a54e766c0c03"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KzumCHZmoAMEihg="
+								},
+								{
+									"key": "X-Amzn-Trace-Id",
+									"value": "Root=1-682af7bf-1031fde573880fe01cf031f7;Parent=50f9bc6ae92ab7d8;Sampled=0;Lineage=1:596c1e83:0"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Miss from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 473e3ebfdeb7e68f3a78ee0ddf96c412.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "DEL54-P4"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "KLw4kr47LSf1JwCapxWBzqM95aXr6KsA5W-_GNvW3e8CuHEQ6lPhSQ=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"user\": {\n            \"_id\": \"d35bf8f7-6cef-4f1c-97ce-5a956975f250\",\n            \"email\": \"test@example.com\",\n            \"firstName\": \"John\",\n            \"lastName\": \"Doe\",\n            \"phone\": \"+1234567890\",\n            \"role\": \"user\",\n            \"createdAt\": \"2025-05-19T09:19:03.016Z\",\n            \"updatedAt\": \"2025-05-19T09:19:03.016Z\"\n        },\n        \"accessToken\": \"{{vault:json-web-token}}\",\n        \"refreshToken\": \"{{vault:json-web-token}}\"\n    }\n}"
+						},
+						{
+							"name": "Login Fail (403)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"newTestEmail@example.com\",\n    \"password\": \"newpassword841\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "23"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 15 May 2025 07:50:02 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KmVqqEffIAMEIgA="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "a933b98e-7ebf-4efe-ad82-6ce682f96134"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "ForbiddenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 8c63e5cafd0d30b723e10da0d044059e.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "jPlwdJ9EaxK592kOnFl8aHwKcl80aIJT_f75bvLxSbp6OXKYPMgNhw=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Forbidden\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Google OAuth Handler",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"idToken\": \"your_google_id_token\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/dev/auth/google",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"auth",
+								"google"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Google OAuth Handler Fail (401)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"idToken\": \"d725db10-ccab-4242-8267-aff3c6e478f9\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/dev/auth/google",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"auth",
+										"google"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "49"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 15 May 2025 07:52:33 GMT"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "8927443a-e5bc-4163-a973-9c08e835dcc2"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KmWCMGlxIAMERaA="
+								},
+								{
+									"key": "X-Amzn-Trace-Id",
+									"value": "Root=1-68259d40-33c6d34828167bb929f0c4e5;Parent=58e7bac4561ef2a4;Sampled=0;Lineage=1:b55ce2d3:0"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 cdc57d53ecf157efae760f1fad8a416a.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "6kJ30KzJczjpe5fpIcwC7Ftl8IQTdeCMBHdinh8Aq6ewGnuo8ZTV2w=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": false,\n    \"error\": \"Authentication failed\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Authorization\": \"Bearer your_access_token\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/dev/auth/logout",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refreshToken\": \"your_refresh_token\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/dev/auth/refresh",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Account",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"idToken\": \"d725db10-ccab-4242-8267-aff3c6e478f9\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Add Preferences",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"notification\": {\n        \"email\": true,\n        \"sms\": true,\n        \"push\": true\n    },\n    \"currency\": \"USD\",\n    \"language\": \"en\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/dev/users/127871ed-c7db-46db-ae4d-59fb59e1dba0/preferences",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dev",
+								"users",
+								"127871ed-c7db-46db-ae4d-59fb59e1dba0",
+								"preferences"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "add prefernces",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"notification\": {\n        \"email\": true,\n        \"sms\": true,\n        \"push\": true\n    },\n    \"currency\": \"USD\",\n    \"language\": \"en\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/dev/users/127871ed-c7db-46db-ae4d-59fb59e1dba0/preferences",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"users",
+										"127871ed-c7db-46db-ae4d-59fb59e1dba0",
+										"preferences"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "75"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 22 Mar 2025 20:48:13 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"message\": \"user preferences updated successfully\"\n    }\n}"
+						},
+						{
+							"name": "Add Preferences Fail (401)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"notification\": {\n        \"email\": true,\n        \"sms\": false,\n        \"push\": true\n    },\n    \"currency\": \"INR\",\n    \"language\": \"en\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/dev/users/127871ed-c7db-46db-ae4d-59fb59e1dba0/preferences",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"users",
+										"127871ed-c7db-46db-ae4d-59fb59e1dba0",
+										"preferences"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "100"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 15 May 2025 09:08:24 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 401,\n    \"error\": \"Unauthorized\",\n    \"message\": \"User is not authorized to access this resource\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/dev/users/4dd6cc14-c1f5-4cf8-a4b9-bcc5778aa018",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dev",
+								"users",
+								"4dd6cc14-c1f5-4cf8-a4b9-bcc5778aa018"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get user",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/dev/users/127871ed-c7db-46db-ae4d-59fb59e1dba0",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"users",
+										"127871ed-c7db-46db-ae4d-59fb59e1dba0"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "358"
+								},
+								{
+									"key": "accept-ranges",
+									"value": "bytes"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 22 Mar 2025 20:41:08 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"user\": {\n            \"_id\": \"127871ed-c7db-46db-ae4d-59fb59e1dba0\",\n            \"personalInfo\": {\n                \"email\": \"test_mail@gmail.com\",\n                \"firstName\": \"first\",\n                \"lastName\": \"last\",\n                \"phone\": \"12345678\"\n            },\n            \"roles\": {\n                \"isHost\": false,\n                \"isSuperhost\": false,\n                \"isAdmin\": false\n            },\n            \"accountStatus\": {\n                \"status\": \"active\",\n                \"createdAt\": \"2025-03-22T20:40:05.299Z\",\n                \"updatedAt\": \"2025-03-22T20:40:05.299Z\"\n            }\n        }\n    }\n}"
+						},
+						{
+							"name": "Get User Fail (401)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/dev/users/4dd6cc14-c1f5-4cf8-a4b9-bcc5778aa018",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"users",
+										"4dd6cc14-c1f5-4cf8-a4b9-bcc5778aa018"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "100"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 15 May 2025 09:15:01 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 401,\n    \"error\": \"Unauthorized\",\n    \"message\": \"User is not authorized to access this resource\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"test_mail@gmail.com\", \n    \"firstName\":\"first\", \n    \"lastName\":\"last\", \n    \"phone\":\"123456789\",\n    \"gender\": \"male\",\n    \"dateOfBirth\":\"02-11-2001\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/dev/users/127871ed-c7db-46db-ae4d-59fb59e1dba0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dev",
+								"users",
+								"127871ed-c7db-46db-ae4d-59fb59e1dba0"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "update user",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\":\"test_mail@gmail.com\", \n    \"firstName\":\"first\", \n    \"lastName\":\"last\", \n    \"phone\":\"123456789\",\n    \"gender\": \"male\",\n    \"dateOfBirth\":\"02-11-2001\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:3000/dev/users/127871ed-c7db-46db-ae4d-59fb59e1dba0",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"users",
+										"127871ed-c7db-46db-ae4d-59fb59e1dba0"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "63"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 22 Mar 2025 20:49:19 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"message\": \"User updated successfully\"\n    }\n}"
+						},
+						{
+							"name": "Update User Fail (401)",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\":\"test_mail@gmail.com\", \n    \"firstName\":\"first3\", \n    \"lastName\":\"last\", \n    \"phone\":\"123456789\",\n    \"gender\": \"male\",\n    \"dateOfBirth\":\"02-11-2001\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:3000/dev/users/127871ed-c7db-46db-ae4d-59fb59e1dba0",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"users",
+										"127871ed-c7db-46db-ae4d-59fb59e1dba0"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "100"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 15 May 2025 09:34:35 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 401,\n    \"error\": \"Unauthorized\",\n    \"message\": \"User is not authorized to access this resource\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User Preferences",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/dev/users/127871ed-c7db-46db-ae4d-59fb59e1dba0/preferences",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dev",
+								"users",
+								"127871ed-c7db-46db-ae4d-59fb59e1dba0",
+								"preferences"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get prefernces",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/dev/users/127871ed-c7db-46db-ae4d-59fb59e1dba0/preferences",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"users",
+										"127871ed-c7db-46db-ae4d-59fb59e1dba0",
+										"preferences"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "188"
+								},
+								{
+									"key": "accept-ranges",
+									"value": "bytes"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 22 Mar 2025 20:50:31 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"preferences\": {\n            \"_id\": \"127871ed-c7db-46db-ae4d-59fb59e1dba0\",\n            \"preferences\": {\n                \"notification\": {\n                    \"email\": true,\n                    \"sms\": true,\n                    \"push\": true\n                },\n                \"currency\": \"USD\",\n                \"language\": \"en\"\n            }\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Save Favourite Locations",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"favoriteProperties\":[\"7b286cf6-4895-4583-871d-68c2bd88479c\"]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/dev/users/127871ed-c7db-46db-ae4d-59fb59e1dba0/saved-locations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dev",
+								"users",
+								"127871ed-c7db-46db-ae4d-59fb59e1dba0",
+								"saved-locations"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "save favorite locations",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"favoriteProperties\":[\"7b286cf6-4895-4583-871d-68c2bd88479c\"]\n}"
+								},
+								"url": {
+									"raw": "http://localhost:3000/dev/users/127871ed-c7db-46db-ae4d-59fb59e1dba0/saved-locations",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"users",
+										"127871ed-c7db-46db-ae4d-59fb59e1dba0",
+										"saved-locations"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "76"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 23 Mar 2025 10:03:14 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"message\": \"User saved items updated successfully \"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Saved Locations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/dev/users/127871ed-c7db-46db-ae4d-59fb59e1dba0/saved-locations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dev",
+								"users",
+								"127871ed-c7db-46db-ae4d-59fb59e1dba0",
+								"saved-locations"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get saved locations",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/dev/users/127871ed-c7db-46db-ae4d-59fb59e1dba0/saved-locations",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"users",
+										"127871ed-c7db-46db-ae4d-59fb59e1dba0",
+										"saved-locations"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "83"
+								},
+								{
+									"key": "accept-ranges",
+									"value": "bytes"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 23 Mar 2025 10:04:16 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"savedLocations\": [\n            \"7b286cf6-4895-4583-871d-68c2bd88479c\"\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Daved Locations",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/dev/users/127871ed-c7db-46db-ae4d-59fb59e1dba0/saved-locations/7b286cf6-4895-4583-871d-68c2bd88479c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dev",
+								"users",
+								"127871ed-c7db-46db-ae4d-59fb59e1dba0",
+								"saved-locations",
+								"7b286cf6-4895-4583-871d-68c2bd88479c"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "delete saved lodation",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/dev/users/127871ed-c7db-46db-ae4d-59fb59e1dba0/saved-locations/7b286cf6-4895-4583-871d-68c2bd88479c",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"users",
+										"127871ed-c7db-46db-ae4d-59fb59e1dba0",
+										"saved-locations",
+										"7b286cf6-4895-4583-871d-68c2bd88479c"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "80"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 23 Mar 2025 10:05:17 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"message\": \"Deleted user saved location  successfully \"\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Properties",
+			"item": [
+				{
+					"name": "Search Properties",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/dev/properties/search?location=ad&min_price=50&max_price=120&property_type=Private room&status=active&amenities=wifi&availability_start=2025-02-01&availability_end=2025-02-02",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dev",
+								"properties",
+								"search"
+							],
+							"query": [
+								{
+									"key": "location",
+									"value": "ad"
+								},
+								{
+									"key": "min_price",
+									"value": "50"
+								},
+								{
+									"key": "max_price",
+									"value": "120"
+								},
+								{
+									"key": "property_type",
+									"value": "Private room"
+								},
+								{
+									"key": "status",
+									"value": "active"
+								},
+								{
+									"key": "amenities",
+									"value": "wifi"
+								},
+								{
+									"key": "availability_start",
+									"value": "2025-02-01"
+								},
+								{
+									"key": "availability_end",
+									"value": "2025-02-02"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "properties search",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/dev/properties/search?location=ad&min_price=50&max_price=120&property_type=Private room&status=active&amenities=wifi&availability_start=2025-02-01&availability_end=2025-02-02",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"properties",
+										"search"
+									],
+									"query": [
+										{
+											"key": "location",
+											"value": "ad"
+										},
+										{
+											"key": "min_price",
+											"value": "50"
+										},
+										{
+											"key": "max_price",
+											"value": "120"
+										},
+										{
+											"key": "property_type",
+											"value": "Private room"
+										},
+										{
+											"key": "status",
+											"value": "active"
+										},
+										{
+											"key": "amenities",
+											"value": "wifi"
+										},
+										{
+											"key": "availability_start",
+											"value": "2025-02-01"
+										},
+										{
+											"key": "availability_end",
+											"value": "2025-02-02"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "692"
+								},
+								{
+									"key": "accept-ranges",
+									"value": "bytes"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 23 Mar 2025 09:59:09 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"properties\": [\n            {\n                \"_id\": \"7b286cf6-4895-4583-871d-68c2bd88479c\",\n                \"host_id\": \"127871ed-c7db-46db-ae4d-59fb59e1dba0\",\n                \"basicInfo\": {\n                    \"title\": \"stay\",\n                    \"description\": \"its a room\",\n                    \"property_type\": \"Private room\",\n                    \"status\": \"active\"\n                },\n                \"location\": {\n                    \"address\": \"adress\",\n                    \"city\": \"city\",\n                    \"state\": \"state\",\n                    \"country\": \"country\",\n                    \"zip_code\": \"zip_code\",\n                    \"coordinates\": {\n                        \"type\": \"Point\",\n                        \"coordinates\": [\n                            11,\n                            12\n                        ]\n                    }\n                },\n                \"pricing\": {\n                    \"price_per_night\": 100,\n                    \"currency\": \"USD\",\n                    \"minimum_stay\": 1,\n                    \"maximum_stay\": 3\n                },\n                \"availability\": {\n                    \"availability_calendar\": [\n                        \"2025-02-01\",\n                        \"2025-02-02\",\n                        \"2025-02-03\"\n                    ],\n                    \"booking_buffer\": 1\n                },\n                \"metadata\": {\n                    \"updated_at\": \"2025-03-22T22:19:30.442Z\"\n                },\n                \"amenities\": {\n                    \"wifi\": true\n                },\n                \"avilability\": null\n            }\n        ],\n        \"count\": 1\n    }\n}"
+						},
+						{
+							"name": "Search Properties Success (200)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/dev/properties/search?location=ad&min_price=50&max_price=120&property_type=Private room&status=active&amenities=wifi&availability_start=2025-02-01&availability_end=2025-02-02",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"properties",
+										"search"
+									],
+									"query": [
+										{
+											"key": "location",
+											"value": "ad"
+										},
+										{
+											"key": "min_price",
+											"value": "50"
+										},
+										{
+											"key": "max_price",
+											"value": "120"
+										},
+										{
+											"key": "property_type",
+											"value": "Private room"
+										},
+										{
+											"key": "status",
+											"value": "active"
+										},
+										{
+											"key": "amenities",
+											"value": "wifi"
+										},
+										{
+											"key": "availability_start",
+											"value": "2025-02-01"
+										},
+										{
+											"key": "availability_end",
+											"value": "2025-02-02"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "51"
+								},
+								{
+									"key": "accept-ranges",
+									"value": "bytes"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 15 May 2025 09:37:07 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"properties\": [],\n        \"count\": 0\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Property",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/dev/properties/7b286cf6-4895-4583-871d-68c2bd88479c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dev",
+								"properties",
+								"7b286cf6-4895-4583-871d-68c2bd88479c"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "getproperty",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/dev/properties/7b286cf6-4895-4583-871d-68c2bd88479c",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"properties",
+										"7b286cf6-4895-4583-871d-68c2bd88479c"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "715"
+								},
+								{
+									"key": "accept-ranges",
+									"value": "bytes"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 22 Mar 2025 22:14:17 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"property\": {\n            \"_id\": \"7b286cf6-4895-4583-871d-68c2bd88479c\",\n            \"host_id\": \"127871ed-c7db-46db-ae4d-59fb59e1dba0\",\n            \"basicInfo\": {\n                \"title\": \"stay\",\n                \"description\": \"its a room\",\n                \"property_type\": \"Private room\",\n                \"status\": \"active\"\n            },\n            \"location\": {\n                \"address\": \"adress\",\n                \"city\": \"city\",\n                \"state\": \"state\",\n                \"country\": \"country\",\n                \"zip_code\": \"zip_code\",\n                \"coordinates\": {\n                    \"type\": \"Point\",\n                    \"coordinates\": [\n                        11,\n                        12\n                    ]\n                }\n            },\n            \"pricing\": {\n                \"price_per_night\": 100,\n                \"currency\": \"USD\",\n                \"minimum_stay\": 1,\n                \"maximum_stay\": 3,\n                \"dynamic_pricing_enabled\": false,\n                \"seasonal_pricing\": {}\n            },\n            \"availability\": {\n                \"availability_calendar\": [\n                    \"2025-02-01T00:00:00.000Z\"\n                ],\n                \"booking_buffer\": 1\n            },\n            \"metadata\": {\n                \"created_at\": \"2025-03-22T22:13:20.066Z\",\n                \"updated_at\": \"2025-03-22T22:13:20.066Z\"\n            }\n        }\n    }\n}"
+						},
+						{
+							"name": "Get Property Fail (404)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/dev/properties/7b286cf6-4895-4583-871d-68c2bd88479c",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"properties",
+										"7b286cf6-4895-4583-871d-68c2bd88479c"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "46"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 15 May 2025 09:38:16 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": false,\n    \"error\": \"property not found\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User's Properties",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/dev/properties/user/127871ed-c7db-46db-ae4d-59fb59e1dba0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dev",
+								"properties",
+								"user",
+								"127871ed-c7db-46db-ae4d-59fb59e1dba0"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get user properties",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/dev/properties/user/127871ed-c7db-46db-ae4d-59fb59e1dba0",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"properties",
+										"user",
+										"127871ed-c7db-46db-ae4d-59fb59e1dba0"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "637"
+								},
+								{
+									"key": "accept-ranges",
+									"value": "bytes"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 22 Mar 2025 22:23:34 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"properties\": [\n            {\n                \"_id\": \"7b286cf6-4895-4583-871d-68c2bd88479c\",\n                \"host_id\": \"127871ed-c7db-46db-ae4d-59fb59e1dba0\",\n                \"basicInfo\": {\n                    \"title\": \"stay\",\n                    \"description\": \"its a room\",\n                    \"property_type\": \"Private room\",\n                    \"status\": \"active\"\n                },\n                \"location\": {\n                    \"address\": \"adress\",\n                    \"city\": \"city\",\n                    \"state\": \"state\",\n                    \"country\": \"country\",\n                    \"zip_code\": \"zip_code\",\n                    \"coordinates\": {\n                        \"type\": \"Point\",\n                        \"coordinates\": [\n                            11,\n                            12\n                        ]\n                    }\n                },\n                \"pricing\": {\n                    \"price_per_night\": 100,\n                    \"currency\": \"USD\",\n                    \"minimum_stay\": 1,\n                    \"maximum_stay\": 3\n                },\n                \"availability\": {\n                    \"availability_calendar\": [\n                        \"2025-02-01\"\n                    ],\n                    \"booking_buffer\": 1\n                },\n                \"metadata\": {\n                    \"updated_at\": \"2025-03-22T22:19:30.442Z\"\n                },\n                \"amenities\": {\n                    \"wifi\": true\n                }\n            }\n        ]\n    }\n}"
+						},
+						{
+							"name": "Get User's Properties Fail (404)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/dev/properties/user/127871ed-c7db-46db-ae4d-59fb59e1dba0",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"properties",
+										"user",
+										"127871ed-c7db-46db-ae4d-59fb59e1dba0"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "61"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 15 May 2025 09:39:15 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": false,\n    \"error\": \"No properties found for this user\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Create New Property",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"host_id\": \"host-uuid\",\n    \"title\": \"Beautiful Beach House\",\n    \"description\": \"Luxury beachfront property with amazing views\",\n    \"address\": {\n        \"street\": \"123 Beach Road\",\n        \"city\": \"Miami\",\n        \"state\": \"FL\",\n        \"country\": \"USA\",\n        \"zipcode\": \"33101\"\n    },\n    \"price\": {\n        \"amount\": 200,\n        \"currency\": \"USD\",\n        \"period\": \"night\"\n    },\n    \"property_type\": \"house\",\n    \"bedrooms\": 3,\n    \"bathrooms\": 2,\n    \"max_guests\": 6,\n    \"amenities\": [\"wifi\", \"pool\", \"parking\"],\n    \"availability\": {\n        \"availability_calendar\": [\"2024-03-20\", \"2024-03-21\", \"2024-03-22\"]\n    }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/dev/properties",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dev",
+								"properties"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create property",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"host_id\":\"127871ed-c7db-46db-ae4d-59fb59e1dba0\",\n    \"basicInfo\":{\n    \"title\": \"stay\",\n    \"description\": \"its a room\",\n    \"property_type\": \"Private room\",\n    \"status\": \"active\"\n    },\n    \"location\":{\n    \"address\": \"adress\",\n    \"city\": \"city\",\n    \"state\": \"state\",\n    \"country\": \"country\",\n    \"zip_code\": \"zip_code\",\n    \"coordinates\": {\n        \"type\": \"Point\",\n        \"coordinates\": [11,12] // [longitude, latitude],\n    }\n    },\n    \"pricing\":{\n    \"price_per_night\": 100,\n    \"currency\": \"USD\",\n    \"minimum_stay\": 1,\n    \"maximum_stay\": 3\n},\n    \"availability\":{\n    \"availability_calendar\": [\"2025-02-01\"],\n    \"booking_buffer\": 1\n    }\n}"
+								},
+								"url": {
+									"raw": "http://localhost:3000/dev/properties",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"properties"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "719"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 22 Mar 2025 22:13:20 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"propertyData\": {\n            \"host_id\": \"127871ed-c7db-46db-ae4d-59fb59e1dba0\",\n            \"basicInfo\": {\n                \"title\": \"stay\",\n                \"description\": \"its a room\",\n                \"property_type\": \"Private room\",\n                \"status\": \"active\"\n            },\n            \"location\": {\n                \"address\": \"adress\",\n                \"city\": \"city\",\n                \"state\": \"state\",\n                \"country\": \"country\",\n                \"zip_code\": \"zip_code\",\n                \"coordinates\": {\n                    \"type\": \"Point\",\n                    \"coordinates\": [\n                        11,\n                        12\n                    ]\n                }\n            },\n            \"pricing\": {\n                \"price_per_night\": 100,\n                \"currency\": \"USD\",\n                \"minimum_stay\": 1,\n                \"maximum_stay\": 3,\n                \"dynamic_pricing_enabled\": false,\n                \"seasonal_pricing\": {}\n            },\n            \"availability\": {\n                \"availability_calendar\": [\n                    \"2025-02-01T00:00:00.000Z\"\n                ],\n                \"booking_buffer\": 1\n            },\n            \"_id\": \"7b286cf6-4895-4583-871d-68c2bd88479c\",\n            \"metadata\": {\n                \"created_at\": \"2025-03-22T22:13:20.066Z\",\n                \"updated_at\": \"2025-03-22T22:13:20.066Z\"\n            }\n        }\n    }\n}"
+						},
+						{
+							"name": "Create New Property Fail (401)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"host_id\":\"127871ed-c7db-46db-ae4d-59fb59e1dba0\",\n    \"basicInfo\":{\n    \"title\": \"stay\",\n    \"description\": \"its a public room\",\n    \"property_type\": \"Publilc room\",\n    \"status\": \"active\"\n    },\n    \"location\":{\n    \"address\": \"4th Street, Bumble Boulevard\",\n    \"city\": \"Capricot\",\n    \"state\": \"Malabia\",\n    \"country\": \"Eskimounty\",\n    \"zip_code\": \"12345\",\n    \"coordinates\": {\n        \"type\": \"Point\",\n        \"coordinates\": [41.1293, 37.8895] // [longitude, latitude],\n    }\n    },\n    \"pricing\":{\n    \"price_per_night\": 1400,\n    \"currency\": \"USD\",\n    \"minimum_stay\": 2,\n    \"maximum_stay\": 8\n},\n    \"availability\":{\n    \"availability_calendar\": [\"2025-02-01\"],\n    \"booking_buffer\": 2\n    }\n}"
+								},
+								"url": {
+									"raw": "http://localhost:3000/dev/properties",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"properties"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "100"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 15 May 2025 09:42:18 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 401,\n    \"error\": \"Unauthorized\",\n    \"message\": \"User is not authorized to access this resource\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Property",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Updated Beach House\",\n    \"description\": \"Updated description\",\n    \"price\": {\n        \"amount\": 250,\n        \"currency\": \"USD\",\n        \"period\": \"night\"\n    }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/dev/properties/7b286cf6-4895-4583-871d-68c2bd88479c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dev",
+								"properties",
+								"7b286cf6-4895-4583-871d-68c2bd88479c"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "update property",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"host_id\":\"127871ed-c7db-46db-ae4d-59fb59e1dba0\",\n    \"basicInfo\":{\n    \"title\": \"stay\",\n    \"description\": \"its a room\",\n    \"property_type\": \"Private room\",\n    \"status\": \"active\"\n    },\n    \"location\":{\n    \"address\": \"adress\",\n    \"city\": \"city\",\n    \"state\": \"state\",\n    \"country\": \"country\",\n    \"zip_code\": \"zip_code\",\n    \"coordinates\": {\n        \"type\": \"Point\",\n        \"coordinates\": [11,12] \n    }\n    },\n    \"pricing\":{\n    \"price_per_night\": 100,\n    \"currency\": \"USD\",\n    \"minimum_stay\": 1,\n    \"maximum_stay\": 3\n},\n    \"availability\":{\n    \"availability_calendar\": [\"2025-02-01\"],\n    \"booking_buffer\": 1\n    },\n    \"amenities\":{\n        \"wifi\":true\n    }\n}"
+								},
+								"url": {
+									"raw": "http://localhost:3000/dev/properties/7b286cf6-4895-4583-871d-68c2bd88479c",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"properties",
+										"7b286cf6-4895-4583-871d-68c2bd88479c"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "access-control-allow-credentials",
+									"value": "true"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "67"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 22 Mar 2025 22:19:30 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"message\": \"Property updated successfully\"\n    }\n}"
+						},
+						{
+							"name": "Update Property Fail (401)",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"host_id\":\"127871ed-c7db-46db-ae4d-59fb59e1dba0\",\n    \"basicInfo\":{\n    \"title\": \"stay\",\n    \"description\": \"its a room\",\n    \"property_type\": \"Private room\",\n    \"status\": \"active\"\n    },\n    \"location\":{\n    \"address\": \"adress\",\n    \"city\": \"city\",\n    \"state\": \"state\",\n    \"country\": \"country\",\n    \"zip_code\": \"zip_code\",\n    \"coordinates\": {\n        \"type\": \"Point\",\n        \"coordinates\": [11,12] \n    }\n    },\n    \"pricing\":{\n    \"price_per_night\": 100,\n    \"currency\": \"USD\",\n    \"minimum_stay\": 1,\n    \"maximum_stay\": 3\n},\n    \"availability\":{\n    \"availability_calendar\": [\"2025-02-01\"],\n    \"booking_buffer\": 1\n    },\n    \"amenities\":{\n        \"wifi\":true\n    }\n}"
+								},
+								"url": {
+									"raw": "http://localhost:3000/dev/properties/7b286cf6-4895-4583-871d-68c2bd88479c",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"dev",
+										"properties",
+										"7b286cf6-4895-4583-871d-68c2bd88479c"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "vary",
+									"value": "origin"
+								},
+								{
+									"key": "access-control-expose-headers",
+									"value": "WWW-Authenticate,Server-Authorization"
+								},
+								{
+									"key": "cache-control",
+									"value": "no-cache"
+								},
+								{
+									"key": "content-length",
+									"value": "100"
+								},
+								{
+									"key": "connection",
+									"value": "close"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 15 May 2025 09:42:52 GMT"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 401,\n    \"error\": \"Unauthorized\",\n    \"message\": \"User is not authorized to access this resource\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Bookings",
+			"item": [
+				{
+					"name": "Create Booking",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"property_id\": \"property-uuid\",\n    \"host_id\": \"host-uuid\",\n    \"guest_id\": \"guest-uuid\",\n    \"bookingDetails\": {\n        \"check_in\": \"2024-03-20\",\n        \"check_out\": \"2024-03-25\",\n        \"guests\": 2,\n        \"total_price\": 500,\n        \"currency\": \"USD\"\n    },\n    \"status\": \"pending\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/dev/bookings",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"bookings"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Booking Fail (403)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"property_id\": \"7b286cf6-4895-4583-871d-68c2bd88479c\",\n    \"user_id\": \"127871ed-c7db-46db-ae4d-59fb59e1dba0\",\n    \"check_in\": \"2025-02-01\",\n    \"check_out\": \"2025-02-03\",\n    \"guests\": 2,\n    \"total_price\": 200,\n    \"currency\": \"USD\",\n    \"status\": \"pending\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/dev/bookings",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"bookings"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 18:51:41 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KxvZsEXlIAMEYqg="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "04034304-ab0c-4a09-9c26-16480c0a7d9a"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 f93f5bee6e7a19ce8854e491cbe39f86.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "bUk2fQTyRMKz5CRyDTyW7DVEyeygoghFmmyDlqk0bl9wiOxuwFdZqg=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Booking",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dev/bookings/{id}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"bookings",
+								"{id}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Booking Fail (403)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/dev/bookings/{id}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"bookings",
+										"{id}"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 18:52:00 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KxvcpH3IoAMEk3A="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "3ed1cac4-be70-4569-b660-19e41bd6503c"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 f93f5bee6e7a19ce8854e491cbe39f86.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "Uah_fSxazGM5IpM-sr_MSTAayXV1J4ZjG9Q57louAWtWOZGEEVvYsQ=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Booking",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"confirmed\",\n    \"bookingDetails\": {\n        \"check_in\": \"2024-03-20\",\n        \"check_out\": \"2024-03-25\",\n        \"guests\": 2,\n        \"total_price\": 500,\n        \"currency\": \"USD\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/dev/bookings/{id}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"bookings",
+								"{id}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Update Booking Fail (403)",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"status\": \"denied\",\n    \"check_in\": \"2025-02-01\",\n    \"check_out\": \"2025-02-03\",\n    \"guests\": 2\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/dev/bookings/{id}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"bookings",
+										"{id}"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 18:52:26 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KxvgsEkGIAMEEbg="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "b7f459e8-7daf-4c62-a7a4-caaaee29d4d7"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 f93f5bee6e7a19ce8854e491cbe39f86.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "ebF0ekYBD5phkxIIbwu_ZXn79iqoz060UAPypPmuoYbGQ7gQM3_gfQ=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User Bookings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dev/bookings/user/{userId}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"bookings",
+								"user",
+								"{userId}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get User Bookings Fail (403)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/dev/bookings/user/{userId}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"bookings",
+										"user",
+										"{userId}"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 18:55:17 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "Kxv7fHGAIAMElNA="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "b35ee0ee-d50b-4c10-959d-30b46398b0ed"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 99ed9c8a5c7493aadc79c846e0863ad0.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "SOXVK0ehlNyY1Pajz2jO2ysIsY6NXHKxRiNE4aUCNm2GwVIVhI-dCA=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Host Bookings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dev/bookings/host/{hostId}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"bookings",
+								"host",
+								"{hostId}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Host Bookings Fail (403)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/dev/bookings/host/{hostId}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"bookings",
+										"host",
+										"{hostId}"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 18:55:32 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "Kxv9xEr5oAMEawQ="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "f37f4d73-5f9b-48e3-b5c4-35108def139a"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 99ed9c8a5c7493aadc79c846e0863ad0.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "UT9_FjTQ8FN5XOqOuYzIRmpDrJyk4vnjelAydMBHUNyJyV2SVnxSww=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Cancel Booking",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dev/bookings/{id}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"bookings",
+								"{id}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Cancel Booking Fail (403)",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/dev/bookings/{id}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"bookings",
+										"{id}"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 18:55:48 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KxwATGw0IAMEWYA="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "d80cff08-7b5c-47c2-9c7d-12666aa036a9"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 99ed9c8a5c7493aadc79c846e0863ad0.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "IYwL5AAOGgWW4PYCpQtJ1-1mi1EF9nRxC-gfAM2w5odWuXB0agulCQ=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Files",
+			"item": [
+				{
+					"name": "Upload File",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/path/to/file"
+								},
+								{
+									"key": "type",
+									"value": "property_image",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/dev/files/upload",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"files",
+								"upload"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Upload File Fail (403)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "multipart/form-data"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/hifia/Desktop/test.png"
+										},
+										{
+											"key": "type",
+											"value": "property_image",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/dev/files/upload",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"files",
+										"upload"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 19:04:33 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KxxSSEcyIAMELDQ="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "41a45ac1-b4fb-4d8a-98d5-3cf26631fd2e"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 d73fd9e8922bacf5e37e5ab82f5d370c.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "Qe2kUxAO_n0ZAp9RHZvoPYzNtrgEMl7Oq7g4sRdaQxmTnjAL05240Q=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get File",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dev/files/{fileId}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"files",
+								"{fileId}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get File Fail (403)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/dev/files/{fileId}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"files",
+										"{fileId}"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 19:04:46 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KxxUXFdEIAMEZCQ="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "77ff4359-d8fb-4b37-b216-fd361e9c6ede"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 d73fd9e8922bacf5e37e5ab82f5d370c.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "zC91lYFt7TXCs-Brwfiq8X8iOSSFJ3AA7zUqW4fi--6J-G1tGacOsw=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete File",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"host_id\": \"host-uuid\",\n    \"title\": \"Beautiful Beach House\",\n    \"description\": \"Luxury beachfront property with amazing views\",\n    \"address\": {\n        \"street\": \"123 Beach Road\",\n        \"city\": \"Miami\",\n        \"state\": \"FL\",\n        \"country\": \"USA\",\n        \"zipcode\": \"33101\"\n    },\n    \"price\": {\n        \"amount\": 200,\n        \"currency\": \"USD\",\n        \"period\": \"night\"\n    },\n    \"property_type\": \"house\",\n    \"bedrooms\": 3,\n    \"bathrooms\": 2,\n    \"max_guests\": 6,\n    \"amenities\": [\"wifi\", \"pool\", \"parking\"],\n    \"availability\": {\n        \"availability_calendar\": [\"2024-03-20\", \"2024-03-21\", \"2024-03-22\"]\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/dev/files/{fileId}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"files",
+								"{fileId}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Delete File Fail (403)",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/dev/files/{fileId}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"files",
+										"{fileId}"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 19:05:15 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KxxY3H3toAMETOg="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "f806ac87-d84b-4ca4-a9d9-432bac70e523"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 d73fd9e8922bacf5e37e5ab82f5d370c.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "8gtXu5BT3luQWmSegcgo0R-iz4L1gvwWftoiNU4u72cbfB3MTf-vDw=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dev/admin/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"admin",
+								"users"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get All Users Fail (403)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/dev/admin/users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"admin",
+										"users"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 19:06:30 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KxxkgHjoIAMEYOg="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "2668134c-cb69-4f90-b32b-a3ea0cecd841"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 98668a17fb98afaedf2be4666cac7b04.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "NofOkUMDhedjRHH3c37_o3NwYDKy9a18oHftrlS5TNhA6iCxZgkG1g=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All Properties",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dev/admin/properties",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"admin",
+								"properties"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get All Properties Fail (403)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/dev/admin/properties",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"admin",
+										"properties"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 19:06:43 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KxxmnEieIAMEEfQ="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "2884a704-a9f6-411e-81e4-1677ed060dfc"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 98668a17fb98afaedf2be4666cac7b04.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "yNWjzTtROtitrCrjLBvSEbxxqnjrtYyyYdWU_kijE-pZoXsn-XOq8w=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All Bookings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dev/admin/bookings",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"admin",
+								"bookings"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get All Bookings Fail (403)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/dev/admin/bookings",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"admin",
+										"bookings"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 19:06:54 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KxxoZFAtoAMEPRg="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "0e444487-cbde-4e2d-a02f-244da3e01f87"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 98668a17fb98afaedf2be4666cac7b04.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "3DqpsYAA2sPioTpJHO7Q93O5Xdh-K8Y5aHt8YRUbEGVU0Dixx6BrrA=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update User Status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"suspended\",\n    \"reason\": \"Violation of terms\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/dev/admin/users/{userId}/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"admin",
+								"users",
+								"{userId}",
+								"status"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Update User Status Fail (403)",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"status\": \"suspended\",\n    \"reason\": \"Violation of terms\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/dev/admin/users/{userId}/status",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"admin",
+										"users",
+										"{userId}",
+										"status"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 19:07:06 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KxxqPFAZoAMEQ3Q="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "a05b891a-edf9-4011-b5c4-38a93adb3ed2"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 98668a17fb98afaedf2be4666cac7b04.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "5MSYnyEYuX458pW7vtWhIvdGUnrm2MnHKylMHDAuJEBq1QwgE935Qw=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Messaging",
+			"item": [
+				{
+					"name": "Send Message",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ConversationId\": \"optional-uuid\", // If not provided, a new conversation will be created\n    \"property_id\": \"property-uuid\",\n    \"host_id\": \"host-uuid\",\n    \"guest_id\": \"guest-uuid\",\n    \"message\": \"Hello, I'm interested in your property\",\n    \"sentBy\": \"guest-uuid\" // ID of the user sending the message\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/dev/messages",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"messages"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Send Message Fail (403)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"sender_id\": \"127871ed-c7db-46db-ae4d-59fb59e1dba0\",\n    \"receiver_id\": \"4dd6cc14-c1f5-4cf8-a4b9-bcc5778aa018\",\n    \"content\": \"Hello, I'm interested in your property\",\n    \"type\": \"text\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/dev/messages",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"messages"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 19:09:00 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "Kxx8BErxIAMEuhg="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "23fd0b33-d7cf-435b-a199-5757c2e2b235"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 e1c37c6560d91aeea7a330ebaf585792.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "5VrXN4DcwVwmERJUi7yPHguc3LS-rqRUgk6Ao0kbHQDhGjQxI-RPBg=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Conversation",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dev/messages/conversation/{userId1}/{userId2}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"messages",
+								"conversation",
+								"{userId1}",
+								"{userId2}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Conversation Fail (403)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/dev/messages/conversation/{userId1}/{userId2}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"messages",
+										"conversation",
+										"{userId1}",
+										"{userId2}"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 19:09:13 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "Kxx-HF8toAMEvlw="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "8b758518-70c3-4bcf-8d9a-a669749752fa"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 e1c37c6560d91aeea7a330ebaf585792.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "s_7gmeEoHyl8MuzdfI91w1K8qe6vzMF0SFyzBK9n12uKdhOAJRI3mA=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User Conversations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dev/messages/user/{userId}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"messages",
+								"user",
+								"{userId}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get User Conversations Fail (403)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/dev/messages/user/{userId}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"messages",
+										"user",
+										"{userId}"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 19:09:24 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "Kxx_tEAdoAMEFzw="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "0c62ca3f-ec5b-4257-ae29-0c5d027ed9da"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 e1c37c6560d91aeea7a330ebaf585792.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "Cb708maRw9WhS6tEVkFcTyYkV_K6dXYp_b0UTKXzKiF0-_A1FKF3aA=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "Get User Notifications",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dev/notifications/user/{userId}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"notifications",
+								"user",
+								"{userId}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get User Notifications Fail (403)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/dev/notifications/user/{userId}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"notifications",
+										"user",
+										"{userId}"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 19:09:47 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KxyDTHCZoAMEP0w="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "b7e7ec4d-c087-4179-a48a-a10c97c3007b"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 e1c37c6560d91aeea7a330ebaf585792.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "JdJVhokat_t07uyZ-Em7cHXMO4nakVlHpL7oz1wN3eARdujyrdVCiw=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Mark Notification as Read",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dev/notifications/{notificationId}/read",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"notifications",
+								"{notificationId}",
+								"read"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Mark Notification as Read Fail (403)",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/dev/notifications/{notificationId}/read",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"notifications",
+										"{notificationId}",
+										"read"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 19:09:58 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KxyFHEM5oAMEYOg="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "0f9a444c-9bb9-406c-b024-fb894f5efd1b"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 e1c37c6560d91aeea7a330ebaf585792.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "K3URoAuV8HYWfb015mkMZi27AR9YqZikt1Ewo8irx3qmD0ZtE3edIQ=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Notification",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dev/notifications/{notificationId}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dev",
+								"notifications",
+								"{notificationId}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Delete Notification Fail (403)",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/dev/notifications/{notificationId}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"dev",
+										"notifications",
+										"{notificationId}"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 18 May 2025 19:10:10 GMT"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "KxyG9GsBIAMEiuw="
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "304358e3-fe8d-4e9e-a75b-50c4ad808f0a"
+								},
+								{
+									"key": "x-amzn-ErrorType",
+									"value": "MissingAuthenticationTokenException"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Error from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 e1c37c6560d91aeea7a330ebaf585792.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "BOM78-P11"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "kYJ4yYOi5_jvNuT1JlYnmvB4R19g_NAiB0BaYFmotziDEWilIzqYNQ=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Missing Authentication Token\"\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{vault:authorization-secret}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://m71ar6e3f9.execute-api.us-east-1.amazonaws.com"
+		}
+	]
+}
