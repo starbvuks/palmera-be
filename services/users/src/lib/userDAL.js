@@ -133,7 +133,7 @@ const reviewsSchema = Joi.object({
 });
 
 const subscriptionsSchema = Joi.object({
-    plan: Joi.string().valid('basic', 'premium').default('basic'),
+    plan: Joi.string().valid('basic', 'silver', 'gold').default('basic'),
     status: Joi.string().valid('active', 'cancelled', 'expired').default('active'),
     startDate: Joi.date(),
     endDate: Joi.date(),
@@ -179,4 +179,4 @@ const userSchema = Joi.object({
     activityLog: activityLogSchema
 });
 
-module.exports = { userSchema, preferencesSchema, personalInfoSchema, savedItemsSchema, accountStatusSchema, authenticationSchema };
+module.exports = { userSchema, preferencesSchema, personalInfoSchema, savedItemsSchema, accountStatusSchema, authenticationSchema, subscriptionsSchema };
