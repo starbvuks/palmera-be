@@ -1,4 +1,4 @@
-service: palmera-messaging
+service: palmera-notifications
 
 provider:
   name: aws
@@ -27,7 +27,7 @@ functions:
     handler: src/handlers/getUserNotificationsHandler.handler
     events:
       - http:
-          path: /notifications/{id}
+          path: /notifications/user/{id}
           method: get
           cors: true
           authorizer:

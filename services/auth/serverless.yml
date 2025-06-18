@@ -11,6 +11,9 @@ provider:
     JWT_SECRET: ${.env:JWT_SECRET}
     GOOGLE_CLIENT_ID: ${.env:GOOGLE_CLIENT_ID}
     GOOGLE_CLIENT_SECRET: ${.env:GOOGLE_CLIENT_SECRET}
+    TWILIO_ACCOUNT_SID: ${.env:TWILIO_ACCOUNT_SID}
+    TWILIO_AUTH_TOKEN: ${.env:TWILIO_AUTH_TOKEN}
+    TWILIO_PHONE_NUMBER: ${.env:TWILIO_PHONE_NUMBER}
 
 functions:
   signup:
@@ -44,6 +47,9 @@ functions:
           path: /auth/refresh
           method: post
           cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
 
   logout:
     handler: src/handlers/logoutHandler.handler
@@ -53,8 +59,9 @@ functions:
           method: post
           cors: true
           authorizer:
-            name: verifyToken
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
             type: token
+
   sendOtp:
     handler: src/handlers/sendOtpHandler.handler
     events:
@@ -62,6 +69,7 @@ functions:
           path: /auth/otp/send
           method: post
           cors: true
+
   verifyOtp:
     handler: src/handlers/verifyOtpHandler.handler
     events:
@@ -78,7 +86,7 @@ functions:
           method: delete
           cors: true
           authorizer:
-            name: verifyToken
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
             type: token
 
   verifyToken:
@@ -91,9 +99,9 @@ plugins:
 
 package:
   patterns:
-    - '!.git/**'
-    - '!.gitignore'
-    - '!.env*'
-    - '!README.md'
-    - '!tests/**'
-    - '!coverage/**' 
+    - "!.git/**"
+    - "!.gitignore"
+    - "!.env*"
+    - "!README.md"
+    - "!tests/**"
+    - "!coverage/**"

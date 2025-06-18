@@ -5,7 +5,7 @@ const { loginSchema } = require('../lib/userDAL');
 const response = require('../lib/response');
 
 const generateTokens = (userId) => {
-  const accessToken = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  const accessToken = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1d' });
   const refreshToken = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
   return { accessToken, refreshToken };
 };
