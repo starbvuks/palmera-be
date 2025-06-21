@@ -10,7 +10,7 @@ const handler = async (event) => {
         // Connect to MongoDB
         const db = await connectToDatabase();
         // Check if notifications exist
-        const notifications = await db.collection('notifications').find({ recipient_id: userId }).toArray();
+        const notifications = await db.collection('notifications').find({ userId: userId }).toArray();
         if (!notifications.length) {
             return response.error('No notifications found for this user', 404);
         }
