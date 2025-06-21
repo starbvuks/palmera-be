@@ -1,11 +1,11 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { connectToDatabase } = require('../lib/mongodb');
-const { loginSchema } = require('../lib/validationSchemas');
+const { loginSchema } = require('../lib/userDAL');
 const response = require('../lib/response');
 
 const generateTokens = (userId) => {
-  const accessToken = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  const accessToken = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1d' });
   const refreshToken = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
   return { accessToken, refreshToken };
 };
@@ -22,15 +22,15 @@ const handler = async (event) => {
 
     // Connect to database
     const db = await connectToDatabase();
-    
+
     // Find user
-    const user = await db.collection('users').findOne({ email });
+    const user = await db.collection('users').findOne({ "personalInfo.email": email });
     if (!user) {
       return response.error('Invalid credentials', 401);
     }
 
     // Verify password
-    const validPassword = await bcrypt.compare(password, user.password);
+    const validPassword = await bcrypt.compare(password, user.authentication.passwordHash);
     if (!validPassword) {
       return response.error('Invalid credentials', 401);
     }
@@ -38,7 +38,7 @@ const handler = async (event) => {
     // Generate tokens
     const tokens = generateTokens(user._id);
 
-    // Store refresh token
+    // Store refresh tokens
     await db.collection('refreshTokens').insertOne({
       userId: user._id,
       token: tokens.refreshToken,
@@ -61,4 +61,4 @@ const handler = async (event) => {
 
 module.exports = {
   handler,
-}; 
+};
