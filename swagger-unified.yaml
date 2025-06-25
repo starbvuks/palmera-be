@@ -1304,6 +1304,322 @@ paths:
               example:
                 success: false
                 error: "Database connection failed"
+  /users/{id}/hostDetails:
+    servers:
+    - url: https://ct4rgp2633.execute-api.us-east-1.amazonaws.com/dev
+      description: Users Service
+    get:
+      summary: Get host details for a user
+      description: Retrieve the host details for a user by their user ID.
+      tags: [Users]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Host details retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      hostDetails:
+                        $ref: '#/components/schemas/HostDetails'
+              example:
+                success: true
+                data:
+                  hostDetails:
+                    verification:
+                      status: "pending"
+                      documents: ["doc1.pdf"]
+                      verifiedAt: "2024-01-15T10:30:00.000Z"
+                    propertiesListed: ["propertyId1"]
+                    hostStats:
+                      totalBookings: 5
+                      responseRate: 99.0
+                      cancellationRate: 1.0
+                      averageRating: 4.9
+                      totalEarnings: 5000
+                      lastMonthEarnings: 800
+                    bankDetails:
+                      bankName: "Bank of Example"
+                      accountNumber: "123456789"
+                      routingNumber: "987654321"
+                      swiftCode: "BOFAUS3N"
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      summary: Update host details for a user
+      description: Update the host details for a user by their user ID.
+      tags: [Users]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HostDetails'
+            example:
+              verification:
+                status: "pending"
+                documents: ["doc1.pdf"]
+                verifiedAt: "2024-01-15T10:30:00.000Z"
+              propertiesListed: ["propertyId1"]
+              hostStats:
+                totalBookings: 5
+                responseRate: 99.0
+                cancellationRate: 1.0
+                averageRating: 4.9
+                totalEarnings: 5000
+                lastMonthEarnings: 800
+              bankDetails:
+                bankName: "Bank of Example"
+                accountNumber: "123456789"
+                routingNumber: "987654321"
+                swiftCode: "BOFAUS3N"
+      responses:
+        '200':
+          description: Host details updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      hostDetails:
+                        $ref: '#/components/schemas/HostDetails'
+              example:
+                success: true
+                data:
+                  hostDetails:
+                    verification:
+                      status: "pending"
+                      documents: ["doc1.pdf"]
+                      verifiedAt: "2024-01-15T10:30:00.000Z"
+                    propertiesListed: ["propertyId1"]
+                    hostStats:
+                      totalBookings: 5
+                      responseRate: 99.0
+                      cancellationRate: 1.0
+                      averageRating: 4.9
+                      totalEarnings: 5000
+                      lastMonthEarnings: 800
+                    bankDetails:
+                      bankName: "Bank of Example"
+                      accountNumber: "123456789"
+                      routingNumber: "987654321"
+                      swiftCode: "BOFAUS3N"
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      /users/{id}/hostDocuments:
+    post:
+      summary: Upload host documents for a user
+      description: Upload one or more documents for host verification. Each document must specify its type.
+      tags: [Users]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: Documents uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Documents uploaded successfully
+                      documents:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/PropertyDocument'
+                      count:
+                        type: integer
+                        example: 2
+              example:
+                success: true
+                data:
+                  message: Documents uploaded successfully
+                  documents:
+                    - id: "doc123"
+                      document_name: "Host License.pdf"
+                      document_url: "https://example.com/docs/license.pdf"
+                      document_type: "license"
+                      uploadedAt: "2024-01-15T10:30:00.000Z"
+                  count: 1
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /users/{id}/hostDocuments:
+    servers:
+    - url: https://ct4rgp2633.execute-api.us-east-1.amazonaws.com/dev
+      description: Users Service
+    post:
+      summary: Upload host documents for a user
+      description: Upload one or more documents for host verification. Each document must specify its type.
+      tags: [Users]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: Documents uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Documents uploaded successfully
+                      documents:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/PropertyDocument'
+                      count:
+                        type: integer
+                        example: 2
+              example:
+                success: true
+                data:
+                  message: Documents uploaded successfully
+                  documents:
+                    - id: "doc123"
+                      document_name: "Host License.pdf"
+                      document_url: "https://example.com/docs/license.pdf"
+                      document_type: "license"
+                      uploadedAt: "2024-01-15T10:30:00.000Z"
+                  count: 1
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    
 
   # Properties Service Endpoints
   /properties/search:
@@ -2487,246 +2803,16 @@ paths:
   # - GET /bookings/search - Search properties
   # - POST /bookings/webhook - Stripe webhook handler
   #
-  /bookings:
-    servers:
-      - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
-        description: Bookings Service
-    post:
-      summary: Create booking
-      description: |
-        Create a new booking for a property. Requires authentication. The request body must include property ID, host ID, guest ID, and booking details. Returns the created booking object. The property must be available for the selected dates.
-        
-        **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev  
-      tags: [Bookings]
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [property_id, host_id, guest_id, bookingDetails]
-              properties:
-                property_id:
-                  type: string
-                  description: ID of the property being booked
-                  example: "prop123"
-                host_id:
-                  type: string
-                  description: ID of the property host
-                  example: "user123"
-                guest_id:
-                  type: string
-                  description: ID of the guest making the booking
-                  example: "user456"
-                bookingDetails:
-                  type: object
-                  required: [check_in, check_out, guests]
-                  properties:
-                    check_in:
-                      type: string
-                      format: date
-                      description: Check-in date (YYYY-MM-DD)
-                      example: "2024-01-15"
-                    check_out:
-                      type: string
-                      format: date
-                      description: Check-out date (YYYY-MM-DD)
-                      example: "2024-01-18"
-                    guests:
-                      type: object
-                      required: [adults]
-                      properties:
-                        adults:
-                          type: integer
-                          minimum: 1
-                          description: Number of adult guests
-                          example: 2
-                        children:
-                          type: integer
-                          minimum: 0
-                          default: 0
-                          description: Number of children
-                          example: 0
-                        infants:
-                          type: integer
-                          minimum: 0
-                          default: 0
-                          description: Number of infants
-                          example: 0
-                    special_requests:
-                      type: string
-                      description: Special requests for the booking
-                      example: "Early check-in if possible"
-                pricing:
-                  type: object
-                  required: [base_price, total_amount]
-                  properties:
-                    base_price:
-                      type: number
-                      minimum: 0
-                      description: Base price per night
-                      example: 150
-                    cleaning_fee:
-                      type: number
-                      minimum: 0
-                      default: 0
-                      description: Cleaning fee
-                      example: 50
-                    service_fee:
-                      type: number
-                      minimum: 0
-                      default: 0
-                      description: Service fee
-                      example: 15
-                    taxes:
-                      type: number
-                      minimum: 0
-                      default: 0
-                      description: Taxes
-                      example: 25
-                    currency:
-                      type: string
-                      default: "USD"
-                      description: Currency code
-                      example: "USD"
-                    total_amount:
-                      type: number
-                      minimum: 0
-                      description: Total booking amount
-                      example: 450
-            example:
-              property_id: "prop123"
-              host_id: "user123"
-              guest_id: "user456"
-              bookingDetails:
-                check_in: "2024-01-15"
-                check_out: "2024-01-18"
-                guests:
-                  adults: 2
-                  children: 0
-                  infants: 0
-                special_requests: "Early check-in if possible"
-              pricing:
-                base_price: 150
-                cleaning_fee: 50
-                service_fee: 15
-                taxes: 25
-                currency: "USD"
-                total_amount: 450
-      responses:
-        '201':
-          description: Booking created successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: object
-                    properties:
-                      message:
-                        type: string
-                        example: "Booking created successfully"
-                      bookingData:
-                        $ref: '#/components/schemas/Booking'
-        '400':
-          description: Bad request - validation error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                missingBody:
-                  summary: Request body is required
-                  value:
-                    success: false
-                    error: "Request body is required"
-                invalidJSON:
-                  summary: Invalid JSON in request body
-                  value:
-                    success: false
-                    error: "Invalid JSON in request body"
-                validationError:
-                  summary: Validation error
-                  value:
-                    success: false
-                    error: "Validation error: Check-out date must be after check-in date"
-                invalidDates:
-                  summary: Invalid date format
-                  value:
-                    success: false
-                    error: "Invalid date format for check-in or check-out"
-                pastDate:
-                  summary: Check-in date in past
-                  value:
-                    success: false
-                    error: "Check-in date cannot be in the past"
-                hostMismatch:
-                  summary: Host ID mismatch
-                  value:
-                    success: false
-                    error: "Host ID does not match with property host ID"
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Unauthorized - Invalid or missing token"
-        '404':
-          description: Property not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Property not found"
-        '409':
-          description: Property not available for selected dates
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Property is not available for the selected date: 2024-01-16"
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Internal server error"
-        '503':
-          description: Database connection failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Database connection failed"
-
-  /bookings/{id}:
+  /bookings/user/{id}:
     servers:
       - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
         description: Bookings Service
     get:
-      summary: Get booking details
+      summary: Get user bookings
       description: |
-        Retrieve detailed information for a specific booking by its ID. Requires authentication. Returns all booking details, including property, host, guest, and payment information.
+        Retrieve all bookings for a user by their user ID. Requires authentication. Returns a list of bookings where the user is the guest.
         
-        **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev    
+        **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev      
       tags: [Bookings]
       security:
         - BearerAuth: []
@@ -2736,10 +2822,10 @@ paths:
           required: true
           schema:
             type: string
-          description: Booking ID
+          description: User ID
       responses:
         '200':
-          description: Booking details retrieved successfully
+          description: User bookings retrieved successfully
           content:
             application/json:
               schema:
@@ -2751,20 +2837,25 @@ paths:
                   data:
                     type: object
                     properties:
-                      booking:
-                        $ref: '#/components/schemas/Booking'
+                      bookings:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Booking'
+                      count:
+                        type: integer
+                        example: 2
                       message:
                         type: string
-                        example: "Booking retrieved successfully"
+                        example: "User bookings retrieved successfully"
         '400':
-          description: Bad request - invalid booking ID
+          description: Bad request - invalid user ID
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 success: false
-                error: "Invalid booking ID format"
+                error: "Invalid user ID format"
         '401':
           description: Unauthorized
           content:
@@ -2775,14 +2866,14 @@ paths:
                 success: false
                 error: "Unauthorized - Invalid or missing token"
         '404':
-          description: Booking not found
+          description: No bookings found for this user
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 success: false
-                error: "Booking not found"
+                error: "No bookings found for this user"
         '500':
           description: Internal server error
           content:
@@ -2802,12 +2893,410 @@ paths:
                 success: false
                 error: "Database connection failed"
 
-    put:
-      summary: Update booking
+  /bookings/host/{id}:
+    servers:
+      - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
+        description: Bookings Service
+    get:
+      summary: Get host bookings
       description: |
-        Update an existing booking by its ID. Requires authentication. Only the booking owner can update their booking. Returns the updated booking object.
+        Retrieve all bookings for a host by their host ID. Requires authentication. Returns a list of bookings where the user is the host.
         
-        **Partial update:** Only include the fields you want to update in the request body. All fields are optional.
+        **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
+      tags: [Bookings]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Host ID
+      responses:
+        '200':
+          description: Host bookings retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      bookings:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Booking'
+                      count:
+                        type: integer
+                        example: 3
+                      message:
+                        type: string
+                        example: "Host bookings retrieved successfully"
+        '400':
+          description: Bad request - invalid host ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Invalid host ID format"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Unauthorized - Invalid or missing token"
+        '404':
+          description: No bookings found for this host
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "No booking found with this hostId"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Internal server error"
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Database connection failed"
+
+  /bookings/history/user/{id}:
+    servers:
+      - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
+        description: Bookings Service
+    get:
+      summary: Get user booking history
+      description: |
+        Retrieve past bookings for a user by their user ID. Requires authentication. Returns a list of completed and cancelled bookings where the user is the guest.
+        
+        **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
+      tags: [Bookings]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: User ID
+      responses:
+        '200':
+          description: User booking history retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      bookings:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Booking'
+                      count:
+                        type: integer
+                        example: 5
+                      message:
+                        type: string
+                        example: "User booking history retrieved successfully"
+        '400':
+          description: Bad request - invalid user ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Invalid user ID format"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Unauthorized - Invalid or missing token"
+        '404':
+          description: No past bookings found for this user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "No past booking found with this userId"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Internal server error"
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Database connection failed"
+
+  /bookings/history/host/{id}:
+    servers:
+      - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
+        description: Bookings Service
+    get:
+      summary: Get host booking history
+      description: |
+        Retrieve past bookings for a host by their host ID. Requires authentication. Returns a list of completed and cancelled bookings where the user is the host.
+        
+        **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
+      tags: [Bookings]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Host ID
+      responses:
+        '200':
+          description: Host booking history retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      bookings:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Booking'
+                      count:
+                        type: integer
+                        example: 8
+                      message:
+                        type: string
+                        example: "Host booking history retrieved successfully"
+        '400':
+          description: Bad request - invalid host ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Invalid host ID format"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Unauthorized - Invalid or missing token"
+        '404':
+          description: No past bookings found for this host
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "No past booking found with this hostId"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Internal server error"
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Database connection failed"
+
+  # Payment-related endpoints (NOT YET DEPLOYED - Development/Testing only)
+  /bookings/payment-intent:
+    servers:
+      - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
+        description: Bookings Service
+    post:
+      summary: Create payment intent (NOT DEPLOYED)
+      description: |
+        Create a payment intent for a booking. Requires authentication. The request body must include the booking ID, amount, and currency. Returns a client secret and payment intent ID for use with payment processing (e.g., Stripe).
+        
+        **⚠️ NOTE: This endpoint is NOT YET DEPLOYED and is for development/testing purposes only.**
+        
+        **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
+      tags: [Bookings]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [bookingId, amount, currency]
+              properties:
+                bookingId:
+                  type: string
+                  description: ID of the booking
+                  example: "book123"
+                amount:
+                  type: number
+                  description: Payment amount in cents
+                  example: 45000
+                currency:
+                  type: string
+                  description: Payment currency (3-letter code)
+                  example: "usd"
+            example:
+              bookingId: "book123"
+              amount: 45000
+              currency: "usd"
+      responses:
+        '200':
+          description: Payment intent created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Payment intent created successfully"
+                      clientSecret:
+                        type: string
+                        example: "pi_1234567890_secret_abcdefghijklmnop"
+                      paymentIntentId:
+                        type: string
+                        example: "pi_1234567890"
+                      amount:
+                        type: number
+                        example: 45000
+                      currency:
+                        type: string
+                        example: "usd"
+        '400':
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Validation error: Invalid amount"
+        '401':
+          description: User authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "User authentication required"
+        '403':
+          description: Unauthorized to make payment for this booking
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Unauthorized to make payment for this booking"
+        '404':
+          description: Booking not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Booking not found"
+        '409':
+          description: Payment intent already exists for this booking
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Payment intent already exists for this booking"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Internal server error"
+
+  /bookings/{id}/payment:
+    servers:
+      - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
+        description: Bookings Service
+    post:
+      summary: Confirm payment (NOT DEPLOYED)
+      description: |
+        Process a payment for a booking by its ID. Requires authentication. The request body must include a valid payment method ID. Returns the payment status and payment ID.
+        
+        **⚠️ NOTE: This endpoint is NOT YET DEPLOYED and is for development/testing purposes only.**
         
         **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
       tags: [Bookings]
@@ -2825,17 +3314,23 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateBookingRequest'
+              type: object
+              required: [paymentIntentId, bookingId]
+              properties:
+                paymentIntentId:
+                  type: string
+                  description: Stripe payment intent ID
+                  example: "pi_1234567890"
+                bookingId:
+                  type: string
+                  description: Booking ID
+                  example: "book123"
             example:
-              bookingDetails:
-                check_in: "2024-01-16"
-                guests:
-                  adults: 3
-              pricing:
-                base_price: 175
+              paymentIntentId: "pi_1234567890"
+              bookingId: "book123"
       responses:
         '200':
-          description: Booking updated successfully
+          description: Payment processed successfully
           content:
             application/json:
               schema:
@@ -2847,18 +3342,39 @@ paths:
                   data:
                     type: object
                     properties:
-                      message:
-                        type: string
-                        example: "Booking updated successfully"
+                      success:
+                        type: boolean
+                        example: true
+                      booking:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                            example: "book123"
+                          status:
+                            type: string
+                            example: "confirmed"
+                          payment:
+                            type: object
+                            properties:
+                              status:
+                                type: string
+                                example: "completed"
+                              amount:
+                                type: number
+                                example: 45000
+                              currency:
+                                type: string
+                                example: "usd"
         '400':
-          description: Bad request - validation error
+          description: Payment failed
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 success: false
-                error: "Validation error: Check-out date must be after check-in date"
+                error: "Payment failed"
         '401':
           description: Unauthorized
           content:
@@ -2867,229 +3383,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 success: false
-                error: "Unauthorized - Invalid or missing token"
-        '404':
-          description: Booking not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Booking not found"
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Internal server error"
-        '503':
-          description: Database connection failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Database connection failed"
-
-    delete:
-      summary: Cancel booking
-      description: |
-        Cancel a booking by its ID. Requires authentication and ownership of the booking. Only the guest who made the booking can cancel it. Provide a cancellation reason in the request body. Returns the cancelled booking details and refund information if applicable.
-        
-        **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev    
-      tags: [Bookings]
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          description: Booking ID
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [cancellation_reason]
-              properties:
-                cancellation_reason:
-                  type: string
-                  description: Reason for cancellation
-                  example: "Change of plans"
-                cancellation_policy:
-                  type: string
-                  description: Cancellation policy applied
-                  example: "flexible"
-                cancellation_fee:
-                  type: number
-                  minimum: 0
-                  description: Cancellation fee amount
-                  example: 0
-                refund_amount:
-                  type: number
-                  minimum: 0
-                  description: Refund amount
-                  example: 450
-                cancelled_by:
-                  type: string
-                  enum: [guest, host, admin]
-                  description: Who cancelled the booking
-                  example: "guest"
-            example:
-              cancellation_reason: "Change of plans"
-              cancellation_policy: "flexible"
-              cancellation_fee: 0
-              refund_amount: 450
-              cancelled_by: "guest"
-      responses:
-        '200':
-          description: Booking cancelled successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: object
-                    properties:
-                      message:
-                        type: string
-                        example: "Booking cancelled successfully"
-                      bookingId:
-                        type: string
-                        example: "book123"
-        '400':
-          description: Bad request - validation error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Validation error: Cancellation reason is required"
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Unauthorized - Invalid or missing token"
-        '404':
-          description: Booking not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Booking not found"
-        '409':
-          description: Booking already cancelled
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Booking is already cancelled"
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Internal server error"
-        '503':
-          description: Database connection failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Database connection failed"
-
-  /bookings/payment-intent:
-    servers:
-      - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
-        description: Bookings Service
-    post:
-      summary: Create payment intent
-      description: |
-        Create a payment intent for a booking. Requires authentication. The request body must include the booking ID, amount, and currency. Returns a client secret and payment intent ID for use with payment processing (e.g., Stripe).
-      tags: [Bookings]
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [booking_id, amount, currency]
-              properties:
-                booking_id:
-                  type: string
-                  description: ID of the booking
-                amount:
-                  type: number
-                  description: Payment amount
-                currency:
-                  type: string
-                  description: Payment currency
-            example:
-              booking_id: "book123"
-              amount: 450
-              currency: "USD"
-      responses:
-        '200':
-          description: Payment intent created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-              example:
-                success: true
-                message: "Payment intent created successfully"
-                data:
-                  clientSecret: "pi_1234567890_secret_abcdefghijklmnop"
-                  paymentIntentId: "pi_1234567890"
-                  amount: 450
-                  currency: "USD"
-                  status: "requires_payment_method"
-        '400':
-          description: Bad request - validation error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Validation error: Invalid amount"
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Unauthorized - Invalid or missing token"
+                error: "Unauthorized"
         '404':
           description: Booking not found
           content:
@@ -3109,7 +3403,7 @@ paths:
                 success: false
                 error: "Internal server error"
 
-  /bookings/{id}/payment:
+  /bookings/{id}/refund:
     servers:
       - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
         description: Bookings Service
@@ -3281,6 +3575,9 @@ paths:
                 error: "Internal server error"
 
   /messages/conversation/{conversationId}:
+    servers:
+      - url: https://am22amgo33.execute-api.us-east-1.amazonaws.com/dev
+        description: Messaging Service
     get:
       summary: Get conversation messages
       description: |
@@ -3357,6 +3654,9 @@ paths:
                 error: "Internal server error"
 
   /conversations/user/{userId}:
+    servers:
+    - url: https://am22amgo33.execute-api.us-east-1.amazonaws.com/dev
+      description: Messaging Service
     get:
       summary: Get user conversations
       description: |
@@ -3434,6 +3734,9 @@ paths:
                 error: "Internal server error"
 
   /messages/{messageId}:
+    servers:
+    - url: https://am22amgo33.execute-api.us-east-1.amazonaws.com/dev
+      description: Messaging Service
     delete:
       summary: Delete message
       description: |
@@ -4631,739 +4934,6 @@ paths:
               example:
                 success: false
                 error: "Internal server error"
-
-  /bookings/user/{id}:
-    servers:
-      - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
-        description: Bookings Service
-    get:
-      summary: Get user bookings
-      description: |
-        Retrieve all bookings for a user by their user ID. Requires authentication. Returns a list of bookings where the user is the guest.
-        
-        **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev      
-      tags: [Bookings]
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          description: User ID
-      responses:
-        '200':
-          description: User bookings retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: object
-                    properties:
-                      bookings:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/Booking'
-                      count:
-                        type: integer
-                        example: 2
-                      message:
-                        type: string
-                        example: "User bookings retrieved successfully"
-        '400':
-          description: Bad request - invalid user ID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Invalid user ID format"
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Unauthorized - Invalid or missing token"
-        '404':
-          description: No bookings found for this user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "No bookings found for this user"
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Internal server error"
-        '503':
-          description: Database connection failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Database connection failed"
-
-  /bookings/host/{id}:
-    servers:
-      - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
-        description: Bookings Service
-    get:
-      summary: Get host bookings
-      description: |
-        Retrieve all bookings for a host by their host ID. Requires authentication. Returns a list of bookings where the user is the host.
-        
-        **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
-      tags: [Bookings]
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          description: Host ID
-      responses:
-        '200':
-          description: Host bookings retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: object
-                    properties:
-                      bookings:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/Booking'
-                      count:
-                        type: integer
-                        example: 3
-                      message:
-                        type: string
-                        example: "Host bookings retrieved successfully"
-        '400':
-          description: Bad request - invalid host ID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Invalid host ID format"
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Unauthorized - Invalid or missing token"
-        '404':
-          description: No bookings found for this host
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "No booking found with this hostId"
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Internal server error"
-        '503':
-          description: Database connection failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Database connection failed"
-
-  /bookings/history/user/{id}:
-    servers:
-      - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
-        description: Bookings Service
-    get:
-      summary: Get user booking history
-      description: |
-        Retrieve past bookings for a user by their user ID. Requires authentication. Returns a list of completed and cancelled bookings where the user is the guest.
-        
-        **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
-      tags: [Bookings]
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          description: User ID
-      responses:
-        '200':
-          description: User booking history retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: object
-                    properties:
-                      bookings:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/Booking'
-                      count:
-                        type: integer
-                        example: 5
-                      message:
-                        type: string
-                        example: "User booking history retrieved successfully"
-        '400':
-          description: Bad request - invalid user ID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Invalid user ID format"
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Unauthorized - Invalid or missing token"
-        '404':
-          description: No past bookings found for this user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "No past booking found with this userId"
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Internal server error"
-        '503':
-          description: Database connection failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Database connection failed"
-
-  /bookings/history/host/{id}:
-    servers:
-      - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
-        description: Bookings Service
-    get:
-      summary: Get host booking history
-      description: |
-        Retrieve past bookings for a host by their host ID. Requires authentication. Returns a list of completed and cancelled bookings where the user is the host.
-        
-        **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
-      tags: [Bookings]
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          description: Host ID
-      responses:
-        '200':
-          description: Host booking history retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: object
-                    properties:
-                      bookings:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/Booking'
-                      count:
-                        type: integer
-                        example: 8
-                      message:
-                        type: string
-                        example: "Host booking history retrieved successfully"
-        '400':
-          description: Bad request - invalid host ID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Invalid host ID format"
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Unauthorized - Invalid or missing token"
-        '404':
-          description: No past bookings found for this host
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "No past booking found with this hostId"
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Internal server error"
-        '503':
-          description: Database connection failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Database connection failed"
-
-  # Payment-related endpoints (NOT YET DEPLOYED - Development/Testing only)
-  /bookings/payment-intent:
-    servers:
-      - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
-        description: Bookings Service
-    post:
-      summary: Create payment intent (NOT DEPLOYED)
-      description: |
-        Create a payment intent for a booking. Requires authentication. The request body must include the booking ID, amount, and currency. Returns a client secret and payment intent ID for use with payment processing (e.g., Stripe).
-        
-        **⚠️ NOTE: This endpoint is NOT YET DEPLOYED and is for development/testing purposes only.**
-        
-        **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
-      tags: [Bookings]
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [bookingId, amount, currency]
-              properties:
-                bookingId:
-                  type: string
-                  description: ID of the booking
-                  example: "book123"
-                amount:
-                  type: number
-                  description: Payment amount in cents
-                  example: 45000
-                currency:
-                  type: string
-                  description: Payment currency (3-letter code)
-                  example: "usd"
-            example:
-              bookingId: "book123"
-              amount: 45000
-              currency: "usd"
-      responses:
-        '200':
-          description: Payment intent created successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: object
-                    properties:
-                      message:
-                        type: string
-                        example: "Payment intent created successfully"
-                      clientSecret:
-                        type: string
-                        example: "pi_1234567890_secret_abcdefghijklmnop"
-                      paymentIntentId:
-                        type: string
-                        example: "pi_1234567890"
-                      amount:
-                        type: number
-                        example: 45000
-                      currency:
-                        type: string
-                        example: "usd"
-        '400':
-          description: Bad request - validation error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Validation error: Invalid amount"
-        '401':
-          description: User authentication required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "User authentication required"
-        '403':
-          description: Unauthorized to make payment for this booking
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Unauthorized to make payment for this booking"
-        '404':
-          description: Booking not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Booking not found"
-        '409':
-          description: Payment intent already exists for this booking
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Payment intent already exists for this booking"
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Internal server error"
-
-  /bookings/{id}/payment:
-    servers:
-      - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
-        description: Bookings Service
-    post:
-      summary: Confirm payment (NOT DEPLOYED)
-      description: |
-        Process a payment for a booking by its ID. Requires authentication. The request body must include a valid payment method ID. Returns the payment status and payment ID.
-        
-        **⚠️ NOTE: This endpoint is NOT YET DEPLOYED and is for development/testing purposes only.**
-        
-        **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
-      tags: [Bookings]
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          description: Booking ID
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [paymentIntentId, bookingId]
-              properties:
-                paymentIntentId:
-                  type: string
-                  description: Stripe payment intent ID
-                  example: "pi_1234567890"
-                bookingId:
-                  type: string
-                  description: Booking ID
-                  example: "book123"
-            example:
-              paymentIntentId: "pi_1234567890"
-              bookingId: "book123"
-      responses:
-        '200':
-          description: Payment processed successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: object
-                    properties:
-                      success:
-                        type: boolean
-                        example: true
-                      booking:
-                        type: object
-                        properties:
-                          _id:
-                            type: string
-                            example: "book123"
-                          status:
-                            type: string
-                            example: "confirmed"
-                          payment:
-                            type: object
-                            properties:
-                              status:
-                                type: string
-                                example: "completed"
-                              amount:
-                                type: number
-                                example: 45000
-                              currency:
-                                type: string
-                                example: "usd"
-        '400':
-          description: Payment failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Payment failed"
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Unauthorized"
-        '404':
-          description: Booking not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Booking not found"
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Internal server error"
-
-  /bookings/{id}/refund:
-    servers:
-      - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
-        description: Bookings Service
-    post:
-      summary: Process refund (NOT DEPLOYED)
-      description: |
-        Process a refund for a booking by its ID. Requires authentication. The request body must include the booking ID and optionally amount and reason. Returns the refund status and details.
-        
-        **⚠️ NOTE: This endpoint is NOT YET DEPLOYED and is for development/testing purposes only.**
-        
-        **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
-      tags: [Bookings]
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          description: Booking ID
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [bookingId]
-              properties:
-                bookingId:
-                  type: string
-                  description: ID of the booking
-                  example: "book123"
-                amount:
-                  type: number
-                  description: Refund amount (optional, full refund if not provided)
-                  example: 45000
-                reason:
-                  type: string
-                  description: Reason for refund
-                  example: "Guest requested cancellation"
-            example:
-              bookingId: "book123"
-              amount: 45000
-              reason: "Guest requested cancellation"
-      responses:
-        '200':
-          description: Refund processed successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: object
-                    properties:
-                      success:
-                        type: boolean
-                        example: true
-                      refund:
-                        type: object
-                        properties:
-                          amount:
-                            type: number
-                            example: 45000
-                          status:
-                            type: string
-                            example: "succeeded"
-                      booking:
-                        type: object
-                        properties:
-                          _id:
-                            type: string
-                            example: "book123"
-                          status:
-                            type: string
-                            example: "refunded"
-        '400':
-          description: Refund failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Refund failed"
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Unauthorized"
-        '403':
-          description: Unauthorized to process refund for this booking
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Unauthorized to process refund for this booking"
-        '404':
-          description: Booking not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Booking not found"
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Internal server error"
-
-  # Additional handlers that exist but are NOT DEPLOYED
-  # /bookings/search - searchPropertiesHandler.js (NOT DEPLOYED)
-  # /bookings/webhook - stripeWebhookHandler.js (NOT DEPLOYED)
-  # These handlers exist in the codebase but are not configured in serverless.yaml
-  # and therefore are not accessible via API Gateway.
 
 components:
   securitySchemes:
@@ -6563,8 +6133,9 @@ components:
           example: "Hi, I'm interested in your property!"
         sentBy:
           type: string
-          example: "user123"
-          description: ID of the user who sent the message
+          enum: [host, guest]
+          description: Role of the user sending the message (must be either 'host' or 'guest')
+          example: "guest"
         sentAt:
           type: string
           format: date-time
@@ -7077,17 +6648,21 @@ components:
 
     SendMessageRequest:
       type: object
-      required: [ConversationId, message, sentBy, property_id, host_id, guest_id]
+      required: [message, sentBy, property_id, host_id, guest_id]
       properties:
         ConversationId:
           type: string
-          description: Conversation ID (optional for new conversations)
+          description: Conversation ID (optional for new conversations - if omitted, a new conversation will be created)
+          example: "conv123"
         message:
           type: string
           description: Message content
+          example: "Hi! I'm interested in your apartment. Is it available for next weekend?"
         sentBy:
           type: string
-          description: ID of the user sending the message
+          enum: [host, guest]
+          description: Role of the user sending the message (must be either 'host' or 'guest')
+          example: "guest"
         property_id:
           type: string
           description: ID of the property being discussed
@@ -7185,6 +6760,97 @@ components:
         endDate:
           type: string
           format: date-time
+
+    HostDetails:
+      type: object
+      properties:
+        verification:
+          type: object
+          description: Host verification status and documents
+          properties:
+            status:
+              type: string
+              description: Verification status
+              enum: [pending, verified, rejected]
+              example: "pending"
+            documents:
+              type: array
+              description: List of uploaded document filenames or IDs
+              items:
+                type: string
+              example: ["doc1.pdf", "doc2.pdf"]
+            verifiedAt:
+              type: string
+              format: date-time
+              description: Date/time when host was verified
+              example: "2024-01-15T10:30:00.000Z"
+        propertiesListed:
+          type: array
+          description: List of property IDs listed by the host
+          items:
+            type: string
+          example: ["propertyId1", "propertyId2"]
+        hostStats:
+          type: object
+          description: Host statistics
+          properties:
+            totalBookings:
+              type: integer
+              description: Total number of bookings as a host
+              example: 10
+            responseRate:
+              type: number
+              description: Host response rate (percentage)
+              example: 98.5
+            cancellationRate:
+              type: number
+              description: Host cancellation rate (percentage)
+              example: 2.1
+            averageRating:
+              type: number
+              description: Average rating as a host
+              example: 4.8
+            totalEarnings:
+              type: number
+              description: Total earnings as a host
+              example: 12000
+            lastMonthEarnings:
+              type: number
+              description: Earnings in the last month
+              example: 1500
+        bankDetails:
+          type: object
+          description: Host's bank details for payouts
+          properties:
+            bankName:
+              type: string
+            accountNumber:
+              type: string
+            routingNumber:
+              type: string
+            swiftCode:
+              type: string
+    PropertyDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Document ID
+        document_name:
+          type: string
+          description: Name of the document
+        document_url:
+          type: string
+          format: uri
+          description: URL to access the document
+        document_type:
+          type: string
+          enum: [license, insurance, permit, other]
+          description: Type of document
+        uploadedAt:
+          type: string
+          format: date-time
+          description: Upload timestamp
 
 security:
   - BearerAuth: [] 
