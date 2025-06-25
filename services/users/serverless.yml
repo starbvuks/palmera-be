@@ -79,6 +79,39 @@ functions:
             arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
             type: token
 
+  updateUserhostDetails:
+    handler: src/handlers/updatehostDetailsHandler.handler
+    events:
+      - http:
+          path: /users/{id}/hostDetails
+          method: post
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  getUserhostDetails:
+    handler: src/handlers/gethostDetailsHandler.handler
+    events:
+      - http:
+          path: /users/{id}/hostDetails
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+  
+  uploadHostDocuments:
+    handler: src/handlers/uploadHostDocumentsHandler.handler
+    events:
+      - http:
+          path: /users/{id}/hostDocuments
+          method: post
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
   saveUserLocation:
     handler: src/handlers/saveLocationHandler.handler
     events:

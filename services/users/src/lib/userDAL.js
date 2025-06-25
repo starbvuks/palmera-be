@@ -179,4 +179,4 @@ const userSchema = Joi.object({
     activityLog: activityLogSchema
 });
 
-module.exports = { userSchema, preferencesSchema, personalInfoSchema, savedItemsSchema, accountStatusSchema, authenticationSchema, subscriptionsSchema };
+module.exports = { userSchema, preferencesSchema, personalInfoSchema, savedItemsSchema, accountStatusSchema, authenticationSchema, subscriptionsSchema, hostDetailsSchema };
