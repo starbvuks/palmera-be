@@ -6,9 +6,8 @@ const { v4: uuidv4 } = require('uuid');
 const { connectToDatabase } = require('../lib/mongodb');
 const response = require('../lib/response');
 
-const s3Client = new S3Client({
-    region: process.env.AWS_REGION
-});
+// S3 client will use the default region from Lambda context
+const s3Client = new S3Client();
 
 function extractFiles(event) {
     try {
@@ -82,6 +81,7 @@ const handler = async (event) => {
             const fileKey = `user_documents/${userId}/${id}.${fileExtension}`;
 
             console.log('Uploading to S3:', fileKey);
+            console.log('Bucket name:', process.env.AWS_S3_BUCKET_NAME);
 
             const uploadParams = {
                 Bucket: process.env.AWS_S3_BUCKET_NAME,
@@ -93,7 +93,9 @@ const handler = async (event) => {
             // Use the new AWS SDK v3
             await s3Client.send(new PutObjectCommand(uploadParams));
             
-            const fileUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}`;
+            // Get region from Lambda context or use default
+            const region = process.env.AWS_REGION || 'us-east-1';
+            const fileUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${region}.amazonaws.com/${fileKey}`;
             const fileDoc = {
                 document_name: filename,
                 id: id,
