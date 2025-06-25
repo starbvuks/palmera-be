@@ -4,11 +4,11 @@ const response = require('../lib/response.js');
 const handler = async (event) => {
     try {
         // Validate path parameters
-        if (!event.pathParameters || !event.pathParameters.id) {
+        if (!event.pathParameters || !event.pathParameters.userId) {
             return response.error("User ID is required", 400);
         }
 
-        const userId = event.pathParameters.id;
+        const userId = event.pathParameters.userId;
 
         // Validate user ID format (basic validation)
         if (!userId || typeof userId !== 'string' || userId.trim() === '') {
@@ -22,6 +22,17 @@ const handler = async (event) => {
         } catch (dbError) {
             console.error("Database connection error:", dbError);
             return response.error("Database connection failed", 503);
+        }
+
+        // Check if user exists
+        try {
+            const user = await db.collection('users').findOne({ _id: userId });
+            if (!user) {
+                return response.error(`User with ID ${userId} does not exist`, 404);
+            }
+        } catch (userQueryError) {
+            console.error("User query error:", userQueryError);
+            return response.error("Failed to validate user", 500);
         }
 
         // Check if conversation exists

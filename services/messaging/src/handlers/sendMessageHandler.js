@@ -4,6 +4,7 @@ const {
   messageSchemaWithConversationDetails,
   conversationSchema,
   messageSchema,
+  validateIdsExist,
 } = require("../lib/messageDAL.js");
 const { v4: uuidv4 } = require("uuid");
 
@@ -46,6 +47,17 @@ const handler = async (event) => {
     } catch (validationError) {
       console.error("Validation processing error:", validationError);
       return response.error("Invalid message data format", 400);
+    }
+
+    // Validate that host_id, property_id, and guest_id exist in database
+    const validationResult = await validateIdsExist(
+      completeMessageData.host_id,
+      completeMessageData.property_id,
+      completeMessageData.guest_id
+    );
+    
+    if (!validationResult.valid) {
+      return response.error(validationResult.error, 400);
     }
 
     // Connect to MongoDB

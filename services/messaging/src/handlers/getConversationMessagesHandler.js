@@ -4,11 +4,11 @@ const response = require('../lib/response.js');
 const handler = async (event) => {
     try {
         // Validate path parameters
-        if (!event.pathParameters || !event.pathParameters.id) {
+        if (!event.pathParameters || !event.pathParameters.conversationId) {
             return response.error("Conversation ID is required", 400);
         }
 
-        const conversationId = event.pathParameters.id;
+        const conversationId = event.pathParameters.conversationId;
 
         // Validate conversation ID format (basic validation)
         if (!conversationId || typeof conversationId !== 'string' || conversationId.trim() === '') {

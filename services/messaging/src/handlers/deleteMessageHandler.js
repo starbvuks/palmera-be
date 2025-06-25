@@ -8,8 +8,8 @@ const handler = async (event) => {
             return response.error("Path parameters are required", 400);
         }
 
-        const conversationId = event.pathParameters.conversationId;
-        const messageId = event.pathParameters.id;
+        const messageId = event.pathParameters.messageId;
+        const conversationId = event.queryStringParameters?.conversationId;
 
         // Validate required parameters
         if (!conversationId || typeof conversationId !== 'string' || conversationId.trim() === '') {
