@@ -10,6 +10,18 @@ provider:
     MONGODB_URI: ${.env:MONGODB_URI}
     JWT_SECRET: ${.env:JWT_SECRET}
     AWS_S3_BUCKET_NAME: ${.env:AWS_S3_BUCKET_NAME}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+            - s3:GetObject
+            - s3:DeleteObject
+            - s3:ListBucket
+          Resource:
+            - arn:aws:s3:::palmera-property-images
+            - arn:aws:s3:::palmera-property-images/*
 
 functions:
   createProperty:
@@ -128,6 +140,29 @@ plugins:
   - serverless-offline
   - serverless-dotenv-plugin
   - serverless-prune-plugin
+
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        StatusCode: '400'
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Credentials: "'true'"
+    GatewayResponseDefault5XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseType: DEFAULT_5XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        StatusCode: '500'
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Credentials: "'true'"
 
 package:
   patterns:

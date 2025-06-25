@@ -38,7 +38,7 @@ const paymentSchema = Joi.object({
 
 // Booking Details Schema
 const bookingDetailsSchema = Joi.object({
-    booking_reference: Joi.string().required(),
+    // booking_reference: Joi.string().required(),
     check_in: Joi.date().required(),
     check_out: Joi.date().greater(Joi.ref('check_in')).required(),
     total_nights: Joi.number().integer().positive().required(),
@@ -102,10 +102,64 @@ const bookingSchema = Joi.object({
     metadata: metadataSchema.default()
 });
 
+// Update Booking Schema - allows partial updates
+const updateBookingSchema = Joi.object({
+    _id: Joi.string().required(),
+    property_id: Joi.string().optional(),
+    host_id: Joi.string().optional(),
+    guest_id: Joi.string().optional(),
+    bookingDetails: Joi.object({
+        check_in: Joi.date().optional(),
+        check_out: Joi.date().optional(),
+        total_nights: Joi.number().integer().positive().optional(),
+        guests: Joi.object({
+            adults: Joi.number().integer().min(1).optional(),
+            children: Joi.number().integer().min(0).optional(),
+            infants: Joi.number().integer().min(0).optional()
+        }).optional(),
+        special_requests: Joi.string().allow('').optional(),
+        status: Joi.string().valid("pending", "confirmed", "cancelled", "completed", "no-show").optional(),
+        booking_date: Joi.date().optional(),
+        last_updated: Joi.date().optional(),
+        payment: paymentSchema.optional()
+    }).optional(),
+    pricing: Joi.object({
+        base_price: Joi.number().positive().optional(),
+        cleaning_fee: Joi.number().min(0).optional(),
+        service_fee: Joi.number().min(0).optional(),
+        taxes: Joi.number().min(0).optional(),
+        deposit_amount: Joi.number().min(0).optional(),
+        discounts: Joi.object({
+            weekly_discount: Joi.number().min(0).max(100).optional(),
+            monthly_discount: Joi.number().min(0).max(100).optional(),
+            early_bird_discount: Joi.number().min(0).max(100).optional(),
+            last_minute_discount: Joi.number().min(0).max(100).optional(),
+            custom_discount: Joi.number().min(0).max(100).optional()
+        }).optional(),
+        currency: Joi.string().optional(),
+        total_amount: Joi.number().positive().optional(),
+        platform_commission: Joi.number().min(0).optional()
+    }).optional(),
+    payment: paymentSchema.optional(),
+    cancellation: Joi.object({
+        cancellation_policy: Joi.string().optional(),
+        cancellation_reason: Joi.string().optional(),
+        cancellation_date: Joi.date().optional(),
+        cancellation_fee: Joi.number().min(0).optional(),
+        refund_amount: Joi.number().min(0).optional(),
+        cancelled_by: Joi.string().valid("guest", "host", "admin").optional()
+    }).optional(),
+    metadata: Joi.object({
+        created_at: Joi.date().optional(),
+        updated_at: Joi.date().optional()
+    }).optional()
+});
+
 // Exporting Modules
 module.exports = {
     paymentSchema,
     bookingSchema,
+    updateBookingSchema,
     bookingDetailsSchema,
     pricingSchema,
     cancellationSchema,

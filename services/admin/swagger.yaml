@@ -1,0 +1,901 @@
+openapi: 3.0.0
+info:
+  title: Palmera Admin API
+  description: Administrative endpoints for managing users and properties
+  version: 1.0.0
+  contact:
+    name: Palmera Support
+    email: support@palmera.com
+
+servers:
+  - url: https://api.palmera.com/admin
+    description: Production server
+  - url: https://dev-api.palmera.com/admin
+    description: Development server
+  - url: http://localhost:3000/admin
+    description: Local development server
+
+paths:
+  /users:
+    get:
+      summary: Get all users with filtering and pagination
+      description: Retrieve users with optional filtering by role, status, and registration date range
+      tags:
+        - User Management
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: role
+          in: query
+          description: Filter by user role
+          schema:
+            type: string
+            enum: [admin, host, guest, superhost]
+          example: "host"
+        - name: status
+          in: query
+          description: Filter by account status
+          schema:
+            type: string
+            enum: [active, suspended, deleted]
+          example: "active"
+        - name: registered_from
+          in: query
+          description: Filter users registered from this date (ISO 8601)
+          schema:
+            type: string
+            format: date
+          example: "2024-01-01"
+        - name: registered_to
+          in: query
+          description: Filter users registered until this date (ISO 8601)
+          schema:
+            type: string
+            format: date
+          example: "2024-12-31"
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          example: 1
+        - name: limit
+          in: query
+          description: Number of items per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          example: 20
+      responses:
+        '200':
+          description: Users retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                              example: "550e8400-e29b-41d4-a716-446655440000"
+                            personalInfo:
+                              type: object
+                              properties:
+                                email:
+                                  type: string
+                                  example: "john.doe@example.com"
+                                firstName:
+                                  type: string
+                                  example: "John"
+                                lastName:
+                                  type: string
+                                  example: "Doe"
+                                phone:
+                                  type: string
+                                  example: "+1234567890"
+                            roles:
+                              type: object
+                              properties:
+                                isHost:
+                                  type: boolean
+                                  example: true
+                                isSuperhost:
+                                  type: boolean
+                                  example: false
+                                isAdmin:
+                                  type: boolean
+                                  example: false
+                            accountStatus:
+                              type: object
+                              properties:
+                                status:
+                                  type: string
+                                  example: "active"
+                            createdAt:
+                              type: string
+                              format: date-time
+                      pagination:
+                        type: object
+                        properties:
+                          page:
+                            type: integer
+                            example: 1
+                          limit:
+                            type: integer
+                            example: 20
+                          total:
+                            type: integer
+                            example: 150
+                          pages:
+                            type: integer
+                            example: 8
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Validation error: Invalid date format"
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Authentication required"
+        '403':
+          description: Admin access required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Admin access required"
+        '404':
+          description: Admin user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Admin user not found"
+        '500':
+          description: Failed to fetch users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Failed to fetch users"
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Database connection failed"
+
+  /user/{id}:
+    put:
+      summary: Update user by admin
+      description: Update user information by admin (requires admin privileges)
+      tags:
+        - User Management
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID to update
+          schema:
+            type: string
+          example: "550e8400-e29b-41d4-a716-446655440000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                personalInfo:
+                  type: object
+                  properties:
+                    firstName:
+                      type: string
+                      example: "John"
+                    lastName:
+                      type: string
+                      example: "Doe"
+                    phone:
+                      type: string
+                      example: "+1234567890"
+                roles:
+                  type: object
+                  properties:
+                    isHost:
+                      type: boolean
+                      example: true
+                    isSuperhost:
+                      type: boolean
+                      example: false
+                    isAdmin:
+                      type: boolean
+                      example: false
+                accountStatus:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      enum: [active, suspended, deleted]
+                      example: "active"
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "User updated by admin successfully"
+                      userId:
+                        type: string
+                        example: "550e8400-e29b-41d4-a716-446655440000"
+                      modifiedCount:
+                        type: integer
+                        example: 1
+        '400':
+          description: Validation error or invalid JSON
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Validation error: Invalid email format"
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Authentication required"
+        '403':
+          description: Admin access required or cannot modify own admin status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Admin access required"
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "User not found"
+        '500':
+          description: Failed to update user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Failed to update user"
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Database connection failed"
+
+  /properties:
+    get:
+      summary: Get properties for moderation
+      description: Retrieve properties with filtering and pagination for admin moderation
+      tags:
+        - Property Management
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: location
+          in: query
+          description: Filter by location (partial match)
+          schema:
+            type: string
+          example: "New York"
+        - name: min_price
+          in: query
+          description: Minimum price per night
+          schema:
+            type: number
+            minimum: 0
+          example: 50
+        - name: max_price
+          in: query
+          description: Maximum price per night
+          schema:
+            type: number
+            minimum: 0
+          example: 200
+        - name: availability_start
+          in: query
+          description: Availability start date (ISO 8601)
+          schema:
+            type: string
+            format: date
+          example: "2024-06-01"
+        - name: availability_end
+          in: query
+          description: Availability end date (ISO 8601)
+          schema:
+            type: string
+            format: date
+          example: "2024-06-15"
+        - name: amenities
+          in: query
+          description: Comma-separated list of amenities
+          schema:
+            type: string
+          example: "wifi,kitchen,parking"
+        - name: property_type
+          in: query
+          description: Type of property
+          schema:
+            type: string
+            enum: [Entire place, Private room, Shared room]
+          example: "Entire place"
+        - name: status
+          in: query
+          description: Property status
+          schema:
+            type: string
+            enum: [active, pending, inactive]
+          example: "pending"
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          example: 1
+        - name: limit
+          in: query
+          description: Number of items per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          example: 20
+      responses:
+        '200':
+          description: Properties retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      properties:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                              example: "550e8400-e29b-41d4-a716-446655440000"
+                            basicInfo:
+                              type: object
+                              properties:
+                                title:
+                                  type: string
+                                  example: "Cozy Downtown Apartment"
+                                property_type:
+                                  type: string
+                                  example: "Entire place"
+                                status:
+                                  type: string
+                                  example: "pending"
+                            location:
+                              type: object
+                              properties:
+                                address:
+                                  type: string
+                                  example: "123 Main St, New York, NY"
+                            pricing:
+                              type: object
+                              properties:
+                                price_per_night:
+                                  type: number
+                                  example: 150
+                            amenities:
+                              type: object
+                              properties:
+                                wifi:
+                                  type: boolean
+                                  example: true
+                                kitchen:
+                                  type: boolean
+                                  example: true
+                      pagination:
+                        type: object
+                        properties:
+                          page:
+                            type: integer
+                            example: 1
+                          limit:
+                            type: integer
+                            example: 20
+                          total:
+                            type: integer
+                            example: 75
+                          pages:
+                            type: integer
+                            example: 4
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Availability start date must be before end date"
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Authentication required"
+        '403':
+          description: Admin access required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Admin access required"
+        '404':
+          description: Admin user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Admin user not found"
+        '500':
+          description: Failed to fetch properties
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Failed to fetch properties"
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Database connection failed"
+
+  /property/{id}:
+    put:
+      summary: Update property by admin
+      description: Update property information by admin (requires admin privileges)
+      tags:
+        - Property Management
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Property ID to update
+          schema:
+            type: string
+          example: "550e8400-e29b-41d4-a716-446655440000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                basicInfo:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      example: "Updated Property Title"
+                    status:
+                      type: string
+                      enum: [active, pending, inactive]
+                      example: "active"
+                pricing:
+                  type: object
+                  properties:
+                    price_per_night:
+                      type: number
+                      minimum: 0
+                      example: 200
+      responses:
+        '200':
+          description: Property updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Property updated by admin successfully"
+                      propertyId:
+                        type: string
+                        example: "550e8400-e29b-41d4-a716-446655440000"
+                      modifiedCount:
+                        type: integer
+                        example: 1
+        '400':
+          description: Validation error or invalid JSON
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Validation error: Invalid property data"
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Authentication required"
+        '403':
+          description: Admin access required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Admin access required"
+        '404':
+          description: Property not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Property not found"
+        '500':
+          description: Failed to update property
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Failed to update property"
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Database connection failed"
+
+    delete:
+      summary: Delete property by admin
+      description: Permanently delete a property by admin (requires admin privileges)
+      tags:
+        - Property Management
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Property ID to delete
+          schema:
+            type: string
+          example: "550e8400-e29b-41d4-a716-446655440000"
+      responses:
+        '200':
+          description: Property deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Property deleted by admin successfully"
+                      propertyId:
+                        type: string
+                        example: "550e8400-e29b-41d4-a716-446655440000"
+                      deletedCount:
+                        type: integer
+                        example: 1
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Authentication required"
+        '403':
+          description: Admin access required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Admin access required"
+        '404':
+          description: Property not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Property not found"
+        '409':
+          description: Cannot delete property with active bookings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Cannot delete property with active bookings"
+        '500':
+          description: Failed to delete property
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Failed to delete property"
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Database connection failed"
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          description: Error message
+
+    Success:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          description: Response data
+
+tags:
+  - name: User Management
+    description: Admin endpoints for managing users
+  - name: Property Management
+    description: Admin endpoints for managing properties 

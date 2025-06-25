@@ -9,7 +9,19 @@ const { v4: uuidv4 } = require("uuid");
 
 const handler = async (event) => {
   try {
-    const requestData = JSON.parse(event.body);
+    // Validate request body
+    if (!event.body) {
+      return response.error("Request body is required", 400);
+    }
+
+    let requestData;
+    try {
+      requestData = JSON.parse(event.body);
+    } catch (parseError) {
+      console.error("JSON parse error:", parseError);
+      return response.error("Invalid JSON in request body", 400);
+    }
+
     var ConversationIdProvided = true;
     if (requestData.ConversationId === undefined) {
       requestData.ConversationId = uuidv4(); // Generate a new conversation ID if not provided
@@ -24,14 +36,27 @@ const handler = async (event) => {
     // Validate input
     const { error } = messageSchemaWithConversationDetails.validate(Data);
     if (error) {
-      console.error(error);
-      return response.error(error.details[0].message, 400);
+      console.error("Validation error:", error);
+      return response.error(`Validation error: ${error.details[0].message}`, 400);
     }
 
-    completeMessageData =
-      messageSchemaWithConversationDetails.validate(Data).value;
+    let completeMessageData;
+    try {
+      completeMessageData = messageSchemaWithConversationDetails.validate(Data).value;
+    } catch (validationError) {
+      console.error("Validation processing error:", validationError);
+      return response.error("Invalid message data format", 400);
+    }
+
     // Connect to MongoDB
-    const db = await connectToDatabase();
+    let db;
+    try {
+      db = await connectToDatabase();
+    } catch (dbError) {
+      console.error("Database connection error:", dbError);
+      return response.error("Database connection failed", 503);
+    }
+
     if (!ConversationIdProvided) {
       const newConversation = {
         _id: completeMessageData.ConversationId,
@@ -43,13 +68,22 @@ const handler = async (event) => {
       };
       const { error } = conversationSchema.validate(newConversation);
       if (error) {
-        console.error(error);
-        return response.error(error.details[0].message, 400);
+        console.error("Conversation validation error:", error);
+        return response.error(`Conversation validation error: ${error.details[0].message}`, 400);
       }
-      await db.collection("conversations").insertOne(newConversation);
+      
+      try {
+        await db.collection("conversations").insertOne(newConversation);
+      } catch (insertError) {
+        console.error("Conversation creation error:", insertError);
+        if (insertError.code === 11000) {
+          return response.error("Conversation already exists", 409);
+        }
+        return response.error("Failed to create conversation", 500);
+      }
     }
 
-    messageData = {
+    const messageData = {
       _id: uuidv4(), // Generate a new unique ID for the message
       message: completeMessageData.message,
       sentBy: completeMessageData.sentBy,
@@ -57,16 +91,30 @@ const handler = async (event) => {
     };
     const { msgerror } = messageSchema.validate(messageData);
     if (msgerror) {
-      console.error(msgerror);
-      return response.error(msgerror.details[0].message, 400);
+      console.error("Message validation error:", msgerror);
+      return response.error(`Message validation error: ${msgerror.details[0].message}`, 400);
     }
+
     // add message
-    await db
-      .collection("conversations")
-      .updateOne(
-        { _id: completeMessageData.ConversationId },
-        { $push: { messages: messageData } }
-      );
+    try {
+      const updateResult = await db
+        .collection("conversations")
+        .updateOne(
+          { _id: completeMessageData.ConversationId },
+          { $push: { messages: messageData } }
+        );
+
+      if (updateResult.matchedCount === 0) {
+        return response.error("Conversation not found", 404);
+      }
+
+      if (updateResult.modifiedCount === 0) {
+        return response.error("Failed to add message to conversation", 500);
+      }
+    } catch (updateError) {
+      console.error("Message update error:", updateError);
+      return response.error("Failed to send message", 500);
+    }
 
     return response.success({
       message: "Message sent successfully",
@@ -74,7 +122,7 @@ const handler = async (event) => {
       messageData,
     });
   } catch (error) {
-    console.error("Create message error:", error);
+    console.error("Send message error:", error);
     return response.error("Internal server error", 500);
   }
 };

@@ -4,14 +4,54 @@ const Joi = require('joi');
 
 const handler = async (event) => {
     try {
-        const userId = event.pathParameters['id'];
-        const updateData = JSON.parse(event.body);
+        // Validate path parameters
+        if (!event.pathParameters || !event.pathParameters.id) {
+            return response.error("User ID is required", 400);
+        }
+
+        const userId = event.pathParameters.id;
+
+        // Validate user ID format (basic validation)
+        if (!userId || typeof userId !== 'string' || userId.trim() === '') {
+            return response.error("Invalid user ID format", 400);
+        }
+
+        // Validate request body
+        if (!event.body) {
+            return response.error("Request body is required", 400);
+        }
+
+        let updateData;
+        try {
+            updateData = JSON.parse(event.body);
+        } catch (parseError) {
+            console.error("JSON parse error:", parseError);
+            return response.error("Invalid JSON in request body", 400);
+        }
+
+        // Validate update data is an object
+        if (!updateData || typeof updateData !== 'object' || Array.isArray(updateData)) {
+            return response.error("Update data must be an object", 400);
+        }
 
         // Connect to MongoDB
-        const db = await connectToDatabase();
+        let db;
+        try {
+            db = await connectToDatabase();
+        } catch (dbError) {
+            console.error("Database connection error:", dbError);
+            return response.error("Database connection failed", 503);
+        }
 
         // Check if user exists
-        const user = await db.collection('users').findOne({ _id: userId });
+        let user;
+        try {
+            user = await db.collection('users').findOne({ _id: userId });
+        } catch (queryError) {
+            console.error("Database query error:", queryError);
+            return response.error("Failed to retrieve user", 500);
+        }
+
         if (!user) {
             return response.error('User not found', 404);
         }
@@ -53,17 +93,22 @@ const handler = async (event) => {
         const schema = Joi.object(updateSchema);
         const { error } = schema.validate(updateData);
         if (error) {
-            console.error(error);
-            return response.error(error.details[0].message, 400);
+            console.error("Validation error:", error);
+            return response.error(`Validation error: ${error.details[0].message}`, 400);
         }
 
         // Check if email or phone is already in use by another user
         if (uniqueFieldChecks.length > 0) {
-            const results = await Promise.all(uniqueFieldChecks);
-            const duplicateFound = results.some(result => result !== null);
-            
-            if (duplicateFound) {
-                return response.error('Email or phone number is already in use', 409);
+            try {
+                const results = await Promise.all(uniqueFieldChecks);
+                const duplicateFound = results.some(result => result !== null);
+                
+                if (duplicateFound) {
+                    return response.error('Email or phone number is already in use', 409);
+                }
+            } catch (checkError) {
+                console.error("Duplicate check error:", checkError);
+                return response.error("Failed to validate unique fields", 500);
             }
         }
 
@@ -77,12 +122,20 @@ const handler = async (event) => {
         updateObject["accountStatus.updatedAt"] = new Date();
 
         // Update user
-        await db.collection('users').updateOne(
-            { _id: userId }, 
-            { $set: updateObject }
-        );
+        try {
+            await db.collection('users').updateOne(
+                { _id: userId }, 
+                { $set: updateObject }
+            );
+        } catch (updateError) {
+            console.error("User update error:", updateError);
+            return response.error("Failed to update user", 500);
+        }
 
-        return response.success({ message: 'User updated successfully', user: updateObject });
+        return response.success({ 
+            message: 'User updated successfully', 
+            user: updateObject 
+        });
     } catch (error) {
         console.error('Update user error:', error);
         return response.error('Internal server error', 500);

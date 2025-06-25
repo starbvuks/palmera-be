@@ -25,10 +25,18 @@ const handler = async (event) => {
         // Validate input
         const { error } = searchSchema.validate(requestFilters);
         if (error) {
-            return response.error(error.details[0].message, 400);
+            console.error("Validation error:", error);
+            return response.error(`Validation error: ${error.details[0].message}`, 400);
         }
 
-        filters = searchSchema.validate(requestFilters).value;
+        let filters;
+        try {
+            filters = searchSchema.validate(requestFilters).value;
+        } catch (validationError) {
+            console.error("Validation processing error:", validationError);
+            return response.error("Invalid search parameters format", 400);
+        }
+
         let query = {};
 
         if (filters.location) query['location.address'] = { $regex: filters.location, $options: 'i' };
@@ -41,10 +49,16 @@ const handler = async (event) => {
         };
         if (filters.property_type) query['basicInfo.property_type'] = filters.property_type;
         if (filters.status) query['basicInfo.status'] = filters.status;
+        
         // Availability filter: Check if all dates between availability_start and availability_end exist in availability_calendar
         if (filters.availability_start && filters.availability_end) {
             const startDate = new Date(filters.availability_start);
             const endDate = new Date(filters.availability_end);
+
+            // Validate date range
+            if (startDate >= endDate) {
+                return response.error("Availability start date must be before end date", 400);
+            }
 
             let dateArray = [];
             for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
@@ -55,13 +69,30 @@ const handler = async (event) => {
         }
 
         // Connect to MongoDB
-        const db = await connectToDatabase();
-        // Fetch properties from database
-        const properties = await db.collection('properties').find(query).toArray();
+        let db;
+        try {
+            db = await connectToDatabase();
+        } catch (dbError) {
+            console.error("Database connection error:", dbError);
+            return response.error("Database connection failed", 503);
+        }
 
-        return response.success({ properties, count: properties.length }, 200);
+        // Fetch properties from database
+        let properties;
+        try {
+            properties = await db.collection('properties').find(query).toArray();
+        } catch (queryError) {
+            console.error("Database query error:", queryError);
+            return response.error("Failed to search properties", 500);
+        }
+
+        return response.success({ 
+            properties, 
+            count: properties.length,
+            message: `Found ${properties.length} properties matching your criteria`
+        }, 200);
     } catch (error) {
-        console.error('Get property error:', error);
+        console.error('Search properties error:', error);
         return response.error('Internal server error', 500);
     }
 };

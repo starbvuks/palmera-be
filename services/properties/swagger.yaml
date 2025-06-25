@@ -1,0 +1,990 @@
+openapi: 3.0.0
+info:
+  title: Properties API
+  description: API for managing property listings, including CRUD operations, search, and file uploads
+  version: 1.0.0
+  contact:
+    name: Palmera Backend Team
+    email: backend@palmera.com
+
+servers:
+  - url: https://api.palmera.com/properties
+    description: Production server
+  - url: https://dev-api.palmera.com/properties
+    description: Development server
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Property:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique property identifier
+        host_id:
+          type: string
+          description: ID of the property host/owner
+        basicInfo:
+          type: object
+          properties:
+            title:
+              type: string
+              description: Property title
+            description:
+              type: string
+              description: Property description
+            property_type:
+              type: string
+              enum: ["Entire place", "Private room", "Shared room"]
+            status:
+              type: string
+              enum: ["active", "pending", "inactive"]
+        location:
+          type: object
+          properties:
+            address:
+              type: string
+              description: Property address
+            city:
+              type: string
+            state:
+              type: string
+            country:
+              type: string
+            coordinates:
+              type: object
+              properties:
+                lat:
+                  type: number
+                lng:
+                  type: number
+        pricing:
+          type: object
+          properties:
+            price_per_night:
+              type: number
+              description: Price per night in USD
+            currency:
+              type: string
+              default: "USD"
+        amenities:
+          type: object
+          description: Available amenities
+          additionalProperties:
+            type: boolean
+        media:
+          type: object
+          properties:
+            photos:
+              type: array
+              items:
+                type: string
+                format: uri
+        verification:
+          type: object
+          properties:
+            documents:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  document_name:
+                    type: string
+                  document_url:
+                    type: string
+                    format: uri
+        availability:
+          type: object
+          properties:
+            availability_calendar:
+              type: array
+              items:
+                type: string
+                format: date
+        metadata:
+          type: object
+          properties:
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+
+    PropertyCreate:
+      type: object
+      required:
+        - host_id
+        - basicInfo
+        - location
+        - pricing
+      properties:
+        host_id:
+          type: string
+          description: ID of the property host/owner
+        basicInfo:
+          type: object
+          required:
+            - title
+            - description
+            - property_type
+          properties:
+            title:
+              type: string
+              minLength: 1
+              maxLength: 100
+            description:
+              type: string
+              minLength: 10
+              maxLength: 1000
+            property_type:
+              type: string
+              enum: ["Entire place", "Private room", "Shared room"]
+            status:
+              type: string
+              enum: ["active", "pending", "inactive"]
+              default: "pending"
+        location:
+          type: object
+          required:
+            - address
+            - city
+            - state
+            - country
+          properties:
+            address:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            country:
+              type: string
+            coordinates:
+              type: object
+              properties:
+                lat:
+                  type: number
+                lng:
+                  type: number
+        pricing:
+          type: object
+          required:
+            - price_per_night
+          properties:
+            price_per_night:
+              type: number
+              minimum: 0
+            currency:
+              type: string
+              default: "USD"
+        amenities:
+          type: object
+          additionalProperties:
+            type: boolean
+
+    PropertyUpdate:
+      type: object
+      properties:
+        basicInfo:
+          type: object
+          properties:
+            title:
+              type: string
+              minLength: 1
+              maxLength: 100
+            description:
+              type: string
+              minLength: 10
+              maxLength: 1000
+            property_type:
+              type: string
+              enum: ["Entire place", "Private room", "Shared room"]
+            status:
+              type: string
+              enum: ["active", "pending", "inactive"]
+        location:
+          type: object
+          properties:
+            address:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            country:
+              type: string
+            coordinates:
+              type: object
+              properties:
+                lat:
+                  type: number
+                lng:
+                  type: number
+        pricing:
+          type: object
+          properties:
+            price_per_night:
+              type: number
+              minimum: 0
+            currency:
+              type: string
+        amenities:
+          type: object
+          additionalProperties:
+            type: boolean
+
+    SearchFilters:
+      type: object
+      properties:
+        location:
+          type: string
+          description: Search by location address
+        min_price:
+          type: number
+          minimum: 0
+          description: Minimum price per night
+        max_price:
+          type: number
+          minimum: 0
+          description: Maximum price per night
+        availability_start:
+          type: string
+          format: date
+          description: Start date for availability check
+        availability_end:
+          type: string
+          format: date
+          description: End date for availability check
+        amenities:
+          type: array
+          items:
+            type: string
+          description: Array of required amenities
+        property_type:
+          type: string
+          enum: ["Entire place", "Private room", "Shared room"]
+        status:
+          type: string
+          enum: ["active", "pending", "inactive"]
+
+    ImageDeleteRequest:
+      type: object
+      required:
+        - Images
+      properties:
+        Images:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: Array of image URLs to delete
+
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+        error:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          description: Error message
+
+paths:
+  /properties:
+    post:
+      summary: Create a new property
+      description: Create a new property listing
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyCreate'
+            example:
+              host_id: "user123"
+              basicInfo:
+                title: "Cozy Downtown Apartment"
+                description: "Beautiful 2-bedroom apartment in the heart of downtown"
+                property_type: "Entire place"
+                status: "pending"
+              location:
+                address: "123 Main St"
+                city: "New York"
+                state: "NY"
+                country: "USA"
+                coordinates:
+                  lat: 40.7128
+                  lng: -74.0060
+              pricing:
+                price_per_night: 150
+                currency: "USD"
+              amenities:
+                wifi: true
+                parking: true
+                kitchen: true
+      responses:
+        '201':
+          description: Property created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Property created successfully"
+                  data:
+                    $ref: '#/components/schemas/Property'
+        '400':
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /properties/search:
+    get:
+      summary: Search properties
+      description: Search properties with various filters
+      parameters:
+        - name: location
+          in: query
+          schema:
+            type: string
+          description: Search by location address
+        - name: min_price
+          in: query
+          schema:
+            type: number
+          description: Minimum price per night
+        - name: max_price
+          in: query
+          schema:
+            type: number
+          description: Maximum price per night
+        - name: availability_start
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Start date for availability check
+        - name: availability_end
+          in: query
+          schema:
+            type: string
+            format: date
+          description: End date for availability check
+        - name: amenities
+          in: query
+          schema:
+            type: string
+          description: Comma-separated list of amenities
+        - name: property_type
+          in: query
+          schema:
+            type: string
+            enum: ["Entire place", "Private room", "Shared room"]
+          description: Property type filter
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: ["active", "pending", "inactive"]
+          description: Property status filter
+      responses:
+        '200':
+          description: Properties found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Found 5 properties matching your criteria"
+                  data:
+                    type: object
+                    properties:
+                      properties:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Property'
+                      count:
+                        type: integer
+                        example: 5
+        '400':
+          description: Bad request - invalid search parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /properties/{id}:
+    get:
+      summary: Get property by ID
+      description: Retrieve a specific property by its ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Property ID
+      responses:
+        '200':
+          description: Property retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Property retrieved successfully"
+                  data:
+                    type: object
+                    properties:
+                      property:
+                        $ref: '#/components/schemas/Property'
+        '400':
+          description: Bad request - invalid property ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Property not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: Update property
+      description: Update an existing property
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Property ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyUpdate'
+            example:
+              basicInfo:
+                title: "Updated Cozy Downtown Apartment"
+                description: "Updated description for the apartment"
+                status: "active"
+              pricing:
+                price_per_night: 175
+      responses:
+        '200':
+          description: Property updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Property updated successfully"
+                  data:
+                    type: object
+                    properties:
+                      propertyId:
+                        type: string
+        '400':
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Property not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Delete property
+      description: Delete a property by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Property ID
+      responses:
+        '200':
+          description: Property deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Property deleted successfully"
+                  data:
+                    type: object
+                    properties:
+                      propertyId:
+                        type: string
+        '400':
+          description: Bad request - invalid property ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Property not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /properties/user/{id}:
+    get:
+      summary: Get user properties
+      description: Get all properties owned by a specific user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: User ID
+      responses:
+        '200':
+          description: User properties retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Found 3 properties for user"
+                  data:
+                    type: object
+                    properties:
+                      properties:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Property'
+                      count:
+                        type: integer
+                        example: 3
+        '400':
+          description: Bad request - invalid user ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No properties found for user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /properties/{id}/images:
+    post:
+      summary: Upload property images
+      description: Upload images for a property (multipart/form-data)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Property ID
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: Image files (JPEG, PNG)
+      responses:
+        '200':
+          description: Images uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Images uploaded successfully"
+                  data:
+                    type: object
+                    properties:
+                      documents:
+                        type: array
+                        items:
+                          type: string
+                          format: uri
+                      count:
+                        type: integer
+                        example: 3
+        '400':
+          description: Bad request - invalid file or property ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Property not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Delete property images
+      description: Delete specific images from a property
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Property ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImageDeleteRequest'
+            example:
+              Images:
+                - "https://example.com/image1.jpg"
+                - "https://example.com/image2.jpg"
+      responses:
+        '200':
+          description: Images deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Successfully deleted 2 image(s)"
+                  data:
+                    type: object
+                    properties:
+                      deletedCount:
+                        type: integer
+                        example: 2
+                      remainingImages:
+                        type: integer
+                        example: 5
+        '400':
+          description: Bad request - invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Property or images not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /properties/{id}/documents:
+    post:
+      summary: Upload property documents
+      description: Upload documents for a property (multipart/form-data)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Property ID
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: Document files (PDF only)
+      responses:
+        '200':
+          description: Documents uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Documents uploaded successfully"
+                  data:
+                    type: object
+                    properties:
+                      documents:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            document_name:
+                              type: string
+                            document_url:
+                              type: string
+                              format: uri
+                      count:
+                        type: integer
+                        example: 2
+        '400':
+          description: Bad request - invalid file or property ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Property not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /properties/{id}/documents/{docId}:
+    delete:
+      summary: Delete property document
+      description: Delete a specific document from a property
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Property ID
+        - name: docId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Document ID
+      responses:
+        '200':
+          description: Document deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Document deleted successfully"
+                  data:
+                    type: object
+                    properties:
+                      documentId:
+                        type: string
+                      remainingDocuments:
+                        type: integer
+                        example: 3
+        '400':
+          description: Bad request - invalid property or document ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Property or document not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse' 
