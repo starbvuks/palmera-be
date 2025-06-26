@@ -23,7 +23,8 @@ const handler = async (event) => {
         const Data = {
             ...requestData,
             _id: uuidv4(),
-            createdAt: new Date()
+            created_at: new Date(),
+            updated_at: new Date()
         };
 
         // Validate input

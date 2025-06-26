@@ -121,7 +121,41 @@ const updateBookingSchema = Joi.object({
         status: Joi.string().valid("pending", "confirmed", "cancelled", "completed", "no-show").optional(),
         booking_date: Joi.date().optional(),
         last_updated: Joi.date().optional(),
-        payment: paymentSchema.optional()
+        payment: Joi.object({
+            stripePaymentIntentId: Joi.string().optional(), 
+            paymentIntentId: Joi.string().optional(), 
+            amount: Joi.number().positive().optional(),
+            currency: Joi.string().length(3).optional(),
+            status: Joi.string().valid('pending', 'completed', 'failed', 'refunded').optional(),
+            breakdown: Joi.object({
+                basePrice: Joi.number().positive().optional(),
+                cleaningFee: Joi.number().min(0).optional(),
+                serviceFee: Joi.number().min(0).optional(),
+                taxes: Joi.number().min(0).optional(),
+                total: Joi.number().positive().optional()
+            }).optional(),
+            refund: Joi.object({
+                amount: Joi.number().min(0).optional(),
+                reason: Joi.string().optional(),
+                stripeRefundId: Joi.string().optional(),
+                processedAt: Joi.date().optional()
+            }).optional(),
+            createdAt: Joi.date().optional(),
+            updatedAt: Joi.date().optional(),
+            completedAt: Joi.date().optional(),
+            details: Joi.object().optional(),
+            payment_method: Joi.string().valid('credit_card', 'paypal', 'stripe', 'bank_transfer').optional(),
+            payment_status: Joi.string().valid('pending', 'paid', 'failed', 'refunded').optional(),
+            transaction_id: Joi.string().allow(null, '').optional(),
+            payment_date: Joi.date().optional(),
+            refunded: Joi.boolean().optional(),
+            refundedAmount: Joi.number().min(0).optional(),
+            refundedAt: Joi.date().optional(),
+            refundReason: Joi.string().optional(),
+            lastError: Joi.string().allow('').optional(),
+            disputed: Joi.boolean().optional(),
+            disputeDetails: Joi.object().optional()
+        }).optional()
     }).optional(),
     pricing: Joi.object({
         base_price: Joi.number().positive().optional(),
@@ -140,7 +174,41 @@ const updateBookingSchema = Joi.object({
         total_amount: Joi.number().positive().optional(),
         platform_commission: Joi.number().min(0).optional()
     }).optional(),
-    payment: paymentSchema.optional(),
+    payment: Joi.object({
+        stripePaymentIntentId: Joi.string().optional(), 
+        paymentIntentId: Joi.string().optional(), 
+        amount: Joi.number().positive().optional(),
+        currency: Joi.string().length(3).optional(),
+        status: Joi.string().valid('pending', 'completed', 'failed', 'refunded').optional(),
+        breakdown: Joi.object({
+            basePrice: Joi.number().positive().optional(),
+            cleaningFee: Joi.number().min(0).optional(),
+            serviceFee: Joi.number().min(0).optional(),
+            taxes: Joi.number().min(0).optional(),
+            total: Joi.number().positive().optional()
+        }).optional(),
+        refund: Joi.object({
+            amount: Joi.number().min(0).optional(),
+            reason: Joi.string().optional(),
+            stripeRefundId: Joi.string().optional(),
+            processedAt: Joi.date().optional()
+        }).optional(),
+        createdAt: Joi.date().optional(),
+        updatedAt: Joi.date().optional(),
+        completedAt: Joi.date().optional(),
+        details: Joi.object().optional(),
+        payment_method: Joi.string().valid('credit_card', 'paypal', 'stripe', 'bank_transfer').optional(),
+        payment_status: Joi.string().valid('pending', 'paid', 'failed', 'refunded').optional(),
+        transaction_id: Joi.string().allow(null, '').optional(),
+        payment_date: Joi.date().optional(),
+        refunded: Joi.boolean().optional(),
+        refundedAmount: Joi.number().min(0).optional(),
+        refundedAt: Joi.date().optional(),
+        refundReason: Joi.string().optional(),
+        lastError: Joi.string().allow('').optional(),
+        disputed: Joi.boolean().optional(),
+        disputeDetails: Joi.object().optional()
+    }).optional(),
     cancellation: Joi.object({
         cancellation_policy: Joi.string().optional(),
         cancellation_reason: Joi.string().optional(),

@@ -88,7 +88,11 @@ const handler = async (event) => {
             return response.error("Check-out date must be after check-in date", 400);
         }
 
-        if (startDate < new Date()) {
+        // Get today's date (without time) for comparison
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        if (startDate < today) {
             return response.error("Check-in date cannot be in the past", 400);
         }
 

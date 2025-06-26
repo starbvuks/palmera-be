@@ -190,7 +190,146 @@ const propertySchema = Joi.object({
     additionalDetails: additionalDetailsSchema,
 });
 
+// Update Property Schema - allows partial updates
+const updatePropertySchema = Joi.object({
+    _id: Joi.string().required(),
+    host_id: Joi.string().optional(),
+    basicInfo: Joi.object({
+        title: Joi.string().optional(),
+        description: Joi.string().optional(),
+        property_type: Joi.string().valid("Entire place", "Private room", "Shared room").optional(),
+        status: Joi.string().valid("active", "pending", "inactive").optional(),
+    }).optional(),
+    location: Joi.object({
+        address: Joi.string().optional(),
+        city: Joi.string().optional(),
+        state: Joi.string().optional(),
+        country: Joi.string().optional(),
+        zip_code: Joi.string().optional(),
+        coordinates: Joi.object({
+            type: Joi.string().valid("Point").optional(),
+            coordinates: Joi.array().items(Joi.number()).length(2).optional(),
+        }).optional(),
+    }).optional(),
+    pricing: Joi.object({
+        price_per_night: Joi.number().optional(),
+        cleaning_fee: Joi.number().optional(),
+        service_fee: Joi.number().optional(),
+        currency: Joi.string().optional(),
+        minimum_stay: Joi.number().optional(),
+        maximum_stay: Joi.number().optional(),
+        dynamic_pricing_enabled: Joi.boolean().optional(),
+        seasonal_pricing: Joi.object().optional(),
+        weekly_discount: Joi.number().optional(),
+        monthly_discount: Joi.number().optional(),
+        additional_discounts: Joi.object({
+            early_bird: Joi.number().optional(),
+            last_minute: Joi.number().optional(),
+            referral_discount: Joi.number().optional(),
+            custom_discounts: Joi.array().items(
+                Joi.object({
+                    code: Joi.string().optional(),
+                    discount_percentage: Joi.number().optional(),
+                    conditions: Joi.object({
+                        min_nights: Joi.number().optional(),
+                        applicable_dates: Joi.array().items(Joi.date()).optional(),
+                    }).optional(),
+                })
+            ).optional(),
+        }).optional(),
+    }).optional(),
+    availability: Joi.object({
+        availability_calendar: Joi.array().items(Joi.date()).optional(),
+        booking_buffer: Joi.number().optional(),
+    }).optional(),
+    amenities: Joi.object({
+        wifi: Joi.boolean().optional(),
+        parking: Joi.boolean().optional(),
+        air_conditioning: Joi.boolean().optional(),
+        heating: Joi.boolean().optional(),
+        kitchen: Joi.boolean().optional(),
+        pool: Joi.boolean().optional(),
+        gym: Joi.boolean().optional(),
+        pet_friendly: Joi.boolean().optional(),
+        tv: Joi.boolean().optional(),
+        laundry: Joi.boolean().optional(),
+        smoke_detector: Joi.boolean().optional(),
+        fire_extinguisher: Joi.boolean().optional(),
+        additional_amenities: Joi.array().items(Joi.string()).optional(),
+    }).optional(),
+    media: Joi.object({
+        photos: Joi.array().items(Joi.string().uri()).optional(),
+        videos: Joi.array().items(Joi.string().uri()).optional(),
+        thumbnail: Joi.string().uri().optional(),
+        virtual_tour_link: Joi.string().uri().optional(),
+    }).optional(),
+    rules: Joi.object({
+        house_rules: Joi.string().optional(),
+        maximum_guests: Joi.number().optional(),
+        minimum_age_requirement: Joi.number().optional(),
+        smoking_allowed: Joi.boolean().optional(),
+        pets_allowed: Joi.boolean().optional(),
+        events_allowed: Joi.boolean().optional(),
+    }).optional(),
+    verification: Joi.object({
+        documents: Joi.array().items(documentSchema).optional(),
+        government_id_verified: Joi.boolean().optional(),
+        ownership_proof_verified: Joi.boolean().optional(),
+        admin_approved: Joi.boolean().optional(),
+        physical_inspection_done: Joi.boolean().optional(),
+    }).optional(),
+    ratings: Joi.object({
+        average_rating: Joi.number().optional(),
+        number_of_reviews: Joi.number().optional(),
+        client_rating_history: Joi.array().items(
+            Joi.object({
+                rating: Joi.number().optional(),
+                timestamp: Joi.date().optional(),
+            })
+        ).optional(),
+        host_response_rate: Joi.number().optional(),
+        host_response_time: Joi.number().optional(),
+    }).optional(),
+    bookingSettings: Joi.object({
+        instant_booking: Joi.boolean().optional(),
+        cancellation_policy: Joi.string().optional(),
+        check_in_time: Joi.string().optional(),
+        check_out_time: Joi.string().optional(),
+    }).optional(),
+    hostInfo: Joi.object({
+        host_name: Joi.string().optional(),
+        host_profile_picture: Joi.string().uri().optional(),
+        host_contact_email: Joi.string().email().optional(),
+        host_phone_number: Joi.string().optional(),
+        super_host: Joi.boolean().optional(),
+    }).optional(),
+    analytics: Joi.object({
+        view_count: Joi.number().optional(),
+        bookmark_count: Joi.number().optional(),
+        conversion_rate: Joi.number().optional(),
+    }).optional(),
+    legal: Joi.object({
+        tax_id: Joi.string().optional(),
+        business_license_number: Joi.string().optional(),
+        liability_waiver_signed: Joi.boolean().optional(),
+    }).optional(),
+    metadata: Joi.object({
+        created_at: Joi.date().optional(),
+        updated_at: Joi.date().optional(),
+        deleted_at: Joi.date().allow(null).optional(),
+        last_booked_at: Joi.date().allow(null).optional(),
+    }).optional(),
+    additionalDetails: Joi.object({
+        bedrooms: Joi.number().optional(),
+        bathrooms: Joi.number().optional(),
+        beds: Joi.number().optional(),
+        square_footage: Joi.number().optional(),
+        occupancy_limit: Joi.number().optional(),
+    }).optional(),
+});
+
 // Exporting Modules
 module.exports = {
-    propertySchema
+    propertySchema,
+    updatePropertySchema
 };

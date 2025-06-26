@@ -3,12 +3,34 @@ const response = require('../lib/response');
 const {
     updateBookingSchema
 } = require('../lib/bookingsDAL.js');
+const jwt = require('jsonwebtoken');
 
 const handler = async (event) => {
     try {
+        // Extract and verify JWT token
+        const authHeader = event.headers.Authorization || event.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return response.error('Authorization header with Bearer token is required', 401);
+        }
+
+        const token = authHeader.substring(7);
+        let decodedToken;
+        try {
+            decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        } catch (jwtError) {
+            return response.error('Invalid or expired token', 401);
+        }
+
         const bookingId = event.pathParameters['id'];
 
-        const requestData = JSON.parse(event.body);
+        // Parse request body
+        let requestData;
+        try {
+            requestData = JSON.parse(event.body);
+        } catch (parseError) {
+            return response.error('Invalid JSON in request body', 400);
+        }
+
         const updateData = {
             ...requestData,
             _id: bookingId,
@@ -21,7 +43,7 @@ const handler = async (event) => {
         const { error, value } = updateBookingSchema.validate(updateData);
         if (error) {
             console.error('Validation error:', error);
-            return response.error(error.details[0].message, 400);
+            return response.error(`Validation error: ${error.details[0].message}`, 400);
         }
 
         // Connect to MongoDB
@@ -31,6 +53,12 @@ const handler = async (event) => {
         const existingBooking = await db.collection('bookings').findOne({ _id: bookingId });
         if (!existingBooking) {
             return response.error('Booking not found', 404);
+        }
+
+        // Authorization: Check if user is either the host or guest of this booking
+        const userId = decodedToken.userId;
+        if (existingBooking.host_id !== userId && existingBooking.guest_id !== userId) {
+            return response.error('Unauthorized: You can only update bookings you are associated with', 403);
         }
 
         // Prepare update object - only include fields that were provided

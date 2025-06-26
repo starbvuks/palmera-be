@@ -4,7 +4,7 @@ info:
   description: Complete API documentation for all Palmera backend services
   version: 1.0.0
   contact:
-    name: Palmera Support
+    name: Palmera Suppor
     email: support@palmera.com
 
 paths:
@@ -16,10 +16,10 @@ paths:
     post:
       summary: Demo Login for Access Token (dev)
       description: |
-        Authenticate a user and receive an access token and refresh token. This endpoint is for development/demo purposes only. Use the provided credentials to obtain a JWT for testing other endpoints. 
-        
+        Authenticate a user and receive an access token and refresh token. This endpoint is for development/demo purposes only. Use the provided credentials to obtain a JWT for testing other endpoints.
+
         **Note:** This is not for production use.
-        
+
         **Base URL:** https://m71ar6e3f9.execute-api.us-east-1.amazonaws.com/dev
       tags: [Authentication]
       requestBody:
@@ -53,7 +53,7 @@ paths:
                     status: "active"
                     createdAt: "2024-01-01T00:00:00.000Z"
         '400':
-          description: Bad request
+          description: Bad reques
           content:
             application/json:
               schema:
@@ -75,12 +75,12 @@ paths:
                     success: false
                     error: "Validation error: Email is required"
                 invalidEmail:
-                  summary: Invalid email format
+                  summary: Invalid email forma
                   value:
                     success: false
                     error: "Invalid email format"
                 invalidPassword:
-                  summary: Invalid password format
+                  summary: Invalid password forma
                   value:
                     success: false
                     error: "Invalid password format"
@@ -111,7 +111,7 @@ paths:
       summary: User registration
       description: |
         Create a new user account with email and password.
-        
+
         **Base URL:** https://m71ar6e3f9.execute-api.us-east-1.amazonaws.com/dev
       tags: [Authentication]
       requestBody:
@@ -147,7 +147,7 @@ paths:
                     status: "active"
                     createdAt: "2024-01-01T00:00:00.000Z"
         '400':
-          description: Bad request
+          description: Bad reques
           content:
             application/json:
               schema:
@@ -169,7 +169,7 @@ paths:
                     success: false
                     error: "Validation error: Password must be at least 6 characters long"
                 invalidPassword:
-                  summary: Invalid password format
+                  summary: Invalid password forma
                   value:
                     success: false
                     error: "Invalid password format"
@@ -200,7 +200,7 @@ paths:
       summary: Send OTP
       description: |
         Send a one-time password (OTP) to the provided phone number for verification.
-        
+
         **Base URL:** https://m71ar6e3f9.execute-api.us-east-1.amazonaws.com/dev
       tags: [Authentication]
       requestBody:
@@ -229,7 +229,7 @@ paths:
                   phoneNumber: "+1234567890"
                   expiresIn: 300
         '400':
-          description: Bad request
+          description: Bad reques
           content:
             application/json:
               schema:
@@ -246,7 +246,7 @@ paths:
                     success: false
                     error: "Invalid JSON in request body"
                 invalidPhoneNumber:
-                  summary: Invalid phone number format
+                  summary: Invalid phone number forma
                   value:
                     success: false
                     error: "Invalid phone number format"
@@ -268,7 +268,7 @@ paths:
       summary: Verify OTP
       description: |
         Verify the OTP sent to the phone number.
-        
+
         **Base URL:** https://m71ar6e3f9.execute-api.us-east-1.amazonaws.com/dev
       tags: [Authentication]
       requestBody:
@@ -300,7 +300,7 @@ paths:
                   phoneNumber: "+1234567890"
                   verified: true
         '400':
-          description: Bad request
+          description: Bad reques
           content:
             application/json:
               schema:
@@ -348,7 +348,7 @@ paths:
       summary: Refresh access token
       description: |
         Refresh an expired access token using a valid refresh token.
-        
+
         **Base URL:** https://m71ar6e3f9.execute-api.us-east-1.amazonaws.com/dev
       tags: [Authentication]
       requestBody:
@@ -412,10 +412,10 @@ paths:
       - url: https://m71ar6e3f9.execute-api.us-east-1.amazonaws.com/dev
         description: Auth Service
     post:
-      summary: User logout
+      summary: User logou
       description: |
         Logout the current user and invalidate their tokens.
-        
+
         **Base URL:** https://m71ar6e3f9.execute-api.us-east-1.amazonaws.com/dev
       tags: [Authentication]
       security:
@@ -456,10 +456,10 @@ paths:
       - url: https://m71ar6e3f9.execute-api.us-east-1.amazonaws.com/dev
         description: Auth Service
     delete:
-      summary: Delete user account
+      summary: Delete user accoun
       description: |
         Permanently delete the user's account and all associated data.
-        
+
         **Base URL:** https://m71ar6e3f9.execute-api.us-east-1.amazonaws.com/dev
       tags: [Authentication]
       security:
@@ -934,7 +934,7 @@ paths:
                 favoriteProperties:
                   type: array
                   items:
-                    type: string 
+                    type: string
 
                   description: Array of property IDs to save
       responses:
@@ -1232,7 +1232,6 @@ paths:
         - name: role
           in: query
           required: true
-          description: New role for the user. Must be one of: user, host, admin.
           schema:
             type: string
             enum: [user, host, admin]
@@ -1460,84 +1459,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-      /users/{id}/hostDocuments:
-    post:
-      summary: Upload host documents for a user
-      description: Upload one or more documents for host verification. Each document must specify its type.
-      tags: [Users]
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: User ID
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                files:
-                  type: array
-                  items:
-                    type: string
-                    format: binary
-      responses:
-        '200':
-          description: Documents uploaded successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    type: object
-                    properties:
-                      message:
-                        type: string
-                        example: Documents uploaded successfully
-                      documents:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/PropertyDocument'
-                      count:
-                        type: integer
-                        example: 2
-              example:
-                success: true
-                data:
-                  message: Documents uploaded successfully
-                  documents:
-                    - id: "doc123"
-                      document_name: "Host License.pdf"
-                      document_url: "https://example.com/docs/license.pdf"
-                      document_type: "license"
-                      uploadedAt: "2024-01-15T10:30:00.000Z"
-                  count: 1
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: User not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
   /users/{id}/hostDocuments:
     servers:
     - url: https://ct4rgp2633.execute-api.us-east-1.amazonaws.com/dev
@@ -1602,7 +1523,7 @@ paths:
                       uploadedAt: "2024-01-15T10:30:00.000Z"
                   count: 1
         '400':
-          description: Bad request
+          description: Bad reques
           content:
             application/json:
               schema:
@@ -1619,7 +1540,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-    
+
 
   # Properties Service Endpoints
   /properties/search:
@@ -1640,12 +1561,12 @@ paths:
           in: query
           schema:
             type: number
-          description: Minimum price per night
+          description: Minimum price per nigh
         - name: max_price
           in: query
           schema:
             type: number
-          description: Maximum price per night
+          description: Maximum price per nigh
         - name: amenities
           in: query
           schema:
@@ -1663,7 +1584,7 @@ paths:
             type: string
             enum: ["active", "pending", "inactive"]
           description: Property status
-        - name: availability_start
+        - name: availability_star
           in: query
           schema:
             type: string
@@ -1736,7 +1657,7 @@ paths:
                   count: 2
                   unreadCount: 2
         '400':
-          description: Bad request
+          description: Bad reques
           content:
             application/json:
               schema:
@@ -1758,12 +1679,12 @@ paths:
                     success: false
                     error: "Validation error: <details from Joi>"
                 invalidPropertyId:
-                  summary: Invalid property ID format
+                  summary: Invalid property ID forma
                   value:
                     success: false
                     error: "Invalid property ID format"
                 invalidSearchParams:
-                  summary: Invalid search parameters format
+                  summary: Invalid search parameters forma
                   value:
                     success: false
                     error: "Invalid search parameters format"
@@ -1872,7 +1793,7 @@ paths:
                 pricing:
                   type: object
                   required:
-                    - price_per_night
+                    - price_per_nigh
                     - minimum_stay
                     - maximum_stay
                   properties:
@@ -2082,7 +2003,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/Property'
         '400':
-          description: Bad request
+          description: Bad reques
           content:
             application/json:
               schema:
@@ -2104,12 +2025,12 @@ paths:
                     success: false
                     error: "Validation error: <details from Joi>"
                 invalidPropertyId:
-                  summary: Invalid property ID format
+                  summary: Invalid property ID forma
                   value:
                     success: false
                     error: "Invalid property ID format"
                 invalidSearchParams:
-                  summary: Invalid search parameters format
+                  summary: Invalid search parameters forma
                   value:
                     success: false
                     error: "Invalid search parameters format"
@@ -2119,7 +2040,7 @@ paths:
                     success: false
                     error: "Availability start date must be before end date"
         '409':
-          description: Conflict
+          description: Conflic
           content:
             application/json:
               schema:
@@ -2680,7 +2601,7 @@ paths:
                       count:
                         type: integer
         '400':
-          description: Bad request
+          description: Bad reques
           content:
             application/json:
               schema:
@@ -2757,7 +2678,7 @@ paths:
                       count:
                         type: integer
         '400':
-          description: Bad request
+          description: Bad reques
           content:
             application/json:
               schema:
@@ -2785,7 +2706,7 @@ paths:
                 error: "Failed to upload documents"
 
   # Bookings Service Endpoints
-  # 
+  #
   # DEPLOYED ENDPOINTS (configured in serverless.yaml):
   # - POST /bookings - Create booking
   # - GET /bookings/{id} - Get booking details
@@ -2797,12 +2718,244 @@ paths:
   # - GET /bookings/history/host/{id} - Get host booking history
   #
   # NOT DEPLOYED ENDPOINTS (handlers exist but not in serverless.yaml):
-  # - POST /bookings/payment-intent - Create payment intent
-  # - POST /bookings/{id}/payment - Confirm payment
+  # - POST /bookings/payment-intent - Create payment inten
+  # - POST /bookings/{id}/payment - Confirm paymen
   # - POST /bookings/{id}/refund - Process refund
   # - GET /bookings/search - Search properties
   # - POST /bookings/webhook - Stripe webhook handler
   #
+  /bookings:
+    servers:
+      - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
+        description: Bookings Service
+    post:
+      summary: Create a new booking
+      description: |
+        Create a new booking for a property. All fields must match the schema. The server will generate the `_id` and metadata.
+      tags: [Bookings]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBookingRequest'
+      responses:
+        '200':
+          description: Booking created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  bookingData:
+                    $ref: '#/components/schemas/Booking'
+        '400':
+          description: Bad request (validation error, missing/invalid body, date logic)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Property not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Booking already exists or property unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /bookings/{id}:
+    servers:
+      - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
+        description: Bookings Service
+    get:
+      summary: Get booking details
+      description: Retrieve a booking by its ID.
+      tags: [Bookings]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Booking ID
+      responses:
+        '200':
+          description: Booking retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  booking:
+                    $ref: '#/components/schemas/Booking'
+                  message:
+                    type: string
+        '400':
+          description: Invalid booking ID forma
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Booking not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Update a booking
+      description: Update fields of a booking. Only provided fields will be updated (partial update).
+      tags: [Bookings]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Booking ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBookingRequest'
+      responses:
+        '200':
+          description: Booking updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  updatedFields:
+                    type: array
+                    items:
+                      type: string
+        '400':
+          description: Validation error or invalid booking ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Booking not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Cancel a booking
+      description: |
+        Cancel a booking by its ID. Requires a cancellation body (see schema). Sets booking status to "cancelled".
+      tags: [Bookings]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Booking ID
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CancellationRequest'
+      responses:
+        '200':
+          description: Booking cancelled successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  bookingId:
+                    type: string
+        '400':
+          description: Validation error, missing body, or already cancelled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Booking not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Booking is already cancelled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /bookings/user/{id}:
     servers:
       - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
@@ -2811,8 +2964,8 @@ paths:
       summary: Get user bookings
       description: |
         Retrieve all bookings for a user by their user ID. Requires authentication. Returns a list of bookings where the user is the guest.
-        
-        **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev      
+
+        **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
       tags: [Bookings]
       security:
         - BearerAuth: []
@@ -2901,7 +3054,7 @@ paths:
       summary: Get host bookings
       description: |
         Retrieve all bookings for a host by their host ID. Requires authentication. Returns a list of bookings where the user is the host.
-        
+
         **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
       tags: [Bookings]
       security:
@@ -2956,7 +3109,7 @@ paths:
                 success: false
                 error: "Unauthorized - Invalid or missing token"
         '404':
-          description: No bookings found for this host
+          description: No bookings found for this hos
           content:
             application/json:
               schema:
@@ -2991,7 +3144,7 @@ paths:
       summary: Get user booking history
       description: |
         Retrieve past bookings for a user by their user ID. Requires authentication. Returns a list of completed and cancelled bookings where the user is the guest.
-        
+
         **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
       tags: [Bookings]
       security:
@@ -3081,7 +3234,7 @@ paths:
       summary: Get host booking history
       description: |
         Retrieve past bookings for a host by their host ID. Requires authentication. Returns a list of completed and cancelled bookings where the user is the host.
-        
+
         **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
       tags: [Bookings]
       security:
@@ -3136,7 +3289,7 @@ paths:
                 success: false
                 error: "Unauthorized - Invalid or missing token"
         '404':
-          description: No past bookings found for this host
+          description: No past bookings found for this hos
           content:
             application/json:
               schema:
@@ -3172,9 +3325,9 @@ paths:
       summary: Create payment intent (NOT DEPLOYED)
       description: |
         Create a payment intent for a booking. Requires authentication. The request body must include the booking ID, amount, and currency. Returns a client secret and payment intent ID for use with payment processing (e.g., Stripe).
-        
+
         **⚠️ NOTE: This endpoint is NOT YET DEPLOYED and is for development/testing purposes only.**
-        
+
         **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
       tags: [Bookings]
       security:
@@ -3295,9 +3448,9 @@ paths:
       summary: Confirm payment (NOT DEPLOYED)
       description: |
         Process a payment for a booking by its ID. Requires authentication. The request body must include a valid payment method ID. Returns the payment status and payment ID.
-        
+
         **⚠️ NOTE: This endpoint is NOT YET DEPLOYED and is for development/testing purposes only.**
-        
+
         **Base URL:** https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
       tags: [Bookings]
       security:
@@ -3408,7 +3561,7 @@ paths:
       - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com/dev
         description: Bookings Service
     post:
-      summary: Process payment
+      summary: Process payment (NOT DEPLOYED)
       description: |
         Process a payment for a booking by its ID. Requires authentication. The request body must include a valid payment method ID. Returns the payment status and payment ID.
       tags: [Bookings]
@@ -3489,11 +3642,11 @@ paths:
       summary: Send message
       description: |
         Send a message in a conversation. If `ConversationId` is provided in the request body, the message will be added to that conversation. If `ConversationId` is omitted, a new conversation will be created automatically and the message will be added as the first message.
-        
+
         **Behavior:**
         - If `ConversationId` is provided: Message is added to existing conversation
         - If `ConversationId` is omitted: New conversation is created with auto-generated ID
-        
+
         **Base URL:** https://am22amgo33.execute-api.us-east-1.amazonaws.com/dev
       tags: [Messaging]
       security:
@@ -3582,7 +3735,7 @@ paths:
       summary: Get conversation messages
       description: |
         Retrieve all messages in a specific conversation by conversation ID.
-        
+
         **Base URL:** https://am22amgo33.execute-api.us-east-1.amazonaws.com/dev
       tags: [Messaging]
       security:
@@ -3661,7 +3814,7 @@ paths:
       summary: Get user conversations
       description: |
         Retrieve all conversations for a user by their user ID. Returns a list of conversations where the user is either the host or the guest. Messages are excluded from the response.
-        
+
         **Base URL:** https://am22amgo33.execute-api.us-east-1.amazonaws.com/dev
       tags: [Messaging]
       security:
@@ -3741,7 +3894,7 @@ paths:
       summary: Delete message
       description: |
         Delete a specific message from a conversation. Requires both conversation ID and message ID as path parameters.
-        
+
         **Base URL:** https://am22amgo33.execute-api.us-east-1.amazonaws.com/dev
       tags: [Messaging]
       security:
@@ -3817,87 +3970,202 @@ paths:
     servers:
       - url: https://z421qustb7.execute-api.us-east-1.amazonaws.com/dev
         description: Notifications Service
-    get:
-      summary: Get user notifications
+    post:
+      summary: Create notification
       description: |
-        Retrieve all notifications for a user by their user ID (as a query parameter). Requires authentication. Returns a list of notifications, including booking, message, payment, and system notifications. Supports pagination if implemented in the backend.
-        
+        Create a new notification for a user. Requires authentication. The request body must include userId, type, message, and relatedEntityId. Returns the created notification object.
+
         **Base URL:** https://z421qustb7.execute-api.us-east-1.amazonaws.com/dev
+
+        **Available notification types:** booking, message, alert, promotion, system
+        **Available channels:** in_app, sms, email, push
+        **Available priorities:** low, normal, high
       tags: [Notifications]
       security:
         - BearerAuth: []
-      parameters:
-        - name: userId
-          in: query
-          required: true
-          schema:
-            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNotificationRequest'
+            example:
+              userId: "user456"
+              type: "booking"
+              channel: "in_app"
+              message: "Your booking for Cozy Downtown Apartment has been confirmed for January 15-18"
+              relatedEntityId: "book123"
+              read: false
+              priority: "high"
+              metadata:
+                additionalData:
+                  propertyId: "prop123"
+                  checkIn: "2024-01-15"
+                  checkOut: "2024-01-18"
+                actionLink: "https://app.palmera.com/bookings/book123"
+              isSystemNotification: false
+              expires_at: "2024-02-01T00:00:00.000Z"
       responses:
         '200':
-          description: Notifications retrieved successfully
+          description: Notification created successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 success: true
-                message: "Notifications retrieved successfully"
                 data:
-                  notifications:
-                    - _id: "notif123"
-                      userId: "user456"
-                      type: "booking"
-                      title: "Booking Confirmed"
-                      message: "Your booking for Cozy Downtown Apartment has been confirmed for January 15-18"
-                      isSystemNotification: false
-                      priority: "high"
-                      read: false
-                      metadata:
-                        bookingId: "book123"
+                  message: "Notification created successfully"
+                  NotificationData:
+                    _id: "550e8400-e29b-41d4-a716-446655440000"
+                    userId: "user456"
+                    type: "booking"
+                    channel: "in_app"
+                    message: "Your booking for Cozy Downtown Apartment has been confirmed for January 15-18"
+                    relatedEntityId: "book123"
+                    read: false
+                    priority: "high"
+                    metadata:
+                      additionalData:
                         propertyId: "prop123"
                         checkIn: "2024-01-15"
                         checkOut: "2024-01-18"
-                      createdAt: "2024-01-01T12:00:00.000Z"
-                    - _id: "notif124"
+                      actionLink: "https://app.palmera.com/bookings/book123"
+                    isSystemNotification: false
+                    expires_at: "2024-02-01T00:00:00.000Z"
+                    created_at: "2024-01-01T12:00:00.000Z"
+                    updated_at: "2024-01-01T12:00:00.000Z"
+        '400':
+          description: Bad request - validation error or missing request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Validation error: userId is required"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Unauthorized - Invalid or missing token"
+        '409':
+          description: Notification already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Notification already exists"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Internal server error"
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Database connection failed"
+
+  /notifications/user/{id}:
+    servers:
+      - url: https://z421qustb7.execute-api.us-east-1.amazonaws.com/dev
+        description: Notifications Service
+    get:
+      summary: Get user notifications
+      description: |
+        Retrieve all notifications for a user by their user ID (as a path parameter). Requires authentication. Returns a list of notifications for the specified user, including both user-specific and system notifications.
+
+        **Base URL:** https://z421qustb7.execute-api.us-east-1.amazonaws.com/dev
+      tags: [Notifications]
+      requestBody:
+        required: false
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: User ID to retrieve notifications for
+      responses:
+        '200':
+          description: User notifications retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+              example:
+                success: true
+                data:
+                  notifications:
+                    - _id: "550e8400-e29b-41d4-a716-446655440000"
+                      userId: "user456"
+                      type: "booking"
+                      channel: "in_app"
+                      message: "Your booking for Cozy Downtown Apartment has been confirmed for January 15-18"
+                      relatedEntityId: "book123"
+                      read: false
+                      priority: "high"
+                      metadata:
+                        additionalData:
+                          propertyId: "prop123"
+                          checkIn: "2024-01-15"
+                          checkOut: "2024-01-18"
+                        actionLink: "https://app.palmera.com/bookings/book123"
+                      isSystemNotification: false
+                      expires_at: "2024-02-01T00:00:00.000Z"
+                      created_at: "2024-01-01T12:00:00.000Z"
+                      updated_at: "2024-01-01T12:00:00.000Z"
+                    - _id: "550e8400-e29b-41d4-a716-446655440001"
                       userId: "user456"
                       type: "message"
-                      title: "New Message from John"
+                      channel: "in_app"
                       message: "John sent you a message about your booking"
-                      isSystemNotification: false
-                      priority: "medium"
+                      relatedEntityId: "conv123"
                       read: true
+                      priority: "normal"
                       metadata:
-                        conversationId: "conv123"
-                        senderId: "user123"
-                        senderName: "John Doe"
-                      createdAt: "2024-01-01T11:30:00.000Z"
-                    - _id: "notif125"
-                      userId: "user456"
-                      type: "payment"
-                      title: "Payment Successful"
-                      message: "Your payment of $450 has been processed successfully"
+                        additionalData:
+                          conversationId: "conv123"
+                          senderId: "user123"
+                          senderName: "John Doe"
+                        actionLink: "https://app.palmera.com/messages/conv123"
                       isSystemNotification: false
-                      priority: "high"
-                      read: false
-                      metadata:
-                        paymentId: "pay123"
-                        amount: 450
-                        currency: "USD"
-                        bookingId: "book123"
-                      createdAt: "2024-01-01T11:00:00.000Z"
-                    - _id: "notif126"
-                      userId: "user456"
+                      created_at: "2024-01-01T11:30:00.000Z"
+                      updated_at: "2024-01-01T11:30:00.000Z"
+                    - _id: "550e8400-e29b-41d4-a716-446655440002"
+                      userId: "system"
                       type: "system"
-                      title: "Welcome to Palmera!"
-                      message: "Thank you for joining our community. Start exploring amazing properties!"
-                      isSystemNotification: true
-                      priority: "low"
+                      channel: "in_app"
+                      message: "Welcome to Palmera! Start exploring amazing properties."
+                      relatedEntityId: "welcome"
                       read: true
+                      priority: "low"
                       metadata:
-                        category: "welcome"
-                      createdAt: "2024-01-01T10:00:00.000Z"
-                  count: 4
-                  unreadCount: 2
+                        additionalData:
+                          category: "welcome"
+                        actionLink: "https://app.palmera.com/explore"
+                      isSystemNotification: true
+                      created_at: "2024-01-01T10:00:00.000Z"
+                      updated_at: "2024-01-01T10:00:00.000Z"
+                  count: 3
+                  message: "User notifications retrieved successfully"
         '400':
           description: Bad request - invalid user ID
           content:
@@ -3943,295 +4211,17 @@ paths:
               example:
                 success: false
                 error: "Database connection failed"
-
-    post:
-      summary: Create notification
-      description: |
-        Create a new notification for a user. Requires authentication. The request body must include user ID, type, title, and message. Returns the created notification object.
-        
-        **Base URL:** https://z421qustb7.execute-api.us-east-1.amazonaws.com/dev
-      tags: [Notifications]
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateNotificationRequest'
-            example:
-              userId: "user456"
-              type: "booking"
-              title: "Booking Confirmed"
-              message: "Your booking for Cozy Downtown Apartment has been confirmed for January 15-18"
-              isSystemNotification: false
-              priority: "high"
-              metadata:
-                bookingId: "book123"
-                propertyId: "prop123"
-                checkIn: "2024-01-15"
-                checkOut: "2024-01-18"
-      responses:
-        '201':
-          description: Notification created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-              example:
-                success: true
-                message: "Notification created successfully"
-                data:
-                  notification:
-                    _id: "notif127"
-                    userId: "user456"
-                    type: "booking"
-                    title: "Booking Confirmed"
-                    message: "Your booking for Cozy Downtown Apartment has been confirmed for January 15-18"
-                    isSystemNotification: false
-                    priority: "high"
-                    read: false
-                    metadata:
-                      bookingId: "book123"
-                      propertyId: "prop123"
-                      checkIn: "2024-01-15"
-                      checkOut: "2024-01-18"
-                    createdAt: "2024-01-01T12:00:00.000Z"
-        '400':
-          description: Bad request - validation error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Validation error: Notification title is required"
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Unauthorized - Invalid or missing token"
-        '409':
-          description: Notification already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Notification already exists"
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Internal server error"
-        '503':
-          description: Database connection failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Database connection failed"
-
+  
   /notifications/{id}:
-    get:
-      summary: Get notification details
-      description: |
-        Retrieve detailed information for a specific notification by its ID. Requires authentication. Returns all notification details, including metadata and timestamps.
-        
-        **Base URL:** https://z421qustb7.execute-api.us-east-1.amazonaws.com/dev
-      tags: [Notifications]
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Notification details retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-              example:
-                success: true
-                message: "Notification details retrieved successfully"
-                data:
-                  notification:
-                    _id: "notif123"
-                    userId: "user456"
-                    type: "booking"
-                    title: "Booking Confirmed"
-                    message: "Your booking for Cozy Downtown Apartment has been confirmed for January 15-18. You can view your booking details in the app."
-                    isSystemNotification: false
-                    priority: "high"
-                    read: false
-                    metadata:
-                      bookingId: "book123"
-                      propertyId: "prop123"
-                      propertyTitle: "Cozy Downtown Apartment"
-                      checkIn: "2024-01-15"
-                      checkOut: "2024-01-18"
-                      totalAmount: 450
-                      currency: "USD"
-                      hostName: "John Doe"
-                    createdAt: "2024-01-01T12:00:00.000Z"
-                    updatedAt: "2024-01-01T12:00:00.000Z"
-        '400':
-          description: Bad request - invalid notification ID
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Invalid notification ID format"
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Unauthorized - Invalid or missing token"
-        '404':
-          description: Notification not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Notification not found"
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Internal server error"
-        '503':
-          description: Database connection failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Database connection failed"
-
-    put:
-      summary: Mark notification as read
-      description: |
-        Mark a notification as read by its ID. Requires authentication. Provide the read status in the request body. Returns the updated notification object.
-        
-        **Base URL:** https://z421qustb7.execute-api.us-east-1.amazonaws.com/dev  
-      tags: [Notifications]
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [read]
-              properties:
-                read:
-                  type: boolean
-                  description: Whether the notification has been read
-            example:
-              read: true
-      responses:
-        '200':
-          description: Notification updated successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-              example:
-                success: true
-                message: "Notification marked as read"
-                data:
-                  notification:
-                    _id: "notif123"
-                    read: true
-                    readAt: "2024-01-01T12:30:00.000Z"
-                    updatedAt: "2024-01-01T12:30:00.000Z"
-        '400':
-          description: Bad request - validation error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Validation error: Read status is required"
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Unauthorized - Invalid or missing token"
-        '404':
-          description: Notification not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Notification not found"
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Internal server error"
-        '503':
-          description: Database connection failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Database connection failed"
-
+    servers:
+      - url: https://z421qustb7.execute-api.us-east-1.amazonaws.com/dev
+        description: Notifications Service
     delete:
       summary: Delete notification
       description: |
-        Delete a notification by its ID. Requires authentication. Returns the deleted notification ID and timestamp.
-        
-        **Base URL:** https://z421qustb7.execute-api.us-east-1.amazonaws.com/dev  
+        Delete a notification by its ID. Requires authentication. Returns the deleted notification ID and success message.
+
+        **Base URL:** https://z421qustb7.execute-api.us-east-1.amazonaws.com/dev
       tags: [Notifications]
       security:
         - BearerAuth: []
@@ -4241,6 +4231,7 @@ paths:
           required: true
           schema:
             type: string
+          description: Notification ID to delete
       responses:
         '200':
           description: Notification deleted successfully
@@ -4250,10 +4241,9 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
               example:
                 success: true
-                message: "Notification deleted successfully"
                 data:
-                  notificationId: "notif123"
-                  deletedAt: "2024-01-01T12:00:00.000Z"
+                  message: "Notification deleted successfully"
+                  notificationId: "550e8400-e29b-41d4-a716-446655440000"
         '400':
           description: Bad request - invalid notification ID
           content:
@@ -4299,74 +4289,6 @@ paths:
               example:
                 success: false
                 error: "Database connection failed"
-
-  /notifications/user/{id}:
-    get:
-      summary: Get user notifications by path parameter
-      description: |
-        Retrieve all notifications for a user by their user ID (as a path parameter). Requires authentication. Returns a list of notifications for the specified user.
-        
-        **Base URL:** https://z421qustb7.execute-api.us-east-1.amazonaws.com/dev
-      tags: [Notifications]
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: User notifications retrieved successfully
-        '400':
-          description: Bad request - invalid user ID
-        '401':
-          description: Unauthorized
-        '404':
-          description: No notifications found for this user
-        '500':
-          description: Internal server error
-        '503':
-          description: Database connection failed
-
-  /notifications/bulk/read:
-    post:
-      summary: Mark multiple notifications as read
-      description: |
-        Mark multiple notifications as read for a user. Requires authentication. Provide the user ID and an array of notification IDs in the request body. Returns the count of notifications marked as read.
-        
-        **Base URL:** https://z421qustb7.execute-api.us-east-1.amazonaws.com/dev
-      tags: [Notifications]
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [userId, notificationIds]
-              properties:
-                userId:
-                  type: string
-                  description: User ID
-                notificationIds:
-                  type: array
-                  items:
-                    type: string
-                  description: Array of notification IDs to mark as read
-      responses:
-        '200':
-          description: Notifications marked as read successfully
-        '400':
-          description: Bad request - validation error
-        '401':
-          description: Unauthorized
-        '500':
-          description: Internal server error
-        '503':
-          description: Database connection failed
 
   # Admin Service Endpoints
   /admin/users:
@@ -4377,7 +4299,7 @@ paths:
       summary: Get all users (Admin only)
       description: |
         Retrieve a paginated list of all users in the system. Requires authentication and admin privileges. Returns user details, pagination info, and total user count.
-        
+
         **Base URL:** https://8u9wyib7j4.execute-api.us-east-1.amazonaws.com/dev
       tags: [Admin]
       security:
@@ -4388,7 +4310,7 @@ paths:
           schema:
             type: integer
             default: 1
-        - name: limit
+        - name: limi
           in: query
           schema:
             type: integer
@@ -4484,7 +4406,7 @@ paths:
       summary: Update user (Admin only)
       description: |
         Update a user's details by their user ID. Requires authentication and admin privileges. Only an admin can update user roles or status. Returns the updated user object.
-        
+
         **Base URL:** https://8u9wyib7j4.execute-api.us-east-1.amazonaws.com/dev
       tags: [Admin]
       security:
@@ -4575,7 +4497,7 @@ paths:
       summary: Get properties for moderation (Admin only)
       description: |
         Retrieve a paginated list of properties pending moderation. Requires authentication and admin privileges. Supports filtering by status (pending, approved, rejected). Returns property details and moderation notes.
-        
+
         **Base URL:** https://8u9wyib7j4.execute-api.us-east-1.amazonaws.com/dev
       tags: [Admin]
       security:
@@ -4591,7 +4513,7 @@ paths:
           schema:
             type: integer
             default: 1
-        - name: limit
+        - name: limi
           in: query
           schema:
             type: integer
@@ -4696,7 +4618,7 @@ paths:
       summary: Update property status (Admin only)
       description: |
         Update the moderation status of a property by its ID. Requires authentication and admin privileges. Only an admin can approve or reject properties. Provide a reason for the status change in the request body. Returns the updated property object and moderation history.
-        
+
         **Base URL:** https://8u9wyib7j4.execute-api.us-east-1.amazonaws.com/dev
       tags: [Admin]
       security:
@@ -4793,7 +4715,7 @@ paths:
       summary: Delete property (Admin only)
       description: |
         Delete a property by its ID. Requires authentication and admin privileges. Only an admin can delete properties. Provide a reason for deletion if applicable. Returns the deleted property ID, timestamp, and reason.
-        
+
         **Base URL:** https://8u9wyib7j4.execute-api.us-east-1.amazonaws.com/dev
       tags: [Admin]
       security:
@@ -4856,84 +4778,6 @@ paths:
                 success: false
                 error: "Internal server error"
 
-  /admin/notifications/system:
-    post:
-      summary: Create system-wide notification (Admin only)
-      description: |
-        Create a system-wide notification to be sent to all users or a specific set of users. Requires authentication and admin privileges. The request body must include the notification title and message. Returns the created notification object and the count of users notified.
-        
-        **Base URL:** https://8u9wyib7j4.execute-api.us-east-1.amazonaws.com/dev
-      tags: [Admin]
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateSystemNotificationRequest'
-            example:
-              title: "System Maintenance"
-              message: "We will be performing scheduled maintenance on January 15th from 2-4 AM EST. Some features may be temporarily unavailable."
-              targetUsers: ["user123", "user456", "user789"]
-      responses:
-        '201':
-          description: System notification created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-              example:
-                success: true
-                message: "System notification created successfully"
-                data:
-                  notification:
-                    _id: "sysnotif123"
-                    title: "System Maintenance"
-                    message: "We will be performing scheduled maintenance on January 15th from 2-4 AM EST. Some features may be temporarily unavailable."
-                    type: "system"
-                    isSystemNotification: true
-                    priority: "high"
-                    targetUsers: ["user123", "user456", "user789"]
-                    sentCount: 3
-                    createdAt: "2024-01-01T12:00:00.000Z"
-                    createdBy: "admin789"
-        '400':
-          description: Validation error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Validation error: Notification title is required"
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Unauthorized - Invalid or missing token"
-        '403':
-          description: Forbidden - Admin access required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Forbidden - Admin access required"
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              example:
-                success: false
-                error: "Internal server error"
 
 components:
   securitySchemes:
@@ -4941,7 +4785,7 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: JWT token obtained from login endpoint
+      description: JWT token obtained from login endpoin
 
   schemas:
     # Common Response Schemas
@@ -5441,7 +5285,6 @@ components:
         favorites:
           type: integer
           example: 25
-
     # Booking Schemas
     Booking:
       type: object
@@ -5458,11 +5301,11 @@ components:
         host_id:
           type: string
           example: "user123"
-          description: ID of the property host
+          description: ID of the property hos
         guest_id:
           type: string
           example: "user456"
-          description: ID of the guest
+          description: ID of the gues
         bookingDetails:
           $ref: '#/components/schemas/BookingDetails'
         pricing:
@@ -5541,6 +5384,43 @@ components:
         payment:
           $ref: '#/components/schemas/Payment'
 
+    BookingDetailsPartial:
+        type: object
+        properties:
+          check_in:
+            type: string
+            format: date
+          check_out:
+            type: string
+            format: date
+          total_nights:
+            type: integer
+          guests:
+            type: object
+            properties:
+              adults:
+                type: integer
+                minimum: 1
+              children:
+                type: integer
+                minimum: 0
+              infants:
+                type: integer
+                minimum: 0
+          special_requests:
+            type: string
+          status:
+            type: string
+            enum: [pending, confirmed, cancelled, completed, no-show]
+          booking_date:
+            type: string
+            format: date-time
+          last_updated:
+            type: string
+            format: date-time
+          payment:
+            $ref: '#/components/schemas/Payment'
+
     Pricing:
       type: object
       required: [base_price, total_amount]
@@ -5548,7 +5428,7 @@ components:
         base_price:
           type: number
           minimum: 0
-          description: Base price per night
+          description: Base price per nigh
           example: 150
         cleaning_fee:
           type: number
@@ -5572,7 +5452,7 @@ components:
           type: number
           minimum: 0
           default: 0
-          description: Security deposit amount
+          description: Security deposit amoun
           example: 200
         discounts:
           type: object
@@ -5621,14 +5501,69 @@ components:
         total_amount:
           type: number
           minimum: 0
-          description: Total booking amount
+          description: Total booking amoun
           example: 450
         platform_commission:
           type: number
           minimum: 0
           default: 0
-          description: Platform commission amount
+          description: Platform commission amoun
           example: 20
+
+    PricingPartial:
+      type: object
+      properties:
+        base_price:
+          type: number
+        cleaning_fee:
+          type: number
+        service_fee:
+          type: number
+        taxes:
+          type: number
+        deposit_amount:
+          type: number
+        discounts:
+          $ref: '#/components/schemas/DiscountsPartial'
+        currency:
+          type: string
+        total_amount:
+          type: number
+        platform_commission:
+          type: number
+
+    Discounts:
+      type: object
+      properties:
+        weekly_discount:
+          type: number
+          default: 0
+        monthly_discount:
+          type: number
+          default: 0
+        early_bird_discount:
+          type: number
+          default: 0
+        last_minute_discount:
+          type: number
+          default: 0
+        custom_discount:
+          type: number
+          default: 0
+
+    DiscountsPartial:
+      type: object
+      properties:
+        weekly_discount:
+          type: number
+        monthly_discount:
+          type: number
+        early_bird_discount:
+          type: number
+        last_minute_discount:
+          type: number
+        custom_discount:
+          type: number
 
     Payment:
       type: object
@@ -5644,7 +5579,7 @@ components:
         amount:
           type: number
           minimum: 0
-          description: Payment amount
+          description: Payment amoun
           example: 45000
         currency:
           type: string
@@ -5683,7 +5618,7 @@ components:
             total:
               type: number
               minimum: 0
-              description: Total amount
+              description: Total amoun
               example: 540
         refund:
           type: object
@@ -5691,7 +5626,7 @@ components:
             amount:
               type: number
               minimum: 0
-              description: Refund amount
+              description: Refund amoun
               example: 450
             reason:
               type: string
@@ -5773,6 +5708,33 @@ components:
           type: object
           description: Dispute details
 
+    PaymentBreakdown:
+      type: object
+      properties:
+        basePrice:
+          type: number
+        cleaningFee:
+          type: number
+        serviceFee:
+          type: number
+        taxes:
+          type: number
+        total:
+          type: number
+
+    Refund:
+      type: object
+      properties:
+        amount:
+          type: number
+        reason:
+          type: string
+        stripeRefundId:
+          type: string
+        processedAt:
+          type: string
+          format: date-time
+
     Cancellation:
       type: object
       properties:
@@ -5792,18 +5754,36 @@ components:
         cancellation_fee:
           type: number
           minimum: 0
-          description: Cancellation fee amount
+          description: Cancellation fee amoun
           example: 0
         refund_amount:
           type: number
           minimum: 0
-          description: Refund amount
+          description: Refund amoun
           example: 450
         cancelled_by:
           type: string
           enum: [guest, host, admin]
           description: Who cancelled the booking
           example: "guest"
+
+    CancellationRequest:
+      type: object
+      properties:
+        cancellation_policy:
+          type: string
+        cancellation_reason:
+          type: string
+        cancellation_date:
+          type: string
+          format: date-time
+        cancellation_fee:
+          type: number
+        refund_amount:
+          type: number
+        cancelled_by:
+          type: string
+          enum: [guest, host, admin]
 
     Metadata:
       type: object
@@ -5819,6 +5799,16 @@ components:
           description: Date when booking was last updated
           example: "2024-01-01T10:00:00.000Z"
 
+    MetadataPartial:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
     CreateBookingRequest:
       type: object
       required: [property_id, host_id, guest_id, bookingDetails]
@@ -5829,7 +5819,7 @@ components:
           example: "prop123"
         host_id:
           type: string
-          description: ID of the property host
+          description: ID of the property hos
           example: "user123"
         guest_id:
           type: string
@@ -5881,7 +5871,7 @@ components:
             base_price:
               type: number
               minimum: 0
-              description: Base price per night
+              description: Base price per nigh
               example: 150
             cleaning_fee:
               type: number
@@ -5909,7 +5899,7 @@ components:
             total_amount:
               type: number
               minimum: 0
-              description: Total booking amount
+              description: Total booking amoun
               example: 450
 
     UpdateBookingRequest:
@@ -5923,7 +5913,7 @@ components:
           example: "prop123"
         host_id:
           type: string
-          description: ID of the property host
+          description: ID of the property hos
           example: "user123"
         guest_id:
           type: string
@@ -5995,7 +5985,7 @@ components:
             base_price:
               type: number
               minimum: 0
-              description: Base price per night
+              description: Base price per nigh
               example: 175
             cleaning_fee:
               type: number
@@ -6015,7 +6005,7 @@ components:
             deposit_amount:
               type: number
               minimum: 0
-              description: Deposit amount
+              description: Deposit amoun
               example: 0
             discounts:
               type: object
@@ -6058,7 +6048,7 @@ components:
             total_amount:
               type: number
               minimum: 0
-              description: Total booking amount
+              description: Total booking amoun
               example: 525
             platform_commission:
               type: number
@@ -6162,11 +6152,11 @@ components:
         host_id:
           type: string
           example: "host123"
-          description: ID of the property host
+          description: ID of the property hos
         guest_id:
           type: string
           example: "guest123"
-          description: ID of the guest
+          description: ID of the gues
         messages:
           type: array
           items:
@@ -6246,12 +6236,12 @@ components:
           type: number
           minimum: 0
           example: 100
-          description: Minimum price per night
+          description: Minimum price per nigh
         max_price:
           type: number
           minimum: 0
           example: 200
-          description: Maximum price per night
+          description: Maximum price per nigh
         availability_start:
           type: string
           format: date
@@ -6354,7 +6344,7 @@ components:
       properties:
         host_id:
           type: string
-          description: ID of the property host
+          description: ID of the property hos
         basicInfo:
           $ref: '#/components/schemas/PropertyBasicInfo'
         location:
@@ -6393,259 +6383,6 @@ components:
         metadata:
           $ref: '#/components/schemas/PropertyMetadata'
 
-    CreateBookingRequest:
-      type: object
-      required: [property_id, host_id, guest_id, bookingDetails]
-      properties:
-        property_id:
-          type: string
-          description: ID of the property being booked
-          example: "prop123"
-        host_id:
-          type: string
-          description: ID of the property host
-          example: "user123"
-        guest_id:
-          type: string
-          description: ID of the guest making the booking
-          example: "user456"
-        bookingDetails:
-          type: object
-          required: [check_in, check_out, guests]
-          properties:
-            check_in:
-              type: string
-              format: date
-              description: Check-in date (YYYY-MM-DD)
-              example: "2024-01-15"
-            check_out:
-              type: string
-              format: date
-              description: Check-out date (YYYY-MM-DD)
-              example: "2024-01-18"
-            guests:
-              type: object
-              required: [adults]
-              properties:
-                adults:
-                  type: integer
-                  minimum: 1
-                  description: Number of adult guests
-                  example: 2
-                children:
-                  type: integer
-                  minimum: 0
-                  default: 0
-                  description: Number of children
-                  example: 0
-                infants:
-                  type: integer
-                  minimum: 0
-                  default: 0
-                  description: Number of infants
-                  example: 0
-            special_requests:
-              type: string
-              description: Special requests for the booking
-              example: "Early check-in if possible"
-        pricing:
-          type: object
-          required: [base_price, total_amount]
-          properties:
-            base_price:
-              type: number
-              minimum: 0
-              description: Base price per night
-              example: 150
-            cleaning_fee:
-              type: number
-              minimum: 0
-              default: 0
-              description: Cleaning fee
-              example: 50
-            service_fee:
-              type: number
-              minimum: 0
-              default: 0
-              description: Service fee
-              example: 15
-            taxes:
-              type: number
-              minimum: 0
-              default: 0
-              description: Taxes
-              example: 25
-            currency:
-              type: string
-              default: "USD"
-              description: Currency code
-              example: "USD"
-            total_amount:
-              type: number
-              minimum: 0
-              description: Total booking amount
-              example: 450
-
-    UpdateBookingRequest:
-      type: object
-      description: |
-        Partial update of a booking. Only include the fields you want to update. All fields are optional.
-      properties:
-        property_id:
-          type: string
-          description: ID of the property being booked
-          example: "prop123"
-        host_id:
-          type: string
-          description: ID of the property host
-          example: "user123"
-        guest_id:
-          type: string
-          description: ID of the guest making the booking
-          example: "user456"
-        bookingDetails:
-          type: object
-          description: Booking details (partial update allowed)
-          properties:
-            check_in:
-              type: string
-              format: date
-              description: Check-in date (YYYY-MM-DD)
-              example: "2024-01-16"
-            check_out:
-              type: string
-              format: date
-              description: Check-out date (YYYY-MM-DD)
-              example: "2024-01-19"
-            total_nights:
-              type: integer
-              minimum: 1
-              description: Total number of nights
-              example: 3
-            guests:
-              type: object
-              description: Guest counts (partial update allowed)
-              properties:
-                adults:
-                  type: integer
-                  minimum: 1
-                  description: Number of adult guests
-                  example: 3
-                children:
-                  type: integer
-                  minimum: 0
-                  description: Number of children
-                  example: 0
-                infants:
-                  type: integer
-                  minimum: 0
-                  description: Number of infants
-                  example: 0
-            special_requests:
-              type: string
-              description: Special requests for the booking
-              example: "Late check-out if possible"
-            status:
-              type: string
-              enum: [pending, confirmed, cancelled, completed, no-show]
-              description: Booking status
-              example: "confirmed"
-            booking_date:
-              type: string
-              format: date-time
-              description: Date when booking was made
-              example: "2024-01-01T10:00:00.000Z"
-            last_updated:
-              type: string
-              format: date-time
-              description: Date when booking was last updated
-              example: "2024-01-01T10:00:00.000Z"
-            payment:
-              $ref: '#/components/schemas/Payment'
-        pricing:
-          type: object
-          description: Pricing details (partial update allowed)
-          properties:
-            base_price:
-              type: number
-              minimum: 0
-              description: Base price per night
-              example: 175
-            cleaning_fee:
-              type: number
-              minimum: 0
-              description: Cleaning fee
-              example: 50
-            service_fee:
-              type: number
-              minimum: 0
-              description: Service fee
-              example: 15
-            taxes:
-              type: number
-              minimum: 0
-              description: Taxes
-              example: 30
-            deposit_amount:
-              type: number
-              minimum: 0
-              description: Deposit amount
-              example: 0
-            discounts:
-              type: object
-              description: Discount details
-              properties:
-                weekly_discount:
-                  type: number
-                  minimum: 0
-                  maximum: 100
-                  description: Weekly discount percentage
-                  example: 0
-                monthly_discount:
-                  type: number
-                  minimum: 0
-                  maximum: 100
-                  description: Monthly discount percentage
-                  example: 0
-                early_bird_discount:
-                  type: number
-                  minimum: 0
-                  maximum: 100
-                  description: Early bird discount percentage
-                  example: 0
-                last_minute_discount:
-                  type: number
-                  minimum: 0
-                  maximum: 100
-                  description: Last minute discount percentage
-                  example: 0
-                custom_discount:
-                  type: number
-                  minimum: 0
-                  maximum: 100
-                  description: Custom discount percentage
-                  example: 0
-            currency:
-              type: string
-              description: Currency code
-              example: "USD"
-            total_amount:
-              type: number
-              minimum: 0
-              description: Total booking amount
-              example: 525
-            platform_commission:
-              type: number
-              minimum: 0
-              description: Platform commission
-              example: 0
-        payment:
-          $ref: '#/components/schemas/Payment'
-        cancellation:
-          $ref: '#/components/schemas/Cancellation'
-        metadata:
-          $ref: '#/components/schemas/Metadata'
-
     SendMessageRequest:
       type: object
       required: [message, sentBy, property_id, host_id, guest_id]
@@ -6656,7 +6393,7 @@ components:
           example: "conv123"
         message:
           type: string
-          description: Message content
+          description: Message conten
           example: "Hi! I'm interested in your apartment. Is it available for next weekend?"
         sentBy:
           type: string
@@ -6668,40 +6405,76 @@ components:
           description: ID of the property being discussed
         host_id:
           type: string
-          description: ID of the property host
+          description: ID of the property hos
         guest_id:
           type: string
-          description: ID of the guest
+          description: ID of the gues
 
     CreateNotificationRequest:
       type: object
-      required: [userId, type, title, message]
+      required: [userId, message, relatedEntityId]
       properties:
         userId:
           type: string
           description: ID of the user to notify
+          example: "user456"
         type:
           type: string
-          enum: [booking, message, payment, system, reminder, alert]
-          description: Type of notification
-        title:
+          enum: [booking, message, alert, promotion, system]
+          description: Type of notification (booking, message, alert, promotion, or system)
+          default: "alert"
+          example: "booking"
+        channel:
           type: string
-          description: Notification title
+          enum: [in_app, sms, email, push]
+          description: Channel through which to send the notification (in_app, sms, email, or push)
+          default: "in_app"
+          example: "in_app"
         message:
           type: string
-          description: Notification message
-        isSystemNotification:
+          description: The notification message conten
+          example: "Your booking for Cozy Downtown Apartment has been confirmed for January 15-18"
+        relatedEntityId:
+          type: string
+          description: ID of the related entity (booking, message, etc.)
+          example: "book123"
+        read:
           type: boolean
-          description: Whether this is a system-wide notification
+          description: Whether the notification has been read
           default: false
+          example: false
         priority:
           type: string
-          enum: [low, medium, high, urgent]
-          description: Notification priority level
-          default: "medium"
+          enum: [low, normal, high]
+          description: Priority level of the notification
+          default: "normal"
+          example: "high"
         metadata:
           type: object
-          description: Additional notification metadata
+          description: Additional metadata for the notification
+          properties:
+            additionalData:
+              type: object
+              description: Additional data specific to the notification type
+              example:
+                propertyId: "prop123"
+                checkIn: "2024-01-15"
+                checkOut: "2024-01-18"
+            actionLink:
+              type: string
+              format: uri
+              description: Link to take action on the notification
+              example: "https://app.palmera.com/bookings/book123"
+        isSystemNotification:
+          type: boolean
+          description: Whether this is a system notification
+          default: false
+          example: false
+        expires_at:
+          type: string
+          format: date-time
+          description: Expiration date for the notification
+          example: "2024-02-01T00:00:00.000Z"
 
     CreateSystemNotificationRequest:
       type: object
@@ -6786,7 +6559,7 @@ components:
               example: "2024-01-15T10:30:00.000Z"
         propertiesListed:
           type: array
-          description: List of property IDs listed by the host
+          description: List of property IDs listed by the hos
           items:
             type: string
           example: ["propertyId1", "propertyId2"]
@@ -6796,7 +6569,7 @@ components:
           properties:
             totalBookings:
               type: integer
-              description: Total number of bookings as a host
+              description: Total number of bookings as a hos
               example: 10
             responseRate:
               type: number
@@ -6808,11 +6581,11 @@ components:
               example: 2.1
             averageRating:
               type: number
-              description: Average rating as a host
+              description: Average rating as a hos
               example: 4.8
             totalEarnings:
               type: number
-              description: Total earnings as a host
+              description: Total earnings as a hos
               example: 12000
             lastMonthEarnings:
               type: number
@@ -6830,27 +6603,6 @@ components:
               type: string
             swiftCode:
               type: string
-    PropertyDocument:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Document ID
-        document_name:
-          type: string
-          description: Name of the document
-        document_url:
-          type: string
-          format: uri
-          description: URL to access the document
-        document_type:
-          type: string
-          enum: [license, insurance, permit, other]
-          description: Type of document
-        uploadedAt:
-          type: string
-          format: date-time
-          description: Upload timestamp
 
 security:
-  - BearerAuth: [] 
+  - BearerAuth: []
