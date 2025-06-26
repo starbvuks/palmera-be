@@ -1,0 +1,174 @@
+service: palmera-properties
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  environment:
+    NODE_ENV: ${.env:NODE_ENV}
+    MONGODB_URI: ${.env:MONGODB_URI}
+    JWT_SECRET: ${.env:JWT_SECRET}
+    AWS_S3_BUCKET_NAME: ${.env:AWS_S3_BUCKET_NAME}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+            - s3:GetObject
+            - s3:DeleteObject
+            - s3:ListBucket
+          Resource:
+            - arn:aws:s3:::palmera-property-images
+            - arn:aws:s3:::palmera-property-images/*
+
+functions:
+  createProperty:
+    handler: src/handlers/createPropertyHandler.handler
+    events:
+      - http:
+          path: /properties
+          method: post
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  getProperty:
+    handler: src/handlers/getPropertyHandler.handler
+    events:
+      - http:
+          path: /properties/{id}
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  updateProperty:
+    handler: src/handlers/updatePropertyHandler.handler
+    events:
+      - http:
+          path: /properties/{id}
+          method: put
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  getUserProperty:
+    handler: src/handlers/getUserPropertiesHandler.handler
+    events:
+      - http:
+          path: /properties/user/{id}
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  deleteProperty:
+    handler: src/handlers/deletePropertyHandler.handler
+    events:
+      - http:
+          path: /properties/{id}
+          method: delete
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  searchProperties:
+    handler: src/handlers/searchPropertiesHandler.handler
+    events:
+      - http:
+          path: /properties/search
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  uploadPropertyDocument:
+    handler: src/handlers/uploadPropertyDocumentsHandler.handler
+    timeout: 90
+    events:
+      - http:
+          path: /properties/{id}/documents
+          method: post
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  uploadPropertyImages:
+    handler: src/handlers/uploadPropertyImagesHandler.handler
+    timeout: 90
+    events:
+      - http:
+          path: /properties/{id}/images
+          method: post
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  deletePropertyDocument:
+    handler: src/handlers/deletePropertyDocumentHandler.handler
+    events:
+      - http:
+          path: /properties/{id}/documents/{docId}
+          method: delete
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  deletePropertyImages:
+    handler: src/handlers/deletePropertyImagesHandler.handler
+    events:
+      - http:
+          path: /properties/{id}/images
+          method: delete
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-prune-plugin
+
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        StatusCode: '400'
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Credentials: "'true'"
+    GatewayResponseDefault5XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseType: DEFAULT_5XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        StatusCode: '500'
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Credentials: "'true'"
+
+package:
+  patterns:
+    - '!.git/**'
+    - '!.gitignore'
+    - '!.env*'
+    - '!README.md'
+    - '!tests/**'
+    - '!coverage/**'

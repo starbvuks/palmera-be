@@ -1,0 +1,206 @@
+service: palmera-user
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  environment:
+    NODE_ENV: ${.env:NODE_ENV}
+    MONGODB_URI: ${.env:MONGODB_URI}
+    JWT_SECRET: ${.env:JWT_SECRET}
+    GOOGLE_CLIENT_ID: ${.env:GOOGLE_CLIENT_ID}
+    GOOGLE_CLIENT_SECRET: ${.env:GOOGLE_CLIENT_SECRET}
+    AWS_S3_BUCKET_NAME: palmera-property-images
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+            - s3:GetObject
+            - s3:PutObjectAcl
+          Resource: 
+            - "arn:aws:s3:::palmera-property-images/*"
+            - "arn:aws:s3:::palmera-property-images"
+
+functions:
+  getUserProfile:
+    handler: src/handlers/getUserHandler.handler
+    events:
+      - http:
+          path: /users/{id}
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  updateUserProfile:
+    handler: src/handlers/updateUserHandler.handler
+    events:
+      - http:
+          path: /users/{id}
+          method: put
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  updateUserPreferences:
+    handler: src/handlers/updatePreferencesHandler.handler
+    events:
+      - http:
+          path: /users/{id}/preferences
+          method: post
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  getUserPreferences:
+    handler: src/handlers/getPreferencesHandler.handler
+    events:
+      - http:
+          path: /users/{id}/preferences
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+  
+  updateUserSubscription:
+    handler: src/handlers/updateSubscriptionHandler.handler
+    events:
+      - http:
+          path: /users/{id}/subscription
+          method: post
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  getUserSubscription:
+    handler: src/handlers/getSubscriptionHandler.handler
+    events:
+      - http:
+          path: /users/{id}/subscription
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  updateUserHostDetails:
+    handler: src/handlers/updateHostDetailsHandler.handler
+    events:
+      - http:
+          path: /users/{id}/hostDetails
+          method: post
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  getUserHostDetails:
+    handler: src/handlers/getHostDetailsHandler.handler
+    events:
+      - http:
+          path: /users/{id}/hostDetails
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+  
+  uploadHostDocuments:
+    handler: src/handlers/uploadHostDocumentsHandler.handler
+    events:
+      - http:
+          path: /users/{id}/hostDocuments
+          method: post
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  saveUserLocation:
+    handler: src/handlers/saveLocationHandler.handler
+    events:
+      - http:
+          path: /users/{id}/saved-locations
+          method: post
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  getUserSavedLocations:
+    handler: src/handlers/getSavedLocationsHandler.handler
+    events:
+      - http:
+          path: /users/{id}/saved-locations
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  deleteUserSavedLocation:
+    handler: src/handlers/deleteSavedLocationHandler.handler
+    events:
+      - http:
+          path: /users/{id}/saved-locations/{locationId}
+          method: delete
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  switchUserRole:
+    handler: src/handlers/changeRoleHandler.handler
+    events:
+      - http:
+          path: /users/{id}/role
+          method: post
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-prune-plugin
+
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        StatusCode: '400'
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Credentials: "'true'"
+    GatewayResponseDefault5XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseType: DEFAULT_5XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        StatusCode: '500'
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Credentials: "'true'"
+
+package:
+  patterns:
+    - '!.git/**'
+    - '!.gitignore'
+    - '!.env*'
+    - '!README.md'
+    - '!tests/**'
+    - '!coverage/**'

@@ -1,0 +1,880 @@
+openapi: 3.0.0
+info:
+  title: Palmera Bookings API
+  description: API for managing property bookings and payments
+  version: 1.0.0
+  contact:
+    name: Palmera Support
+    email: support@palmera.com
+
+servers:
+  - url: https://097aqk2gwf.execute-api.us-east-1.amazonaws.com
+    description: Production server
+
+paths:
+  /bookings:
+    get:
+      summary: Get user bookings
+      description: Retrieve all bookings for a specific user
+      tags:
+        - Bookings
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          description: User ID to get bookings for
+          schema:
+            type: string
+          example: "user-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Bookings retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      bookings:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Booking'
+                      count:
+                        type: integer
+                        example: 5
+                      message:
+                        type: string
+                        example: "User bookings retrieved successfully"
+        '400':
+          description: Bad request - invalid user ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No bookings found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      summary: Create booking
+      description: Create a new property booking
+      tags:
+        - Bookings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - property_id
+                - host_id
+                - guest_id
+                - bookingDetails
+              properties:
+                property_id:
+                  type: string
+                  description: ID of the property being booked
+                  example: "prop-123e4567-e89b-12d3-a456-426614174000"
+                host_id:
+                  type: string
+                  description: ID of the property host
+                  example: "host-123e4567-e89b-12d3-a456-426614174000"
+                guest_id:
+                  type: string
+                  description: ID of the guest making the booking
+                  example: "guest-123e4567-e89b-12d3-a456-426614174000"
+                bookingDetails:
+                  type: object
+                  required:
+                    - check_in
+                    - check_out
+                    - guests
+                  properties:
+                    check_in:
+                      type: string
+                      format: date
+                      description: Check-in date
+                      example: "2024-02-15"
+                    check_out:
+                      type: string
+                      format: date
+                      description: Check-out date
+                      example: "2024-02-18"
+                    guests:
+                      type: integer
+                      description: Number of guests
+                      example: 2
+                totalAmount:
+                  type: number
+                  description: Total booking amount
+                  example: 450.00
+      responses:
+        '201':
+          description: Booking created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Booking created successfully"
+                      bookingData:
+                        $ref: '#/components/schemas/Booking'
+        '400':
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Property not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Property not available for selected dates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /bookings/{id}:
+    get:
+      summary: Get booking details
+      description: Retrieve details of a specific booking
+      tags:
+        - Bookings
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Booking ID
+          schema:
+            type: string
+          example: "booking-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Booking details retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      booking:
+                        $ref: '#/components/schemas/Booking'
+                      message:
+                        type: string
+                        example: "Booking retrieved successfully"
+        '400':
+          description: Bad request - invalid booking ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Booking not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: Update booking
+      description: Update an existing booking
+      tags:
+        - Bookings
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Booking ID
+          schema:
+            type: string
+          example: "booking-123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bookingDetails:
+                  type: object
+                  properties:
+                    check_in:
+                      type: string
+                      format: date
+                    check_out:
+                      type: string
+                      format: date
+                    guests:
+                      type: integer
+                totalAmount:
+                  type: number
+      responses:
+        '200':
+          description: Booking updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Booking updated successfully"
+        '400':
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Booking not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Cancel booking
+      description: Cancel an existing booking
+      tags:
+        - Bookings
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Booking ID
+          schema:
+            type: string
+          example: "booking-123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - reason
+              properties:
+                reason:
+                  type: string
+                  description: Reason for cancellation
+                  example: "Change of plans"
+      responses:
+        '200':
+          description: Booking cancelled successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Booking cancelled successfully"
+                      bookingId:
+                        type: string
+                        example: "booking-123e4567-e89b-12d3-a456-426614174000"
+        '400':
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Booking not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Booking already cancelled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /bookings/{id}/payment:
+    post:
+      summary: Process payment
+      description: Process payment for a booking
+      tags:
+        - Payments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Booking ID
+          schema:
+            type: string
+          example: "booking-123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - paymentMethodId
+              properties:
+                paymentMethodId:
+                  type: string
+                  description: Stripe payment method ID
+                  example: "pm_1234567890abcdef"
+      responses:
+        '200':
+          description: Payment processed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Payment processed successfully"
+        '400':
+          description: Payment failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Booking not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /bookings/payment-intent:
+    post:
+      summary: Create payment intent
+      description: Create a Stripe payment intent for a booking
+      tags:
+        - Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - bookingId
+                - amount
+                - currency
+              properties:
+                bookingId:
+                  type: string
+                  description: Booking ID
+                  example: "booking-123e4567-e89b-12d3-a456-426614174000"
+                amount:
+                  type: number
+                  description: Payment amount in cents
+                  example: 45000
+                currency:
+                  type: string
+                  description: Currency code
+                  example: "usd"
+      responses:
+        '200':
+          description: Payment intent created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Payment intent created successfully"
+                      clientSecret:
+                        type: string
+                        example: "pi_1234567890abcdef_secret_1234567890abcdef"
+                      paymentIntentId:
+                        type: string
+                        example: "pi_1234567890abcdef"
+                      amount:
+                        type: number
+                        example: 45000
+                      currency:
+                        type: string
+                        example: "usd"
+        '400':
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: User authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Unauthorized to make payment for this booking
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Booking not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Payment intent already exists for this booking
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /bookings/host/{id}:
+    get:
+      summary: Get host bookings
+      description: Retrieve all bookings for a specific host
+      tags:
+        - Bookings
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Host ID
+          schema:
+            type: string
+          example: "host-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Host bookings retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      bookings:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Booking'
+                      count:
+                        type: integer
+                        example: 3
+        '400':
+          description: Bad request - invalid host ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No bookings found for this host
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /bookings/search:
+    get:
+      summary: Search properties for booking
+      description: Search available properties for booking
+      tags:
+        - Bookings
+      parameters:
+        - name: location
+          in: query
+          description: Location to search
+          schema:
+            type: string
+          example: "New York"
+        - name: checkIn
+          in: query
+          description: Check-in date
+          schema:
+            type: string
+            format: date
+          example: "2024-02-15"
+        - name: checkOut
+          in: query
+          description: Check-out date
+          schema:
+            type: string
+            format: date
+          example: "2024-02-18"
+        - name: guests
+          in: query
+          description: Number of guests
+          schema:
+            type: integer
+          example: 2
+        - name: priceMin
+          in: query
+          description: Minimum price
+          schema:
+            type: number
+          example: 50
+        - name: priceMax
+          in: query
+          description: Maximum price
+          schema:
+            type: number
+          example: 200
+      responses:
+        '200':
+          description: Properties found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      properties:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Property'
+                      count:
+                        type: integer
+                        example: 10
+        '400':
+          description: Bad request - invalid search parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Error message"
+    
+    Booking:
+      type: object
+      required:
+        - _id
+        - property_id
+        - host_id
+        - guest_id
+        - bookingDetails
+        - metadata
+      properties:
+        _id:
+          type: string
+          description: Unique booking identifier
+          example: "booking-123e4567-e89b-12d3-a456-426614174000"
+        property_id:
+          type: string
+          description: ID of the booked property
+          example: "prop-123e4567-e89b-12d3-a456-426614174000"
+        host_id:
+          type: string
+          description: ID of the property host
+          example: "host-123e4567-e89b-12d3-a456-426614174000"
+        guest_id:
+          type: string
+          description: ID of the guest
+          example: "guest-123e4567-e89b-12d3-a456-426614174000"
+        bookingDetails:
+          type: object
+          required:
+            - check_in
+            - check_out
+            - guests
+          properties:
+            check_in:
+              type: string
+              format: date
+              description: Check-in date
+              example: "2024-02-15"
+            check_out:
+              type: string
+              format: date
+              description: Check-out date
+              example: "2024-02-18"
+            guests:
+              type: integer
+              description: Number of guests
+              example: 2
+            status:
+              type: string
+              enum: [pending, confirmed, cancelled, completed]
+              description: Booking status
+              example: "confirmed"
+        totalAmount:
+          type: number
+          description: Total booking amount
+          example: 450.00
+        payment:
+          type: object
+          properties:
+            paymentIntentId:
+              type: string
+              description: Stripe payment intent ID
+              example: "pi_1234567890abcdef"
+            amount:
+              type: number
+              description: Payment amount
+              example: 45000
+            currency:
+              type: string
+              description: Payment currency
+              example: "usd"
+            status:
+              type: string
+              enum: [pending, succeeded, failed, cancelled]
+              description: Payment status
+              example: "succeeded"
+            createdAt:
+              type: string
+              format: date-time
+              description: Payment creation timestamp
+              example: "2024-01-15T10:30:00.000Z"
+        metadata:
+          type: object
+          properties:
+            created_at:
+              type: string
+              format: date-time
+              description: Booking creation timestamp
+              example: "2024-01-15T10:30:00.000Z"
+            updated_at:
+              type: string
+              format: date-time
+              description: Last update timestamp
+              example: "2024-01-15T10:30:00.000Z"
+    
+    Property:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique property identifier
+          example: "prop-123e4567-e89b-12d3-a456-426614174000"
+        title:
+          type: string
+          description: Property title
+          example: "Cozy Downtown Apartment"
+        description:
+          type: string
+          description: Property description
+          example: "Beautiful apartment in the heart of downtown"
+        price:
+          type: number
+          description: Price per night
+          example: 150.00
+        location:
+          type: object
+          properties:
+            address:
+              type: string
+              example: "123 Main St, New York, NY"
+            coordinates:
+              type: object
+              properties:
+                lat:
+                  type: number
+                  example: 40.7128
+                lng:
+                  type: number
+                  example: -74.0060
+        host_id:
+          type: string
+          description: Property host ID
+          example: "host-123e4567-e89b-12d3-a456-426614174000"
+        availability:
+          type: object
+          properties:
+            availability_calendar:
+              type: array
+              items:
+                type: string
+                format: date
+              description: Available dates
+              example: ["2024-02-15", "2024-02-16", "2024-02-17"]
+        status:
+          type: string
+          enum: [pending, approved, rejected, active]
+          description: Property status
+          example: "active"
+        createdAt:
+          type: string
+          format: date-time
+          description: Property creation timestamp
+          example: "2024-01-15T10:30:00.000Z"
+
+security:
+  - BearerAuth: [] 

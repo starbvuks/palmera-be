@@ -1,0 +1,106 @@
+service: palmera-admin
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  environment:
+    NODE_ENV: ${.env:NODE_ENV}
+    MONGODB_URI: ${.env:MONGODB_URI}
+    JWT_SECRET: ${.env:JWT_SECRET}
+    AWS_S3_BUCKET_NAME: ${.env:AWS_S3_BUCKET_NAME}
+
+functions:
+  getUsers:
+    handler: src/handlers/getUsersHandler.handler
+    events:
+      - http:
+          path: /admin/users
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  updateUser:
+    handler: src/handlers/updateUserHandler.handler
+    events:
+      - http:
+          path: /admin/user/{id}
+          method: put
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  getProperties:
+    handler: src/handlers/getPropertiesForModerationHandler.handler
+    events:
+      - http:
+          path: /admin/properties
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  updateProperty:
+    handler: src/handlers/updatePropertyHandler.handler
+    events:
+      - http:
+          path: /admin/property/{id}
+          method: put
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+  deleteProperty:
+    handler: src/handlers/deletePropertyHandler.handler
+    events:
+      - http:
+          path: /admin/property/{id}
+          method: delete
+          cors: true
+          authorizer:
+            arn: arn:aws:lambda:us-east-1:850995537590:function:palmera-auth-dev-verifyToken
+            type: token
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-prune-plugin
+
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        StatusCode: '400'
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Credentials: "'true'"
+    GatewayResponseDefault5XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseType: DEFAULT_5XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        StatusCode: '500'
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Credentials: "'true'"
+
+package:
+  patterns:
+    - '!.git/**'
+    - '!.gitignore'
+    - '!.env*'
+    - '!README.md'
+    - '!tests/**'
+    - '!coverage/**'
+

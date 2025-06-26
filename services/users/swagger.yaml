@@ -1,0 +1,885 @@
+openapi: 3.0.0
+info:
+  title: Palmera Users API
+  description: API for managing user profiles, preferences, saved locations, and subscriptions
+  version: 1.0.0
+  contact:
+    name: Palmera Support
+    email: support@palmera.com
+
+servers:
+  - url: https://ct4rgp2633.execute-api.us-east-1.amazonaws.com
+    description: Production server
+
+paths:
+  /users/{id}:
+    get:
+      summary: Get user profile
+      description: Retrieve a user's complete profile information
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+          example: "user-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: '#/components/schemas/User'
+                      message:
+                        type: string
+                        example: "User retrieved successfully"
+        '400':
+          description: Bad request - invalid user ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: Update user profile
+      description: Update a user's personal information
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+          example: "user-123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  description: User's first name
+                  example: "John"
+                lastName:
+                  type: string
+                  description: User's last name
+                  example: "Doe"
+                email:
+                  type: string
+                  format: email
+                  description: User's email address
+                  example: "john.doe@example.com"
+                phone:
+                  type: string
+                  description: User's phone number
+                  example: "+1234567890"
+                dateOfBirth:
+                  type: string
+                  format: date
+                  description: User's date of birth
+                  example: "1990-01-01"
+                address:
+                  type: object
+                  description: User's address information
+                  properties:
+                    street:
+                      type: string
+                      example: "123 Main St"
+                    city:
+                      type: string
+                      example: "New York"
+                    state:
+                      type: string
+                      example: "NY"
+                    zipCode:
+                      type: string
+                      example: "10001"
+                    country:
+                      type: string
+                      example: "USA"
+      responses:
+        '200':
+          description: User profile updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "User updated successfully"
+                      user:
+                        type: object
+                        description: Updated user data
+        '400':
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Email or phone number already in use
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users/{id}/preferences:
+    get:
+      summary: Get user preferences
+      description: Retrieve a user's preferences and settings
+      tags:
+        - Preferences
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+          example: "user-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: User preferences retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      preferences:
+                        $ref: '#/components/schemas/UserPreferences'
+                      message:
+                        type: string
+                        example: "User preferences retrieved successfully"
+        '400':
+          description: Bad request - invalid user ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: Update user preferences
+      description: Update a user's preferences and settings
+      tags:
+        - Preferences
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+          example: "user-123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPreferences'
+      responses:
+        '200':
+          description: User preferences updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      preferences:
+                        $ref: '#/components/schemas/UserPreferences'
+                      message:
+                        type: string
+                        example: "User preferences updated successfully"
+        '400':
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users/{id}/saved-locations:
+    get:
+      summary: Get saved locations
+      description: Retrieve a user's saved/favorite property locations
+      tags:
+        - Saved Locations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+          example: "user-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Saved locations retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      savedLocations:
+                        type: array
+                        items:
+                          type: string
+                        description: Array of saved property IDs
+                        example: ["prop-123e4567-e89b-12d3-a456-426614174000", "prop-987fcdeb-51a2-43d1-b789-123456789abc"]
+                      count:
+                        type: integer
+                        example: 2
+                      message:
+                        type: string
+                        example: "User saved locations retrieved successfully"
+        '400':
+          description: Bad request - invalid user ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      summary: Save locations
+      description: Save multiple property locations to user's favorites
+      tags:
+        - Saved Locations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+          example: "user-123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - favoriteProperties
+              properties:
+                favoriteProperties:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of property IDs to save
+                  example: ["prop-123e4567-e89b-12d3-a456-426614174000", "prop-987fcdeb-51a2-43d1-b789-123456789abc"]
+      responses:
+        '200':
+          description: Locations saved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "User saved items updated successfully"
+                      savedCount:
+                        type: integer
+                        example: 2
+        '400':
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found or properties not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users/{id}/saved-locations/{locationId}:
+    delete:
+      summary: Delete saved location
+      description: Remove a specific property from user's saved locations
+      tags:
+        - Saved Locations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+          example: "user-123e4567-e89b-12d3-a456-426614174000"
+        - name: locationId
+          in: path
+          required: true
+          description: Property ID to remove
+          schema:
+            type: string
+          example: "prop-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Location deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Deleted user saved location successfully"
+                      deletedLocationId:
+                        type: string
+                        example: "prop-123e4567-e89b-12d3-a456-426614174000"
+                      remainingCount:
+                        type: integer
+                        example: 1
+        '400':
+          description: Bad request - invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found or location not in saved locations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users/{id}/subscription:
+    get:
+      summary: Get subscription status
+      description: Retrieve a user's subscription information
+      tags:
+        - Subscriptions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+          example: "user-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Subscription retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      subscription:
+                        $ref: '#/components/schemas/UserSubscription'
+                      message:
+                        type: string
+                        example: "User subscription retrieved successfully"
+        '400':
+          description: Bad request - invalid user ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: Update subscription
+      description: Update a user's subscription plan
+      tags:
+        - Subscriptions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+          example: "user-123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSubscription'
+      responses:
+        '200':
+          description: Subscription updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      subscription:
+                        $ref: '#/components/schemas/UserSubscription'
+                      message:
+                        type: string
+                        example: "User subscription updated successfully"
+        '400':
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users/{id}/role:
+    put:
+      summary: Change user role
+      description: Change a user's role between guest and host
+      tags:
+        - Roles
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+          example: "user-123e4567-e89b-12d3-a456-426614174000"
+        - name: role
+          in: query
+          required: true
+          description: New role for the user
+          schema:
+            type: string
+            enum: [host, guest]
+          example: "host"
+      responses:
+        '200':
+          description: User role updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "User role updated to host successfully"
+                      newRole:
+                        type: string
+                        example: "host"
+        '400':
+          description: Bad request - validation error or host verification pending
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Error message"
+    
+    User:
+      type: object
+      required:
+        - _id
+        - personalInfo
+        - accountStatus
+      properties:
+        _id:
+          type: string
+          description: Unique user identifier
+          example: "user-123e4567-e89b-12d3-a456-426614174000"
+        personalInfo:
+          type: object
+          properties:
+            firstName:
+              type: string
+              example: "John"
+            lastName:
+              type: string
+              example: "Doe"
+            email:
+              type: string
+              format: email
+              example: "john.doe@example.com"
+            phone:
+              type: string
+              example: "+1234567890"
+            dateOfBirth:
+              type: string
+              format: date
+              example: "1990-01-01"
+            address:
+              type: object
+              properties:
+                street:
+                  type: string
+                  example: "123 Main St"
+                city:
+                  type: string
+                  example: "New York"
+                state:
+                  type: string
+                  example: "NY"
+                zipCode:
+                  type: string
+                  example: "10001"
+                country:
+                  type: string
+                  example: "USA"
+        accountStatus:
+          type: object
+          properties:
+            status:
+              type: string
+              enum: [active, suspended, banned]
+              example: "active"
+            createdAt:
+              type: string
+              format: date-time
+              example: "2024-01-15T10:30:00.000Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2024-01-15T10:30:00.000Z"
+        roles:
+          type: object
+          properties:
+            isHost:
+              type: boolean
+              example: false
+        hostDetails:
+          type: object
+          properties:
+            verification:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [pending, verified, rejected]
+                  example: "pending"
+        preferences:
+          $ref: '#/components/schemas/UserPreferences'
+        subscription:
+          $ref: '#/components/schemas/UserSubscription'
+        savedItems:
+          type: object
+          properties:
+            favoriteProperties:
+              type: array
+              items:
+                type: string
+              example: ["prop-123e4567-e89b-12d3-a456-426614174000"]
+
+    UserPreferences:
+      type: object
+      properties:
+        notifications:
+          type: object
+          properties:
+            email:
+              type: boolean
+              example: true
+            push:
+              type: boolean
+              example: true
+            sms:
+              type: boolean
+              example: false
+        privacy:
+          type: object
+          properties:
+            profileVisibility:
+              type: string
+              enum: [public, private, friends]
+              example: "public"
+            showEmail:
+              type: boolean
+              example: false
+            showPhone:
+              type: boolean
+              example: false
+        language:
+          type: string
+          example: "en"
+        currency:
+          type: string
+          example: "USD"
+        timezone:
+          type: string
+          example: "America/New_York"
+
+    UserSubscription:
+      type: object
+      required:
+        - plan
+      properties:
+        plan:
+          type: string
+          enum: [basic, premium, pro]
+          example: "premium"
+        status:
+          type: string
+          enum: [active, inactive, cancelled, expired]
+          example: "active"
+        startDate:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00.000Z"
+        endDate:
+          type: string
+          format: date-time
+          example: "2025-01-15T10:30:00.000Z"
+        autoRenew:
+          type: boolean
+          example: true
+        paymentMethod:
+          type: object
+          properties:
+            type:
+              type: string
+              example: "card"
+            last4:
+              type: string
+              example: "1234"
+
+security:
+  - BearerAuth: [] 

@@ -1,0 +1,588 @@
+openapi: 3.0.0
+info:
+  title: Palmera Notifications API
+  description: API for managing user notifications
+  version: 1.0.0
+  contact:
+    name: Palmera Support
+    email: support@palmera.com
+
+servers:
+  - url: https://z421qustb7.execute-api.us-east-1.amazonaws.com
+    description: Production server
+
+paths:
+  /notifications:
+    get:
+      summary: Get user notifications
+      description: Retrieve all notifications for a specific user (including system notifications)
+      tags:
+        - Notifications
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          description: User ID to get notifications for
+          schema:
+            type: string
+          example: "user-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Notifications retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      notifications:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Notification'
+                      count:
+                        type: integer
+                        example: 5
+                      message:
+                        type: string
+                        example: "User notifications retrieved successfully"
+        '400':
+          description: Bad request - invalid user ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No notifications found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      summary: Create notification
+      description: Create a new notification for a user
+      tags:
+        - Notifications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+                - type
+                - title
+                - message
+              properties:
+                userId:
+                  type: string
+                  description: ID of the user to notify
+                  example: "user-123e4567-e89b-12d3-a456-426614174000"
+                type:
+                  type: string
+                  description: Type of notification
+                  enum: [booking, message, payment, system, reminder, alert]
+                  example: "booking"
+                title:
+                  type: string
+                  description: Notification title
+                  example: "Booking Confirmed"
+                message:
+                  type: string
+                  description: Notification message
+                  example: "Your booking for Cozy Downtown Apartment has been confirmed!"
+                isSystemNotification:
+                  type: boolean
+                  description: Whether this is a system-wide notification
+                  default: false
+                  example: false
+                priority:
+                  type: string
+                  description: Notification priority level
+                  enum: [low, medium, high, urgent]
+                  default: "medium"
+                  example: "medium"
+                metadata:
+                  type: object
+                  description: Additional notification metadata
+                  properties:
+                    bookingId:
+                      type: string
+                      example: "booking-123e4567-e89b-12d3-a456-426614174000"
+                    propertyId:
+                      type: string
+                      example: "prop-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '201':
+          description: Notification created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Notification created successfully"
+                      NotificationData:
+                        $ref: '#/components/schemas/Notification'
+        '400':
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Notification already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /notifications/{id}:
+    get:
+      summary: Get notification details
+      description: Retrieve details of a specific notification
+      tags:
+        - Notifications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Notification ID
+          schema:
+            type: string
+          example: "notif-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Notification details retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      notification:
+                        $ref: '#/components/schemas/Notification'
+                      message:
+                        type: string
+                        example: "Notification retrieved successfully"
+        '400':
+          description: Bad request - invalid notification ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Notification not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: Update notification
+      description: Update an existing notification (e.g., mark as read)
+      tags:
+        - Notifications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Notification ID
+          schema:
+            type: string
+          example: "notif-123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                read:
+                  type: boolean
+                  description: Mark notification as read
+                  example: true
+                priority:
+                  type: string
+                  description: Update notification priority
+                  enum: [low, medium, high, urgent]
+                  example: "high"
+                message:
+                  type: string
+                  description: Update notification message
+                  example: "Updated notification message"
+      responses:
+        '200':
+          description: Notification updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Notification updated successfully"
+                      notification:
+                        $ref: '#/components/schemas/Notification'
+        '400':
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Notification not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Delete notification
+      description: Delete a specific notification
+      tags:
+        - Notifications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Notification ID
+          schema:
+            type: string
+          example: "notif-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Notification deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Notification deleted successfully"
+                      notificationId:
+                        type: string
+                        example: "notif-123e4567-e89b-12d3-a456-426614174000"
+        '400':
+          description: Bad request - invalid notification ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Notification not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /notifications/user/{id}:
+    get:
+      summary: Get user notifications by path parameter
+      description: Retrieve all notifications for a specific user using path parameter
+      tags:
+        - Notifications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+          example: "user-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: User notifications retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      notifications:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Notification'
+                      count:
+                        type: integer
+                        example: 5
+                      message:
+                        type: string
+                        example: "User notifications retrieved successfully"
+        '400':
+          description: Bad request - invalid user ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No notifications found for this user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /notifications/bulk/read:
+    post:
+      summary: Mark multiple notifications as read
+      description: Mark multiple notifications as read for a user
+      tags:
+        - Notifications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+                - notificationIds
+              properties:
+                userId:
+                  type: string
+                  description: User ID
+                  example: "user-123e4567-e89b-12d3-a456-426614174000"
+                notificationIds:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of notification IDs to mark as read
+                  example: ["notif-123e4567-e89b-12d3-a456-426614174000", "notif-987fcdeb-51a2-43d1-b789-123456789abc"]
+      responses:
+        '200':
+          description: Notifications marked as read successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Notifications marked as read successfully"
+                      updatedCount:
+                        type: integer
+                        example: 3
+        '400':
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Error message"
+    
+    Notification:
+      type: object
+      required:
+        - _id
+        - userId
+        - type
+        - title
+        - message
+        - createdAt
+      properties:
+        _id:
+          type: string
+          description: Unique notification identifier
+          example: "notif-123e4567-e89b-12d3-a456-426614174000"
+        userId:
+          type: string
+          description: ID of the user receiving the notification
+          example: "user-123e4567-e89b-12d3-a456-426614174000"
+        type:
+          type: string
+          description: Type of notification
+          enum: [booking, message, payment, system, reminder, alert]
+          example: "booking"
+        title:
+          type: string
+          description: Notification title
+          example: "Booking Confirmed"
+        message:
+          type: string
+          description: Notification message
+          example: "Your booking for Cozy Downtown Apartment has been confirmed!"
+        isSystemNotification:
+          type: boolean
+          description: Whether this is a system-wide notification
+          default: false
+          example: false
+        read:
+          type: boolean
+          description: Whether the notification has been read
+          default: false
+          example: false
+        priority:
+          type: string
+          description: Notification priority level
+          enum: [low, medium, high, urgent]
+          default: "medium"
+          example: "medium"
+        metadata:
+          type: object
+          description: Additional notification metadata
+          properties:
+            bookingId:
+              type: string
+              example: "booking-123e4567-e89b-12d3-a456-426614174000"
+            propertyId:
+              type: string
+              example: "prop-123e4567-e89b-12d3-a456-426614174000"
+            messageId:
+              type: string
+              example: "msg-123e4567-e89b-12d3-a456-426614174000"
+        createdAt:
+          type: string
+          format: date-time
+          description: Notification creation timestamp
+          example: "2024-01-15T10:30:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: "2024-01-15T10:30:00.000Z"
+
+security:
+  - BearerAuth: [] 

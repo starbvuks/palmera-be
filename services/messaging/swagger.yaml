@@ -1,0 +1,444 @@
+openapi: 3.0.0
+info:
+  title: Palmera Messaging API
+  description: API for managing messaging and conversations between users
+  version: 1.0.0
+  contact:
+    name: Palmera Support
+    email: support@palmera.com
+
+servers:
+  - url: https://am22amgo33.execute-api.us-east-1.amazonaws.com
+    description: Production server
+
+paths:
+  /messaging/send:
+    post:
+      summary: Send a message
+      description: Send a message in a conversation. Creates a new conversation if ConversationId is not provided.
+      tags:
+        - Messaging
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - message
+                - sentBy
+                - property_id
+                - host_id
+                - guest_id
+              properties:
+                ConversationId:
+                  type: string
+                  description: Optional conversation ID. If not provided, a new conversation will be created.
+                  example: "conv-123e4567-e89b-12d3-a456-426614174000"
+                message:
+                  type: string
+                  description: The message content
+                  example: "Hi, I'm interested in your property!"
+                sentBy:
+                  type: string
+                  description: ID of the user sending the message
+                  example: "user-123e4567-e89b-12d3-a456-426614174000"
+                property_id:
+                  type: string
+                  description: ID of the property being discussed
+                  example: "prop-123e4567-e89b-12d3-a456-426614174000"
+                host_id:
+                  type: string
+                  description: ID of the property host
+                  example: "host-123e4567-e89b-12d3-a456-426614174000"
+                guest_id:
+                  type: string
+                  description: ID of the guest/user
+                  example: "guest-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Message sent successfully"
+                      ConversationId:
+                        type: string
+                        example: "conv-123e4567-e89b-12d3-a456-426614174000"
+                      messageData:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                            example: "msg-123e4567-e89b-12d3-a456-426614174000"
+                          message:
+                            type: string
+                            example: "Hi, I'm interested in your property!"
+                          sentBy:
+                            type: string
+                            example: "user-123e4567-e89b-12d3-a456-426614174000"
+                          sentAt:
+                            type: string
+                            format: date-time
+                            example: "2024-01-15T10:30:00.000Z"
+        '400':
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                validation_error:
+                  summary: Validation error
+                  value:
+                    success: false
+                    error: "Validation error: message is required"
+                invalid_json:
+                  summary: Invalid JSON
+                  value:
+                    success: false
+                    error: "Invalid JSON in request body"
+        '404':
+          description: Conversation not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conversation already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /messaging/conversations/{id}:
+    get:
+      summary: Get user conversations
+      description: Retrieve all conversations for a specific user (both as host and guest)
+      tags:
+        - Messaging
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+          example: "user-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Conversations retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      conversations:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                              example: "conv-123e4567-e89b-12d3-a456-426614174000"
+                            property_id:
+                              type: string
+                              example: "prop-123e4567-e89b-12d3-a456-426614174000"
+                            host_id:
+                              type: string
+                              example: "host-123e4567-e89b-12d3-a456-426614174000"
+                            guest_id:
+                              type: string
+                              example: "guest-123e4567-e89b-12d3-a456-426614174000"
+                            createdAt:
+                              type: string
+                              format: date-time
+                              example: "2024-01-15T10:30:00.000Z"
+                      count:
+                        type: integer
+                        example: 5
+        '400':
+          description: Bad request - invalid user ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No conversations found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /messaging/conversations/{id}/messages:
+    get:
+      summary: Get conversation messages
+      description: Retrieve all messages in a specific conversation
+      tags:
+        - Messaging
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Conversation ID
+          schema:
+            type: string
+          example: "conv-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Messages retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      messages:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                              example: "msg-123e4567-e89b-12d3-a456-426614174000"
+                            message:
+                              type: string
+                              example: "Hi, I'm interested in your property!"
+                            sentBy:
+                              type: string
+                              example: "user-123e4567-e89b-12d3-a456-426614174000"
+                            sentAt:
+                              type: string
+                              format: date-time
+                              example: "2024-01-15T10:30:00.000Z"
+                      conversationId:
+                        type: string
+                        example: "conv-123e4567-e89b-12d3-a456-426614174000"
+                      messageCount:
+                        type: integer
+                        example: 10
+        '400':
+          description: Bad request - invalid conversation ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Conversation not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /messaging/conversations/{conversationId}/messages/{id}:
+    delete:
+      summary: Delete a message
+      description: Delete a specific message from a conversation
+      tags:
+        - Messaging
+      parameters:
+        - name: conversationId
+          in: path
+          required: true
+          description: Conversation ID
+          schema:
+            type: string
+          example: "conv-123e4567-e89b-12d3-a456-426614174000"
+        - name: id
+          in: path
+          required: true
+          description: Message ID
+          schema:
+            type: string
+          example: "msg-123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Message deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Message deleted successfully"
+                      conversationId:
+                        type: string
+                        example: "conv-123e4567-e89b-12d3-a456-426614174000"
+                      messageId:
+                        type: string
+                        example: "msg-123e4567-e89b-12d3-a456-426614174000"
+                      remainingMessages:
+                        type: integer
+                        example: 9
+        '400':
+          description: Bad request - missing parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Conversation or message not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Error message"
+    
+    Message:
+      type: object
+      required:
+        - _id
+        - message
+        - sentBy
+        - sentAt
+      properties:
+        _id:
+          type: string
+          description: Unique message identifier
+          example: "msg-123e4567-e89b-12d3-a456-426614174000"
+        message:
+          type: string
+          description: Message content
+          example: "Hi, I'm interested in your property!"
+        sentBy:
+          type: string
+          description: ID of the user who sent the message
+          example: "user-123e4567-e89b-12d3-a456-426614174000"
+        sentAt:
+          type: string
+          format: date-time
+          description: Timestamp when the message was sent
+          example: "2024-01-15T10:30:00.000Z"
+    
+    Conversation:
+      type: object
+      required:
+        - _id
+        - property_id
+        - host_id
+        - guest_id
+        - messages
+        - createdAt
+      properties:
+        _id:
+          type: string
+          description: Unique conversation identifier
+          example: "conv-123e4567-e89b-12d3-a456-426614174000"
+        property_id:
+          type: string
+          description: ID of the property being discussed
+          example: "prop-123e4567-e89b-12d3-a456-426614174000"
+        host_id:
+          type: string
+          description: ID of the property host
+          example: "host-123e4567-e89b-12d3-a456-426614174000"
+        guest_id:
+          type: string
+          description: ID of the guest/user
+          example: "guest-123e4567-e89b-12d3-a456-426614174000"
+        messages:
+          type: array
+          description: Array of messages in the conversation
+          items:
+            $ref: '#/components/schemas/Message'
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the conversation was created
+          example: "2024-01-15T10:30:00.000Z"
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - BearerAuth: [] 
